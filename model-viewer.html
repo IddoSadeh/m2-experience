@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>m.2 Model Viewer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body class="model-viewer-page">
+    <main class="model-viewer-shell">
+      <section class="model-viewer-stage" aria-label="3D model preview">
+        <canvas id="model-canvas"></canvas>
+        <p id="model-status" class="model-viewer-status">Loading model...</p>
+      </section>
+
+      <aside class="model-viewer-controls" aria-label="Model controls">
+        <a class="model-viewer-back" href="index.html">Back to site</a>
+        <h1>Model viewer</h1>
+        <section class="model-viewer-control-group">
+          <h2>Asset</h2>
+          <label>
+            Model file
+            <select id="model-select">
+              <optgroup label="GLB">
+                <option value="chip-glb">Chip.glb</option>
+                <option value="glass-glb">Glass.glb</option>
+                <option value="metal-glb">Metal ring.glb</option>
+              </optgroup>
+              <optgroup label="OBJ + MTL">
+                <option value="chip-obj">Chip.obj + Chip.mtl</option>
+                <option value="glass-obj">Glass.obj + Glass.mtl</option>
+                <option value="metal-obj">Metal_ring.obj + Metal_ring.mtl</option>
+              </optgroup>
+            </select>
+          </label>
+        </section>
+
+        <section class="model-viewer-control-group">
+          <h2>View</h2>
+          <label>
+            Background
+            <select id="background-select">
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="transparent">Transparent</option>
+            </select>
+          </label>
+          <label>
+            Color output
+            <select id="color-output">
+              <option value="srgb">sRGB</option>
+              <option value="linear">Linear sRGB</option>
+            </select>
+          </label>
+          <label>
+            Tone mapping
+            <select id="tone-mapping">
+              <option value="none">None</option>
+              <option value="aces">ACES Filmic</option>
+              <option value="reinhard">Reinhard</option>
+            </select>
+          </label>
+          <label class="model-viewer-check">
+            <input id="auto-rotate" type="checkbox" />
+            Auto rotate
+          </label>
+          <label class="model-viewer-check">
+            <input id="normalize-model" type="checkbox" />
+            Normalize scale/origin
+          </label>
+          <label class="model-viewer-check">
+            <input id="wireframe" type="checkbox" />
+            Wireframe
+          </label>
+          <button id="reset-camera" type="button">Reset view</button>
+        </section>
+
+        <section class="model-viewer-control-group">
+          <h2>Lighting</h2>
+          <label>
+            Hemisphere
+            <input id="light-hemi" type="range" min="0" max="5" step="0.05" value="1.8" />
+          </label>
+          <label>
+            Key
+            <input id="light-key" type="range" min="0" max="8" step="0.05" value="2.6" />
+          </label>
+          <label>
+            Fill
+            <input id="light-fill" type="range" min="0" max="5" step="0.05" value="1.1" />
+          </label>
+        </section>
+
+        <section class="model-viewer-control-group">
+          <h2>Optional material override</h2>
+          <label class="model-viewer-check">
+            <input id="material-override" type="checkbox" />
+            Override loaded material values
+          </label>
+          <label>
+            Roughness
+            <input id="material-roughness" type="range" min="0" max="1" step="0.01" value="0.5" disabled />
+          </label>
+          <label>
+            Metalness
+            <input id="material-metalness" type="range" min="0" max="1" step="0.01" value="0.5" disabled />
+          </label>
+          <label>
+            Opacity
+            <input id="material-opacity" type="range" min="0.05" max="1" step="0.01" value="1" disabled />
+          </label>
+        </section>
+
+        <p class="model-viewer-note">
+          OBJ files load with their matching MTL profile. Texture maps referenced by
+          absolute artist-machine paths may not resolve in the browser. Optional
+          material override is off by default so loaded material values are preserved.
+        </p>
+      </aside>
+    </main>
+
+    <script type="module" src="model-viewer.js"></script>
+  </body>
+</html>
