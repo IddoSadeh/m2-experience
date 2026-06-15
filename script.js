@@ -6,6 +6,7 @@ const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
+const siteFooter = document.querySelector(".site-footer");
 const modelPartConfigs = [
   {
     key: "interface",
@@ -271,6 +272,20 @@ for (const element of maskRevealTitles) {
 updateMaskRevealTitles();
 window.addEventListener("scroll", updateMaskRevealTitles, { passive: true });
 window.addEventListener("resize", updateMaskRevealTitles);
+
+function updateFooterReveal() {
+  if (!siteFooter) return;
+
+  const rect = siteFooter.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const isActive = rect.top <= viewportHeight && rect.bottom > 0;
+
+  siteFooter.classList.toggle("is-footer-reveal-active", isActive);
+}
+
+updateFooterReveal();
+window.addEventListener("scroll", updateFooterReveal, { passive: true });
+window.addEventListener("resize", updateFooterReveal);
 
 if (letterDropTexts.length > 0) {
   const letterDropObserver = new IntersectionObserver(
