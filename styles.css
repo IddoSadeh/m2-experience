@@ -1074,6 +1074,44 @@ img {
   transform: translateY(0);
 }
 
+.typewriter-char {
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 1ms linear;
+  transition-delay: calc(var(--typewriter-index) * 70ms);
+}
+
+.typewriter-space {
+  display: inline-block;
+  width: 0.34em;
+}
+
+.is-typewriter-active .typewriter-char {
+  opacity: 1;
+}
+
+.is-typewriter-active .typewriter-char:last-child {
+  position: relative;
+}
+
+.is-typewriter-active .typewriter-char:last-child::after {
+  position: absolute;
+  top: 0.1em;
+  right: -0.28em;
+  width: 1px;
+  height: 0.85em;
+  background: currentColor;
+  content: "";
+  animation: typewriter-caret 850ms steps(1, end) infinite;
+  animation-delay: calc(var(--typewriter-index) * 70ms + 160ms);
+}
+
+@keyframes typewriter-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
 .texture-stack {
   position: relative;
   width: min(100%, 52.184rem);
@@ -1152,7 +1190,19 @@ img {
   font-size: clamp(0.75rem, 1.04vw, 1.125rem);
   line-height: 1;
   backdrop-filter: blur(2px);
+  opacity: 0;
   pointer-events: none;
+  transform: translateY(0.75rem) scale(0.98);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.texture-card:hover .texture-card__label,
+.texture-card:focus-visible .texture-card__label,
+.texture-card.is-featured .texture-card__label {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .texture-card__label::before {
@@ -1233,10 +1283,10 @@ img {
 
 .spec-section__header {
   display: grid;
-  grid-template-columns: minmax(20rem, 36rem) minmax(20rem, 42rem);
+  grid-template-columns: minmax(20rem, 32rem) minmax(0, 52rem);
   align-items: end;
   justify-content: space-between;
-  gap: clamp(3rem, 15vw, 16.1875rem);
+  gap: clamp(2rem, 5.5vw, 6rem);
   padding: 0 clamp(1.25rem, 3.7vw, 4rem) clamp(4.5rem, 7.06vw, 7.625rem);
 }
 
@@ -1250,7 +1300,7 @@ img {
     sans-serif;
   font-size: clamp(2.375rem, 3.125vw, 3.375rem);
   font-weight: 900;
-  line-height: 1.25;
+  line-height: 1.08;
 }
 
 .spec-section__header h2 span {
@@ -1258,7 +1308,9 @@ img {
 }
 
 .spec-section__header p {
-  max-width: 42rem;
+  justify-self: end;
+  width: min(100%, 52rem);
+  max-width: 52rem;
   margin: 0;
   font-family:
     "F37 Moon",
@@ -1267,7 +1319,7 @@ img {
     sans-serif;
   font-size: clamp(1rem, 1.39vw, 1.5rem);
   line-height: 1.22;
-  text-align: center;
+  text-align: right;
 }
 
 .spec-grid {

@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const localeTime = document.querySelector("#locale-time");
 const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
+const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const modelPartConfigs = [
   {
@@ -161,6 +162,35 @@ function setupLetterDrop(element) {
   element.appendChild(fragment);
 }
 
+function setupTypewriterText(element) {
+  const text = element.textContent.trim();
+  const fragment = document.createDocumentFragment();
+  let index = 0;
+
+  element.setAttribute("aria-label", text);
+  element.textContent = "";
+
+  for (const character of text) {
+    const span = document.createElement("span");
+    span.setAttribute("aria-hidden", "true");
+
+    if (character === " ") {
+      span.className = "typewriter-space";
+      span.textContent = "\u00a0";
+      fragment.appendChild(span);
+      continue;
+    }
+
+    span.className = "typewriter-char";
+    span.style.setProperty("--typewriter-index", index);
+    span.textContent = character;
+    fragment.appendChild(span);
+    index += 1;
+  }
+
+  element.appendChild(fragment);
+}
+
 function setupMaskRevealTitle(element) {
   const lines = Array.from(element.children);
   let globalLetterIndex = 0;
@@ -230,6 +260,10 @@ for (const element of letterDropTexts) {
   setupLetterDrop(element);
 }
 
+for (const element of typewriterTexts) {
+  setupTypewriterText(element);
+}
+
 for (const element of maskRevealTitles) {
   setupMaskRevealTitle(element);
 }
@@ -250,6 +284,21 @@ if (letterDropTexts.length > 0) {
 
   for (const element of letterDropTexts) {
     letterDropObserver.observe(element);
+  }
+}
+
+if (typewriterTexts.length > 0) {
+  const typewriterObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        entry.target.classList.toggle("is-typewriter-active", entry.isIntersecting);
+      }
+    },
+    { threshold: 0.58 },
+  );
+
+  for (const element of typewriterTexts) {
+    typewriterObserver.observe(element);
   }
 }
 
