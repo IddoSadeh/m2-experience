@@ -120,7 +120,7 @@ function updateRevealText() {
     const rect = element.closest(".reveal").getBoundingClientRect();
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const progress = Math.min(
-      Math.max((viewportHeight * 0.72 - rect.top) / (rect.height - viewportHeight * 0.28), 0),
+      Math.max((viewportHeight * 0.78 - rect.top) / (rect.height + viewportHeight * 0.16), 0),
       1,
     );
     const activeCount = Math.round(chars.length * progress);

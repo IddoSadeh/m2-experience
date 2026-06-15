@@ -385,19 +385,16 @@ img {
 }
 
 .reveal {
-  min-height: 105svh;
+  min-height: auto;
   background: var(--black);
   color: rgba(255, 255, 255, 0.5);
 }
 
 .reveal__inner {
-  position: sticky;
-  top: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  min-height: 100svh;
-  padding: clamp(5rem, 7.06vw, 7.625rem) clamp(1.25rem, 3.7vw, 4rem);
+  padding: clamp(2.5rem, 4.2vw, 4.5rem) clamp(1.25rem, 3.7vw, 4rem);
 }
 
 .reveal__text {
