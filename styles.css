@@ -1501,6 +1501,511 @@ img {
   background: #bfbfbf;
 }
 
+.m2os-page {
+  background: var(--black);
+  color: var(--white);
+}
+
+.site-menu--light {
+  color: var(--white);
+}
+
+.site-menu--light .site-menu__nav,
+.site-menu--light .site-menu__icon {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--white);
+}
+
+.os-hero {
+  min-height: 100svh;
+  padding: clamp(8rem, 13vw, 14.5rem) clamp(1.25rem, 3.7vw, 4rem) 4rem;
+  background: var(--black);
+  color: var(--white);
+}
+
+.os-hero__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(2rem, 6vw, 7rem);
+  margin-bottom: clamp(4rem, 8vw, 7.5rem);
+}
+
+.os-hero__title {
+  margin: 0;
+  font-family:
+    "F37 Moon",
+    "Arial Black",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: clamp(2.75rem, 4vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.28;
+  text-transform: uppercase;
+}
+
+.os-hero__title span {
+  display: block;
+}
+
+.os-hero__subhead {
+  margin: 0.65rem 0 0;
+  font-family:
+    "F37 Moon",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: clamp(1.125rem, 1.5vw, 1.5rem);
+  line-height: 1.2;
+}
+
+.os-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-bottom: 0.4rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.875rem, 1.1vw, 1.125rem);
+  white-space: nowrap;
+}
+
+.os-hero__actions p {
+  margin: 0;
+  color: var(--white);
+}
+
+.os-hero__actions a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.os-hero__actions a span {
+  margin-left: 0.75rem;
+}
+
+.os-console {
+  overflow-x: auto;
+}
+
+.os-console__inner {
+  position: relative;
+  min-width: 64rem;
+  aspect-ratio: 1600 / 791;
+  overflow: hidden;
+  border: 1px solid #2b2b2b;
+  border-radius: 1.375rem;
+  background: transparent;
+}
+
+.os-console__inner::before {
+  position: absolute;
+  top: 1.64%;
+  left: 0.75%;
+  width: 98.44%;
+  height: 95.95%;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 1rem;
+  background: #0f0f0f;
+  content: "";
+}
+
+.os-console__header {
+  position: absolute;
+  z-index: 1;
+  top: 8.49%;
+  left: 4.06%;
+  color: rgba(255, 255, 255, 0.52);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.72rem, 1.125vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.os-console__body {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.os-chart {
+  position: absolute;
+  top: 18.33%;
+  left: 2.5%;
+  width: 72.25%;
+  height: 72.95%;
+}
+
+.os-chart__label {
+  position: absolute;
+  top: 1.56%;
+  left: 2.12%;
+  display: grid;
+  gap: 0.38rem;
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.64rem, 1vw, 1rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.os-chart__label span {
+  color: rgba(255, 255, 255, 0.68);
+  text-transform: none;
+}
+
+.os-chart__levels {
+  position: absolute;
+  top: 16.3%;
+  left: 2.16%;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  width: 8.1rem;
+  height: 61.4%;
+  color: var(--white);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.54rem, 0.75vw, 0.75rem);
+  line-height: 1.1;
+}
+
+.os-chart__levels span {
+  align-self: center;
+}
+
+.os-chart__plot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.os-chart__grid {
+  position: absolute;
+  top: 16.8%;
+  left: 13.25%;
+  width: 89.6%;
+  height: 67.75%;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(20% - 1px),
+      rgba(255, 255, 255, 0.15) calc(20% - 1px),
+      rgba(255, 255, 255, 0.15) 20%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent calc(100% - 1px),
+      rgba(255, 255, 255, 0.24) calc(100% - 1px)
+    );
+}
+
+.os-chart__grid::after {
+  position: absolute;
+  right: 0;
+  bottom: -1.1rem;
+  left: 0;
+  height: 1.25rem;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.42) 0 1px,
+    transparent 1px calc(100% / 11)
+  );
+  content: "";
+}
+
+.os-arousal-field {
+  position: absolute;
+  top: calc(34.32% - 9.15%);
+  left: 20.55%;
+  width: 79.36%;
+  height: 59.39%;
+  max-width: none;
+}
+
+.os-memory-hotspot {
+  position: absolute;
+  z-index: 3;
+  width: 2.2%;
+  height: 5.5%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.os-memory-hotspot--0130 {
+  top: 75.8%;
+  left: 20.7%;
+}
+
+.os-memory-hotspot:focus-visible {
+  outline: 1px solid var(--acid);
+  outline-offset: 0.2rem;
+}
+
+.os-memory-preview {
+  position: absolute;
+  right: 50%;
+  bottom: calc(100% + 0.75rem);
+  width: min(10rem, 14vw);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(50%, 0.5rem) scale(0.98);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+.os-memory-preview img {
+  width: 100%;
+  max-width: none;
+  border-radius: 0.375rem;
+}
+
+.os-memory-hotspot:hover .os-memory-preview,
+.os-memory-hotspot:focus-visible .os-memory-preview {
+  opacity: 1;
+  transform: translate(50%, 0) scale(1);
+}
+
+.os-event {
+  position: absolute;
+  top: calc(var(--top) - 9.15%);
+  left: calc(var(--left) + 4.63%);
+  display: grid;
+  gap: 0.125rem;
+  color: var(--white);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.62rem, 0.875vw, 0.875rem);
+  line-height: 1.28;
+}
+
+.os-event__line {
+  position: absolute;
+  top: var(--line-top);
+  left: var(--line-left);
+  width: 1px;
+  height: var(--line-h);
+  max-width: none;
+}
+
+.os-event__mark {
+  position: absolute;
+  top: var(--mark-top);
+  left: var(--mark-left);
+  z-index: 1;
+  width: var(--mark-w, 1.312rem);
+  height: var(--mark-h, 1.212rem);
+  max-width: none;
+}
+
+.os-event__mark--down {
+  transform: rotate(180deg);
+}
+
+.os-event__mark--plus {
+  width: 1.875rem;
+  height: 1.875rem;
+  color: var(--acid);
+}
+
+.os-event__mark--plus::after {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  line-height: 1;
+  content: "+";
+}
+
+.os-event__mark--plus img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.os-event span {
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.os-event strong {
+  font-weight: 500;
+}
+
+.os-event--active strong {
+  color: var(--acid);
+}
+
+.os-event--one {
+  --left: 28.46%;
+  --top: 33.45%;
+  --mark-left: -1.55rem;
+  --mark-top: 0.08rem;
+  --line-left: -0.9rem;
+  --line-top: 1.35rem;
+  --line-h: 11.5625rem;
+}
+
+.os-event--two {
+  --left: 40.48%;
+  --top: 19.93%;
+  --mark-left: -1.45rem;
+  --mark-top: 0.06rem;
+  --line-left: -0.8rem;
+  --line-top: 1.35rem;
+  --line-h: 13.078rem;
+}
+
+.os-event--three {
+  --left: 50.26%;
+  --top: 55.63%;
+  --mark-left: -1.55rem;
+  --mark-top: 0.1rem;
+  --line-left: -0.9rem;
+  --line-top: 1.35rem;
+  --line-h: 7.395rem;
+}
+
+.os-event--four {
+  --left: 64.48%;
+  --top: 26.86%;
+  --mark-left: -1.45rem;
+  --mark-top: 0.06rem;
+  --line-left: -0.8rem;
+  --line-top: 1.35rem;
+  --line-h: 12.815rem;
+}
+
+.os-event--five {
+  --left: 79.21%;
+  --top: 7.97%;
+  --mark-left: -2rem;
+  --mark-top: 0.7rem;
+  --line-left: -1.05rem;
+  --line-top: 2.25rem;
+  --line-h: 17.539rem;
+}
+
+.os-event--six {
+  --left: 93.6%;
+  --top: 35.18%;
+  --mark-left: -1.45rem;
+  --mark-top: 0.06rem;
+  --line-left: -0.8rem;
+  --line-top: 1.35rem;
+  --line-h: 12.618rem;
+}
+
+.os-chart__times {
+  position: absolute;
+  top: 93.62%;
+  left: 15.65%;
+  width: 87.2%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--white);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.52rem, 0.75vw, 0.75rem);
+  line-height: 1;
+  text-align: center;
+}
+
+.os-console__metrics {
+  position: absolute;
+  top: 33.12%;
+  right: 3.62%;
+  width: 13%;
+  height: 49.94%;
+  display: grid;
+  grid-template-rows: repeat(3, 29.62%);
+  gap: 5.57%;
+}
+
+.os-console__metrics div {
+  min-height: 0;
+  padding: 7.69%;
+  border: 1px solid rgba(197, 255, 174, 0.1);
+  border-radius: 0.5rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.48rem, 0.625vw, 0.625rem);
+  line-height: 1.6;
+}
+
+.os-console__metrics h2 {
+  margin: 0 0 0.75rem;
+  color: var(--acid);
+  font-size: inherit;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.os-console__metrics p {
+  margin: 0;
+}
+
+.os-console__signal-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.os-console__signal-label {
+  color: #9a9f9b;
+  font-size: inherit;
+  line-height: 1;
+}
+
+.os-meter {
+  display: block;
+  width: 75.16%;
+  height: 0.31rem;
+  max-width: none;
+  margin: 0.375rem 0 0.875rem;
+  object-fit: fill;
+}
+
+.os-console__signal-card .os-meter:last-child {
+  margin-bottom: 0;
+}
+
 .buy-section {
   position: relative;
   display: flex;
@@ -2400,6 +2905,32 @@ img {
 
   .spec-panel--image img {
     width: min(78%, 21rem);
+  }
+
+  .os-hero {
+    padding: 6.5rem 1rem 2rem;
+  }
+
+  .os-hero__intro {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    margin-bottom: 3rem;
+  }
+
+  .os-hero__title {
+    font-size: clamp(2rem, 10vw, 3.1rem);
+    line-height: 1.12;
+  }
+
+  .os-hero__actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.8rem;
+    white-space: normal;
+  }
+
+  .os-console__inner {
+    min-width: 64rem;
   }
 
   .buy-section {

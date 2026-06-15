@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>m.v_os | Experience Memory System</title>
+    <meta
+      name="description"
+      content="m.v_os turns physiological moments into structured memories you can return to."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body class="m2os-page">
+    <header class="site-menu site-menu--light" aria-label="Primary">
+      <div class="site-menu__status" aria-label="Local interface status">
+        <span class="site-menu__dot" aria-hidden="true"></span>
+        <span id="locale-time">US_00:00:00</span>
+      </div>
+
+      <div class="site-menu__actions">
+        <nav class="site-menu__nav" aria-label="Site">
+          <a href="index.html">M2</a>
+          <a href="m2os.html">M2_os</a>
+          <a href="index.html#company">company</a>
+          <a href="#login">Login</a>
+          <button type="button">MENU</button>
+        </nav>
+
+        <button class="site-menu__icon" type="button" aria-label="Open menu">
+          <span class="site-menu__mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="os-hero" aria-labelledby="os-title">
+        <div class="os-hero__intro">
+          <div>
+            <h1 id="os-title" class="os-hero__title">
+              <span>m.v_os: the system</span>
+              <span>behind every experience</span>
+            </h1>
+            <p class="os-hero__subhead">
+              Turns physiological moments into structured memories you can return to
+            </p>
+          </div>
+
+          <div class="os-hero__actions">
+            <p><span aria-hidden="true">•</span> Signal becomes memory</p>
+            <a href="buy.html">Get access to m.2_os <span aria-hidden="true">›</span></a>
+          </div>
+        </div>
+
+        <section class="os-console" aria-label="Emotional arousal timeline">
+          <div class="os-console__inner">
+            <div class="os-console__header">
+              Emotional Arousal Timeline // Memory 0427-B // Perceived Threat // 14m 23s
+            </div>
+
+            <div class="os-console__body">
+              <div class="os-chart" aria-label="Arousal chart">
+                <div class="os-chart__label">
+                  <strong>Arousal</strong>
+                  <span>(Low - High)</span>
+                </div>
+
+                <div class="os-chart__levels" aria-hidden="true">
+                  <span>Peak<br />Activation</span>
+                  <span>High<br />Activation</span>
+                  <span>Elevated</span>
+                  <span>Neutral</span>
+                  <span>Clam</span>
+                  <span>Low<br />Arousal</span>
+                </div>
+
+                <div class="os-chart__plot">
+                  <div class="os-chart__grid" aria-hidden="true"></div>
+                  <img
+                    class="os-arousal-field"
+                    src="assets/m2os-arousal-field.svg"
+                    alt=""
+                    aria-hidden="true"
+                  />
+
+                  <button class="os-memory-hotspot os-memory-hotspot--0130" type="button">
+                    <span class="os-memory-preview">
+                      <img src="assets/m2os-preview-0130.png" alt="Memory preview at 01:30" />
+                    </span>
+                  </button>
+
+                  <div class="os-event os-event--one">
+                    <img class="os-event__line" src="assets/m2os-vector-0.svg" alt="" aria-hidden="true" />
+                    <img class="os-event__mark" src="assets/m2os-group-1.svg" alt="" aria-hidden="true" />
+                    <span>02:42</span>
+                    <strong>Tension<br />Building</strong>
+                  </div>
+                  <div class="os-event os-event--two">
+                    <img class="os-event__line" src="assets/m2os-vector-2.svg" alt="" aria-hidden="true" />
+                    <img class="os-event__mark" src="assets/m2os-group-1.svg" alt="" aria-hidden="true" />
+                    <span>04:17</span>
+                    <strong>First Peak</strong>
+                  </div>
+                  <div class="os-event os-event--three">
+                    <img class="os-event__line" src="assets/m2os-vector-3.svg" alt="" aria-hidden="true" />
+                    <img class="os-event__mark os-event__mark--down" src="assets/m2os-group-2.svg" alt="" aria-hidden="true" />
+                    <span>05:03</span>
+                    <strong>Emotional<br />Dip</strong>
+                  </div>
+                  <div class="os-event os-event--four">
+                    <img class="os-event__line" src="assets/m2os-vector-5.svg" alt="" aria-hidden="true" />
+                    <img class="os-event__mark" src="assets/m2os-group-1.svg" alt="" aria-hidden="true" />
+                    <span>07:03</span>
+                    <strong>Second Rise</strong>
+                  </div>
+                  <div class="os-event os-event--five os-event--active">
+                    <img class="os-event__line" src="assets/m2os-vector-6.svg" alt="" aria-hidden="true" />
+                    <span class="os-event__mark os-event__mark--plus" aria-hidden="true">
+                      <img src="assets/m2os-active-marker.svg" alt="" />
+                    </span>
+                    <span>09:50</span>
+                    <strong>Peak Stress</strong>
+                  </div>
+                  <div class="os-event os-event--six">
+                    <img class="os-event__line" src="assets/m2os-vector-7.svg" alt="" aria-hidden="true" />
+                    <img class="os-event__mark" src="assets/m2os-group-1.svg" alt="" aria-hidden="true" />
+                    <span>11:20</span>
+                    <strong>Overload</strong>
+                  </div>
+
+                  <div class="os-chart__times" aria-hidden="true">
+                    <span>01:00</span>
+                    <span>02:00</span>
+                    <span>03:00</span>
+                    <span>04:00</span>
+                    <span>05:00</span>
+                    <span>06:00</span>
+                    <span>07:00</span>
+                    <span>08:00</span>
+                    <span>09:00</span>
+                    <span>10:00</span>
+                    <span>11:00</span>
+                    <span>12:00</span>
+                  </div>
+                </div>
+              </div>
+
+              <aside class="os-console__metrics" aria-label="Timeline diagnostics">
+                <div>
+                  <h2>Summary</h2>
+                  <p>Avg arousal: 0.47</p>
+                  <p>Peak arousal: 0.92</p>
+                  <p>Duration above high: 00:03:18</p>
+                  <p>Events detected: 6</p>
+                </div>
+                <div>
+                  <h2>Processing</h2>
+                  <p>Filter: Kalman_7</p>
+                  <p>Smoothing: Adaptive</p>
+                  <p>Algorithm: Ema_core V1</p>
+                </div>
+                <div class="os-console__signal-card">
+                  <p class="os-console__signal-label">Signal quality</p>
+                  <img class="os-meter" src="assets/m2os-signal-quality.svg" alt="" aria-hidden="true" />
+                  <p class="os-console__signal-label">Noise level</p>
+                  <img class="os-meter" src="assets/m2os-noise-level.svg" alt="" aria-hidden="true" />
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
