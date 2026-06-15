@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const localeTime = document.querySelector("#locale-time");
 const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
+const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const modelPartConfigs = [
   {
     key: "interface",
@@ -160,6 +161,63 @@ function setupLetterDrop(element) {
   element.appendChild(fragment);
 }
 
+function setupMaskRevealTitle(element) {
+  const lines = Array.from(element.children);
+  let globalLetterIndex = 0;
+
+  for (const line of lines) {
+    const text = line.textContent.replace(/\u00a0/g, " ");
+    const fragment = document.createDocumentFragment();
+    const chars = Array.from(text);
+
+    line.classList.add("product-system__title-line");
+    line.textContent = "";
+
+    for (const character of chars) {
+      if (character === " ") {
+        const space = document.createElement("span");
+
+        space.className = "product-system__title-space";
+        space.setAttribute("aria-hidden", "true");
+        fragment.appendChild(space);
+        continue;
+      }
+
+      const span = document.createElement("span");
+      span.className = "product-system__title-char";
+      span.dataset.maskIndex = globalLetterIndex;
+      span.textContent = character;
+      fragment.appendChild(span);
+      globalLetterIndex += 1;
+    }
+
+    line.appendChild(fragment);
+  }
+}
+
+function updateMaskRevealTitles() {
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  for (const title of maskRevealTitles) {
+    const section = title.closest(".product-system");
+    const rect = section.getBoundingClientRect();
+    const chars = title.querySelectorAll(".product-system__title-char");
+    const totalChars = chars.length || 1;
+    const raw = (viewportHeight * 0.68 - rect.top) / (viewportHeight * 0.46);
+    const progress = Math.min(Math.max(raw, 0), 1);
+    const stagger = Math.min(0.045, 0.68 / totalChars);
+
+    chars.forEach((char) => {
+      const index = Number(char.dataset.maskIndex) || 0;
+      const reverseIndex = totalChars - index - 1;
+      const local = Math.min(Math.max((progress - reverseIndex * stagger) / 0.24, 0), 1);
+      const y = (1 - easeOutCubic(local)) * 105;
+
+      char.style.transform = `translateY(${y}%)`;
+    });
+  }
+}
+
 for (const element of revealTexts) {
   setupRevealText(element);
 }
@@ -171,6 +229,14 @@ window.addEventListener("resize", updateRevealText);
 for (const element of letterDropTexts) {
   setupLetterDrop(element);
 }
+
+for (const element of maskRevealTitles) {
+  setupMaskRevealTitle(element);
+}
+
+updateMaskRevealTitles();
+window.addEventListener("scroll", updateMaskRevealTitles, { passive: true });
+window.addEventListener("resize", updateMaskRevealTitles);
 
 if (letterDropTexts.length > 0) {
   const letterDropObserver = new IntersectionObserver(
@@ -437,8 +503,8 @@ function getExplosionProgress(figure) {
   const section = figure.closest(".product-system");
   const rect = section.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const startOffset = viewportHeight * 0.32;
-  const scrollDistance = viewportHeight * 0.38;
+  const startOffset = viewportHeight * 0.02;
+  const scrollDistance = viewportHeight * 0.18;
   const raw = (Math.max(-rect.top, 0) - startOffset) / scrollDistance;
 
   return smoothstep(Math.min(Math.max(raw, 0), 1));
@@ -446,6 +512,10 @@ function getExplosionProgress(figure) {
 
 function smoothstep(value) {
   return value * value * (3 - 2 * value);
+}
+
+function easeOutCubic(value) {
+  return 1 - Math.pow(1 - value, 3);
 }
 
 function normalizeModel(model, targetSize) {
