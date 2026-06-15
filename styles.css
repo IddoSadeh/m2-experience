@@ -689,10 +689,11 @@ img {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1.75rem;
-  width: min(18rem, 25vw);
-  min-height: 7.5rem;
-  padding: 1.25rem;
+  width: min(20.875rem, 30vw);
+  min-height: 8.8125rem;
+  padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
@@ -754,6 +755,15 @@ img {
   mix-blend-mode: screen;
 }
 
+.part-card__thumb--large {
+  width: 6.625rem;
+  height: 7.625rem;
+}
+
+.part-card__text {
+  flex: 0 0 12.875rem;
+}
+
 .part-card h3,
 .part-card p {
   margin: 0;
@@ -766,14 +776,21 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 0.98rem;
+  font-size: 1.125rem;
+  font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
 }
 
 .part-card p {
-  margin-top: 0.625rem;
-  font-size: 0.98rem;
+  margin-top: 0.75rem;
+  font-family:
+    "F37 Moon",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
   line-height: 1.18;
 }
 
@@ -807,7 +824,8 @@ img {
 .system-steps li {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: clamp(4.5rem, 8vw, 8.75rem);
+  justify-content: flex-start;
   min-height: 20rem;
   padding: 1.25rem;
   border-right: 1px dashed #838383;
@@ -2149,6 +2167,11 @@ img {
     width: min(17rem, 78vw);
     gap: 1rem;
     padding: 1rem;
+  }
+
+  .part-card__text {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .part-card h3,
