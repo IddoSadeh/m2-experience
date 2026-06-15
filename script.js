@@ -437,8 +437,9 @@ function getExplosionProgress(figure) {
   const section = figure.closest(".product-system");
   const rect = section.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const scrollDistance = viewportHeight * 0.24;
-  const raw = Math.max(-rect.top, 0) / scrollDistance;
+  const startOffset = viewportHeight * 0.32;
+  const scrollDistance = viewportHeight * 0.38;
+  const raw = (Math.max(-rect.top, 0) - startOffset) / scrollDistance;
 
   return smoothstep(Math.min(Math.max(raw, 0), 1));
 }
