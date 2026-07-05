@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+let THREE;
+let GLTFLoader;
 
 const localeTime = document.querySelector("#locale-time");
 const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
@@ -450,7 +450,7 @@ const productScene = document.querySelector("[data-product-scene]");
 const productCutoutScene = document.querySelector("[data-product-cutout-scene]");
 
 if (productScene) {
-  setupProductScene(productScene);
+  loadThree().then(() => setupProductScene(productScene));
 }
 
 if (productCutoutScene) {
@@ -458,6 +458,18 @@ if (productCutoutScene) {
 }
 
 setupPartThumbnails();
+
+async function loadThree() {
+  if (THREE && GLTFLoader) return;
+
+  const [threeModule, loaderModule] = await Promise.all([
+    import("three"),
+    import("three/addons/loaders/GLTFLoader.js"),
+  ]);
+
+  THREE = threeModule;
+  GLTFLoader = loaderModule.GLTFLoader;
+}
 
 function setupProductCutoutScene(figure) {
   const scene = figure.querySelector(".product-cutout-scene");
