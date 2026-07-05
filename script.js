@@ -7,6 +7,7 @@ const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const siteFooter = document.querySelector(".site-footer");
+const osRevealStack = document.querySelector(".reveal--os");
 const modelPartConfigs = [
   {
     key: "interface",
@@ -120,12 +121,13 @@ function setupRevealText(element) {
 function updateRevealText() {
   for (const element of revealTexts) {
     const chars = element.querySelectorAll(".reveal__char");
-    const rect = element.closest(".reveal").getBoundingClientRect();
+    const reveal = element.closest(".reveal");
+    const rect = reveal.getBoundingClientRect();
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-    const progress = Math.min(
-      Math.max((viewportHeight * 0.78 - rect.top) / (rect.height + viewportHeight * 0.16), 0),
-      1,
-    );
+    const rawProgress = reveal.classList.contains("reveal--os")
+      ? (viewportHeight * 0.92 - rect.top) / (viewportHeight * 0.72)
+      : (viewportHeight * 0.78 - rect.top) / (rect.height + viewportHeight * 0.16);
+    const progress = Math.min(Math.max(rawProgress, 0), 1);
     const activeCount = Math.round(chars.length * progress);
 
     chars.forEach((char, index) => {
@@ -273,19 +275,33 @@ updateMaskRevealTitles();
 window.addEventListener("scroll", updateMaskRevealTitles, { passive: true });
 window.addEventListener("resize", updateMaskRevealTitles);
 
-function updateFooterReveal() {
+function updateFooterCover() {
   if (!siteFooter) return;
 
   const rect = siteFooter.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const isActive = rect.top <= viewportHeight && rect.bottom > 0;
+  const isActive = rect.top <= 0 && rect.bottom > viewportHeight * 0.08;
 
-  siteFooter.classList.toggle("is-footer-reveal-active", isActive);
+  siteFooter.classList.toggle("is-footer-cover-active", isActive);
 }
 
-updateFooterReveal();
-window.addEventListener("scroll", updateFooterReveal, { passive: true });
-window.addEventListener("resize", updateFooterReveal);
+updateFooterCover();
+window.addEventListener("scroll", updateFooterCover, { passive: true });
+window.addEventListener("resize", updateFooterCover);
+
+function updateOsRevealStack() {
+  if (!osRevealStack) return;
+
+  const rect = osRevealStack.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const isActive = rect.top <= 0 && rect.bottom > viewportHeight * 0.05;
+
+  osRevealStack.classList.toggle("is-os-reveal-active", isActive);
+}
+
+updateOsRevealStack();
+window.addEventListener("scroll", updateOsRevealStack, { passive: true });
+window.addEventListener("resize", updateOsRevealStack);
 
 if (letterDropTexts.length > 0) {
   const letterDropObserver = new IntersectionObserver(
