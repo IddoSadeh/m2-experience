@@ -2552,19 +2552,22 @@ img {
 
 .product-cutout {
   position: absolute;
-  inset: 4% 3%;
-  width: 94%;
+  top: 50%;
+  left: 50%;
+  width: 89.3%;
   max-width: none;
-  height: 92%;
+  height: 87.4%;
   object-fit: contain;
-  opacity: 0.96;
-  mix-blend-mode: screen;
+  opacity: 1;
+  mix-blend-mode: normal;
   pointer-events: none;
   transition: filter 180ms ease;
   transform:
-    translate(
+    translate(-50%, -50%)
+    translate3d(
       calc(var(--explode-progress) * var(--explode-x, 0%)),
-      calc(var(--explode-progress) * var(--explode-y, 0%))
+      calc(var(--explode-progress) * var(--explode-y, 0%)),
+      0
     )
     scale(var(--part-scale, 1));
   transform-origin: 50% 50%;
@@ -2573,21 +2576,21 @@ img {
 .product-cutout--interface {
   --explode-x: -27%;
   --explode-y: -4%;
-  --part-scale: 0.98;
+  --part-scale: 0.93;
   z-index: 3;
 }
 
 .product-cutout--engine {
   --explode-x: 0%;
   --explode-y: 0%;
-  --part-scale: 0.98;
+  --part-scale: 0.93;
   z-index: 2;
 }
 
 .product-cutout--outer {
   --explode-x: 28%;
   --explode-y: 9%;
-  --part-scale: 0.98;
+  --part-scale: 0.93;
   z-index: 1;
 }
 
@@ -2664,13 +2667,13 @@ img {
 
 .part-card {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 6.75rem minmax(0, 1fr);
   align-items: center;
-  justify-content: center;
-  gap: 1.75rem;
-  width: min(20.875rem, 30vw);
-  min-height: 8.8125rem;
-  padding: 1.5rem;
+  gap: 1.125rem;
+  width: clamp(21rem, 28vw, 24rem);
+  min-height: 8.25rem;
+  padding: 1.125rem 1.25rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
@@ -2723,22 +2726,28 @@ img {
 }
 
 .part-card__thumb {
-  flex: 0 0 auto;
-  width: 3.3125rem;
-  height: 3.8125rem;
+  width: 6.75rem;
+  height: 6.75rem;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
-.part-card__thumb--large {
-  width: 6.625rem;
-  height: 7.625rem;
+.part-card-wrap--interface .part-card__thumb {
+  transform: scale(2.32);
+}
+
+.part-card-wrap--engine .part-card__thumb {
+  transform: scale(2.32);
+}
+
+.part-card-wrap--outer .part-card__thumb {
+  transform: scale(0.9);
 }
 
 .part-card__text {
-  flex: 0 0 12.875rem;
+  min-width: 0;
 }
 
 .part-card h3,
@@ -2753,22 +2762,22 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.02;
   text-transform: uppercase;
 }
 
 .part-card p {
-  margin-top: 0.75rem;
+  margin-top: 0.625rem;
   font-family:
     "F37 Moon",
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 1.125rem;
+  font-size: 0.98rem;
   font-weight: 400;
-  line-height: 1.18;
+  line-height: 1.22;
 }
 
 .part-card-wrap--interface {
@@ -5032,9 +5041,11 @@ img {
   }
 
   .product-cutout {
-    inset: 5%;
-    width: 90%;
-    height: 90%;
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: 85.5%;
+    height: 85.5%;
   }
 
   .product-cutout--interface {
@@ -5069,14 +5080,16 @@ img {
   }
 
   .part-card {
-    width: min(17rem, 78vw);
-    gap: 1rem;
+    grid-template-columns: 5.25rem minmax(0, 1fr);
+    width: min(20rem, 86vw);
+    gap: 0.875rem;
     padding: 1rem;
   }
 
-  .part-card__text {
-    flex: 1 1 auto;
-    min-width: 0;
+  .part-card__thumb,
+  .part-card__thumb--large {
+    width: 5.25rem;
+    height: 5.25rem;
   }
 
   .part-card h3,
