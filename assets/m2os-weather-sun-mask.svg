@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 37.6261 37.3659" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mask Group 1">
+<path id="Ellipse 1" d="M23.0513 37.3659C31.1007 37.3659 37.6261 31.1181 37.6261 23.4111C37.6261 15.7041 31.1007 9.45632 23.0513 9.45632C15.0019 9.45632 8.47658 15.7041 8.47658 23.4111C8.47658 31.1181 15.0019 37.3659 23.0513 37.3659Z" fill="var(--fill-0, #C5FFAE)"/>
+<g id="Ellipse 2" filter="url(#filter0_f_0_408)">
+<path d="M21.4944 20.6465C26.5929 18.0537 29.477 13.7002 27.9363 10.9227C26.3955 8.14528 21.0133 7.99563 15.9148 10.5885C10.8163 13.1813 7.93222 17.5348 9.47298 20.3123C11.0137 23.0897 16.3959 23.2394 21.4944 20.6465Z" fill="var(--fill-0, #C5FFAE)"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_408" x="2.47736" y="2.15691" width="32.4545" height="26.9212" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="3.29037" result="effect1_foregroundBlur_0_408"/>
+</filter>
+</defs>
+</svg>

@@ -8,6 +8,9 @@ const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const siteFooter = document.querySelector(".site-footer");
 const osRevealStack = document.querySelector(".reveal--os");
+const osReturnStack = document.querySelector(".os-return");
+const memoryTabs = document.querySelectorAll("[data-memory-tab]");
+const memoryPanes = document.querySelectorAll("[data-memory-pane]");
 const modelPartConfigs = [
   {
     key: "interface",
@@ -302,6 +305,38 @@ function updateOsRevealStack() {
 updateOsRevealStack();
 window.addEventListener("scroll", updateOsRevealStack, { passive: true });
 window.addEventListener("resize", updateOsRevealStack);
+
+function updateOsReturnStack() {
+  if (!osReturnStack) return;
+
+  const rect = osReturnStack.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const isActive = rect.top <= 0 && rect.bottom > viewportHeight * 0.05;
+
+  osReturnStack.classList.toggle("is-os-return-active", isActive);
+}
+
+updateOsReturnStack();
+window.addEventListener("scroll", updateOsReturnStack, { passive: true });
+window.addEventListener("resize", updateOsReturnStack);
+
+if (memoryTabs.length > 0 && memoryPanes.length > 0) {
+  for (const tab of memoryTabs) {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.memoryTab;
+
+      for (const item of memoryTabs) {
+        const isActive = item === tab;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-selected", String(isActive));
+      }
+
+      for (const pane of memoryPanes) {
+        pane.classList.toggle("is-active", pane.dataset.memoryPane === target);
+      }
+    });
+  }
+}
 
 if (letterDropTexts.length > 0) {
   const letterDropObserver = new IntersectionObserver(
