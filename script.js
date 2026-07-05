@@ -7,6 +7,7 @@ const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const homeLetterTexts = document.querySelectorAll(".home-letters");
+const homeProcessItems = document.querySelectorAll(".home-process__item");
 const siteFooter = document.querySelector(".site-footer");
 const osRevealStack = document.querySelector(".reveal--os");
 const osReturnStack = document.querySelector(".os-return");
@@ -405,6 +406,21 @@ if (typewriterTexts.length > 0) {
 
   for (const element of typewriterTexts) {
     typewriterObserver.observe(element);
+  }
+}
+
+if (homeProcessItems.length > 0) {
+  const homeProcessObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        entry.target.classList.toggle("is-process-active", entry.isIntersecting);
+      }
+    },
+    { rootMargin: "0px 0px -12% 0px", threshold: 0.42 },
+  );
+
+  for (const item of homeProcessItems) {
+    homeProcessObserver.observe(item);
   }
 }
 
