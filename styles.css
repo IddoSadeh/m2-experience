@@ -119,9 +119,9 @@ img {
   height: 2.875rem;
   overflow: hidden;
   border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 -1px 6px rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.46);
+  box-shadow: inset 0 -1px 6px rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(12px);
   transition: width 180ms ease;
 }
 
@@ -139,7 +139,7 @@ img {
   padding: 0 0.75rem;
   border: 0;
   background: transparent;
-  color: var(--black);
+  color: currentColor;
   font-size: 0.875rem;
   font-weight: 700;
   line-height: 1;
@@ -162,9 +162,9 @@ img {
   padding: 0;
   border: 0;
   border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 -1px 6px rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.46);
+  box-shadow: inset 0 -1px 6px rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(12px);
   cursor: pointer;
 }
 
@@ -182,7 +182,7 @@ img {
   min-width: 4px;
   min-height: 4px;
   border-radius: 50%;
-  background: var(--black);
+  background: currentColor;
   transform: translate3d(0, 0, 0);
   will-change: transform;
 }
@@ -264,8 +264,233 @@ img {
 
 .site-menu a:focus-visible,
 .site-menu button:focus-visible {
-  outline: 2px solid var(--black);
+  outline: 2px solid currentColor;
   outline-offset: -6px;
+}
+
+.home-page {
+  min-height: 100%;
+  background: #f4f4f4;
+}
+
+.home-main {
+  background: #f4f4f4;
+}
+
+.home-sequence {
+  position: relative;
+  min-height: 200svh;
+  overflow: clip;
+  background: #f4f4f4;
+}
+
+.home-intro,
+.home-system {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  min-height: 100svh;
+}
+
+.home-intro {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(5, 9, 20, 0.18), rgba(0, 0, 0, 0), rgba(5, 9, 20, 0.18)),
+    url("assets/home-intro-bg.png") center / cover no-repeat;
+}
+
+.home-intro__text {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  min-height: 100svh;
+  margin-top: -100svh;
+  color: var(--white);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.home-intro__edge,
+.home-intro__question {
+  position: absolute;
+  top: 48.98%;
+  right: clamp(1.25rem, 1.16vw, 1.25rem);
+  left: clamp(1.25rem, 1.16vw, 1.25rem);
+  margin: 0;
+  font-size: clamp(0.75rem, 0.93vw, 1rem);
+  line-height: 1.25;
+  text-transform: none;
+}
+
+.home-intro__edge {
+  display: flex;
+  justify-content: space-between;
+  opacity: 0;
+  animation: home-edge-in 700ms ease forwards;
+  animation-delay: 200ms;
+}
+
+.home-intro__question {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.home-letters {
+  margin-left: 19.65%;
+  white-space: nowrap;
+}
+
+.home-letters:last-child {
+  justify-self: end;
+  margin-right: 19.78%;
+  margin-left: 0;
+}
+
+.home-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: home-letter-in 1ms linear forwards;
+  animation-delay: calc(280ms + var(--home-letter-index) * 70ms);
+}
+
+.home-letter-space {
+  display: inline-block;
+  width: 0.58em;
+}
+
+.home-symbols {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  min-height: 100svh;
+  margin-top: -100svh;
+  color: var(--acid);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.45rem, 0.58vw, 0.625rem);
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.home-symbols span {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: min-content;
+  opacity: 0;
+  transform: translateY(0.45rem);
+  animation: home-symbol-in 900ms ease forwards;
+  animation-delay: calc(760ms + var(--d) * 55ms);
+  white-space: normal;
+  word-spacing: 0.22em;
+}
+
+.home-system {
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-top: -100svh;
+  padding: clamp(2.5rem, 3.7vw, 4rem);
+  background: #f4f4f4;
+  color: var(--black);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.75rem, 0.93vw, 1rem);
+  font-weight: 500;
+  line-height: 1.25;
+  transform: translateY(100%);
+  animation: home-system-in 1.15s cubic-bezier(0.62, 0.05, 0, 1) forwards;
+  animation-delay: 2.75s;
+}
+
+.home-system__mark {
+  position: absolute;
+  top: 39.98%;
+  left: 50%;
+  width: clamp(3.25rem, 4.99vw, 5.4rem);
+  height: auto;
+  transform: translate(-50%, -50%);
+}
+
+.home-system__readout {
+  display: grid;
+  grid-template-columns: 0.98fr 1.08fr 0.95fr 0.9fr;
+  gap: clamp(1.25rem, 3.35vw, 3.625rem);
+  width: 100%;
+  max-width: 100rem;
+  margin: 0 auto 4rem;
+}
+
+.home-system__readout div,
+.home-system__footer {
+  min-width: 0;
+}
+
+.home-system__readout p,
+.home-system__footer p {
+  margin: 0;
+}
+
+.home-system__readout div {
+  text-align: center;
+}
+
+.home-system__readout div:first-child {
+  text-align: left;
+}
+
+.home-system__readout div:last-child {
+  text-align: right;
+}
+
+.home-system__footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100rem;
+  margin: 0 auto;
+}
+
+@keyframes home-edge-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes home-letter-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes home-symbol-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes home-system-in {
+  to {
+    transform: translateY(0);
+  }
 }
 
 .hero {
@@ -3444,6 +3669,62 @@ img {
     height: 2.875rem;
     min-width: 0;
     justify-content: center;
+  }
+
+  .home-sequence {
+    min-height: 190svh;
+  }
+
+  .home-intro__edge,
+  .home-intro__question {
+    top: 50%;
+    right: 1rem;
+    left: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .home-intro__question {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    transform: translateY(-0.9rem);
+  }
+
+  .home-letters,
+  .home-letters:last-child {
+    justify-self: center;
+    margin: 0;
+  }
+
+  .home-system {
+    padding: 5rem 1rem 2rem;
+    font-size: 0.8125rem;
+  }
+
+  .home-system__mark {
+    top: 38%;
+    width: 3.5rem;
+  }
+
+  .home-system__readout {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+    margin-bottom: 4rem;
+  }
+
+  .home-system__readout div,
+  .home-system__readout div:first-child,
+  .home-system__readout div:last-child {
+    text-align: left;
+  }
+
+  .home-system__footer {
+    gap: 2rem;
+    flex-direction: column;
+  }
+
+  .home-system__footer p:last-child {
+    align-self: flex-end;
+    text-align: right;
   }
 
   .hero {

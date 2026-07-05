@@ -6,6 +6,7 @@ const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
+const homeLetterTexts = document.querySelectorAll(".home-letters");
 const siteFooter = document.querySelector(".site-footer");
 const osRevealStack = document.querySelector(".reveal--os");
 const osReturnStack = document.querySelector(".os-return");
@@ -197,6 +198,39 @@ function setupTypewriterText(element) {
   element.appendChild(fragment);
 }
 
+function setupHomeLetters(element, startIndex = 0) {
+  const text = element.textContent.replace(/\s+/g, " ");
+  const fragment = document.createDocumentFragment();
+  let index = startIndex;
+  let visibleCharacterCount = 0;
+
+  element.setAttribute("aria-label", text.trim());
+  element.textContent = "";
+
+  for (const character of text) {
+    const span = document.createElement("span");
+    span.setAttribute("aria-hidden", "true");
+
+    if (character === " ") {
+      span.className = "home-letter-space";
+      span.textContent = "\u00a0";
+      fragment.appendChild(span);
+      continue;
+    }
+
+    span.className = "home-letter";
+    span.style.setProperty("--home-letter-index", index);
+    span.textContent = character;
+    fragment.appendChild(span);
+    index += 1;
+    visibleCharacterCount += 1;
+  }
+
+  element.appendChild(fragment);
+
+  return visibleCharacterCount;
+}
+
 function setupMaskRevealTitle(element) {
   const lines = Array.from(element.children);
   let globalLetterIndex = 0;
@@ -268,6 +302,12 @@ for (const element of letterDropTexts) {
 
 for (const element of typewriterTexts) {
   setupTypewriterText(element);
+}
+
+let homeLetterOffset = 0;
+
+for (const element of homeLetterTexts) {
+  homeLetterOffset += setupHomeLetters(element, homeLetterOffset);
 }
 
 for (const element of maskRevealTitles) {
