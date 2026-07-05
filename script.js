@@ -96,12 +96,14 @@ window.setInterval(updateLocaleTime, 1000);
 function setupRevealText(element) {
   const text = element.dataset.revealText || element.textContent.trim();
   const fragment = document.createDocumentFragment();
-  const indent = document.createElement("span");
-
-  indent.className = "reveal__indent";
 
   element.textContent = "";
-  fragment.appendChild(indent);
+
+  if (element.dataset.revealIndent !== "false") {
+    const indent = document.createElement("span");
+    indent.className = "reveal__indent";
+    fragment.appendChild(indent);
+  }
 
   for (const character of text) {
     if (character === "\n") {
@@ -126,7 +128,7 @@ function setupRevealText(element) {
 function updateRevealText() {
   for (const element of revealTexts) {
     const chars = element.querySelectorAll(".reveal__char");
-    const reveal = element.closest(".reveal");
+    const reveal = element.closest(".reveal") || element;
     const rect = reveal.getBoundingClientRect();
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const rawProgress = reveal.classList.contains("reveal--os")
