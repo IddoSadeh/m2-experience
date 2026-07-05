@@ -8,6 +8,7 @@ const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const homeLetterTexts = document.querySelectorAll(".home-letters");
+const homeSymbolLayer = document.querySelector(".home-symbols");
 const homeProcessItems = document.querySelectorAll(".home-process__item");
 const siteFooter = document.querySelector(".site-footer");
 const osRevealStack = document.querySelector(".reveal--os");
@@ -202,6 +203,87 @@ function setupTypewriterText(element) {
   element.appendChild(fragment);
 }
 
+function setupHomeSymbols(layer) {
+  const states = [];
+
+  for (const symbol of layer.querySelectorAll("span")) {
+    const text = symbol.textContent;
+    const fragment = document.createDocumentFragment();
+
+    for (const character of text) {
+      if (character === "\n") {
+        fragment.appendChild(document.createElement("br"));
+        continue;
+      }
+
+      if (character === " ") {
+        fragment.appendChild(document.createTextNode(" "));
+        continue;
+      }
+
+      const cell = document.createElement("i");
+      cell.textContent = character;
+      fragment.appendChild(cell);
+      states.push({
+        cell,
+        x: 0,
+        y: 0,
+        dx: 1,
+        dy: 0,
+        life: Math.floor(Math.random() * 4),
+      });
+    }
+
+    symbol.textContent = "";
+    symbol.appendChild(fragment);
+  }
+
+  const shuffled = [...states].sort(() => Math.random() - 0.5);
+  const revealStart = 980;
+  const revealStep = 34;
+
+  shuffled.forEach(({ cell }, index) => {
+    window.setTimeout(() => {
+      cell.classList.add("is-symbol-active");
+    }, revealStart + index * revealStep + Math.random() * 220);
+  });
+
+  window.setInterval(() => {
+    for (const state of states) {
+      if (!state.cell.classList.contains("is-symbol-active")) continue;
+
+      if (state.life <= 0 || Math.random() > 0.76) {
+        const turns = [
+          [state.dy, -state.dx],
+          [-state.dy, state.dx],
+          [state.dx, state.dy],
+        ];
+        const [nextDx, nextDy] = turns[Math.floor(Math.random() * turns.length)];
+        state.dx = nextDx;
+        state.dy = nextDy;
+        state.life = 2 + Math.floor(Math.random() * 4);
+      }
+
+      state.x += state.dx;
+      state.y += state.dy;
+
+      if (state.x > 3 || state.x < -3) {
+        state.dx *= -1;
+        state.x = Math.max(-3, Math.min(3, state.x));
+      }
+
+      if (state.y > 3 || state.y < -3) {
+        state.dy *= -1;
+        state.y = Math.max(-3, Math.min(3, state.y));
+      }
+
+      state.cell.style.setProperty("--symbol-tx", `${state.x * 0.42}rem`);
+      state.cell.style.setProperty("--symbol-ty", `${state.y * 0.42}rem`);
+      state.life -= 1;
+    }
+  }, 760);
+}
+
 function setupHomeLetters(element, startIndex = 0) {
   const text = element.textContent.replace(/\s+/g, " ");
   const fragment = document.createDocumentFragment();
@@ -331,6 +413,10 @@ let homeLetterOffset = 0;
 
 for (const element of homeLetterTexts) {
   homeLetterOffset += setupHomeLetters(element, homeLetterOffset);
+}
+
+if (homeSymbolLayer) {
+  setupHomeSymbols(homeSymbolLayer);
 }
 
 for (const element of maskRevealTitles) {

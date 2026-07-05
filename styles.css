@@ -415,12 +415,22 @@ img {
   top: var(--y);
   left: var(--x);
   width: min-content;
+  white-space: pre;
+}
+
+.home-symbols i {
+  display: inline-block;
+  font-style: normal;
   opacity: 0;
-  transform: translateY(0.45rem);
-  animation: home-symbol-in 900ms ease forwards;
-  animation-delay: calc(760ms + var(--d) * 55ms);
-  white-space: normal;
-  word-spacing: 0.22em;
+  transform: translate3d(var(--symbol-tx, 0), calc(var(--symbol-ty, 0) + 0.45rem), 0);
+  transition:
+    opacity 520ms ease,
+    transform 720ms steps(3, end);
+}
+
+.home-symbols i.is-symbol-active {
+  opacity: 1;
+  transform: translate3d(var(--symbol-tx, 0), var(--symbol-ty, 0), 0);
 }
 
 .home-system {
@@ -1369,13 +1379,6 @@ img {
 @keyframes home-letter-in {
   to {
     opacity: 1;
-  }
-}
-
-@keyframes home-symbol-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
