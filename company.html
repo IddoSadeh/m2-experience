@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>m.2 | Company</title>
+    <meta
+      name="description"
+      content="About m.2 and the company behind physiological memory systems."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body class="company-page">
+    <header class="site-menu site-menu--light" aria-label="Primary">
+      <div class="site-menu__status" aria-label="Local interface status">
+        <span class="site-menu__dot" aria-hidden="true"></span>
+        <span id="locale-time">US_00:00:00</span>
+      </div>
+
+      <div class="site-menu__actions">
+        <nav class="site-menu__nav" aria-label="Site">
+          <a href="index.html">Home</a>
+          <a href="m2.html">M2</a>
+          <a href="m2os.html">M2_os</a>
+          <a href="company.html">Company</a>
+          <a href="#cart">Cart</a>
+        </nav>
+
+        <button class="site-menu__icon" type="button" aria-label="Open menu">
+          <span class="site-menu__mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <main class="company-main" aria-label="Company page">
+      <section class="company-hero" aria-labelledby="company-hero-title">
+        <img class="company-hero__image" src="assets/company-hero-bg.png" alt="" aria-hidden="true" />
+
+        <div class="company-hero__guide company-hero__guide--x" aria-hidden="true"></div>
+        <div class="company-hero__guide company-hero__guide--y" aria-hidden="true"></div>
+        <span class="company-hero__marker" aria-hidden="true"></span>
+
+        <div class="company-hero__coords" aria-hidden="true">
+          <span>X: 1117</span>
+          <span>Y: 366</span>
+        </div>
+
+        <div class="company-hero__copy">
+          <p>[M.2] About Us</p>
+          <h1 id="company-hero-title">Memory is no<br />longer enough</h1>
+        </div>
+
+        <button class="company-hero__play" type="button">Play video [00:60]</button>
+      </section>
+
+      <section class="company-principles" aria-label="Company principles">
+        <div class="company-principles__inner">
+          <ol class="company-principles__list" data-word-reveal>
+            <li><span>01</span><strong>Precision</strong></li>
+            <li><span>02</span><strong>Access</strong></li>
+            <li><span>03</span><strong>Preservation</strong></li>
+            <li><span>04</span><strong>Interpretation</strong></li>
+            <li><span>05</span><strong>Continuity</strong></li>
+            <li><span>06</span><strong>Intelligence</strong></li>
+            <li><span>07</span><strong>Reliability</strong></li>
+          </ol>
+
+          <p class="company-principles__copy">
+            It’s time to move beyond memory. Our vision<br />
+            is to make every human experience accessible.
+          </p>
+        </div>
+      </section>
+
+      <section class="company-vision" aria-labelledby="company-vision-title">
+        <div class="company-vision__header">
+          <div class="company-vision__meta">
+            <p>Our vision</p>
+            <p>2026 M.2&reg; All Rights Reserved.</p>
+          </div>
+
+          <div class="company-vision__rule" aria-hidden="true"></div>
+
+          <div class="company-vision__copy">
+            <h2 id="company-vision-title">We believe memory should go beyond recall</h2>
+            <p>
+              In a world where experiences quickly fade, memory<br />
+              captures only a fraction of what we truly felt By translating<br />
+              physiological signals into structured data, we create a new<br />
+              way to capture, understand, and revisit human experience.
+            </p>
+          </div>
+        </div>
+
+        <figure class="company-vision__figure">
+          <img src="assets/company-vision-portrait.png" alt="Two people facing each other, each wearing an m.2 sensor." />
+        </figure>
+      </section>
+
+      <section class="company-contact" aria-labelledby="company-contact-title">
+        <div class="company-contact__inner">
+          <p>Get in touch</p>
+          <h2 id="company-contact-title">
+            <span>Creat</span>
+            <span>wit us</span>
+          </h2>
+          <a class="company-contact__button" href="mailto:support@M2.de">Contact us</a>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

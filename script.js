@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const localeTime = document.querySelector("#locale-time");
 const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
+const wordRevealGroups = document.querySelectorAll("[data-word-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
@@ -298,6 +299,25 @@ for (const element of revealTexts) {
 updateRevealText();
 window.addEventListener("scroll", updateRevealText, { passive: true });
 window.addEventListener("resize", updateRevealText);
+
+function updateWordRevealText() {
+  for (const group of wordRevealGroups) {
+    const items = group.querySelectorAll("li");
+    const rect = group.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const rawProgress = (viewportHeight * 0.72 - rect.top) / (rect.height + viewportHeight * 0.08);
+    const progress = Math.min(Math.max(rawProgress, 0), 1);
+    const activeCount = Math.round(items.length * progress);
+
+    items.forEach((item, index) => {
+      item.classList.toggle("is-active", index < activeCount);
+    });
+  }
+}
+
+updateWordRevealText();
+window.addEventListener("scroll", updateWordRevealText, { passive: true });
+window.addEventListener("resize", updateWordRevealText);
 
 for (const element of letterDropTexts) {
   setupLetterDrop(element);
