@@ -2556,13 +2556,13 @@ img {
 
 .product-system__intro {
   display: grid;
-  gap: clamp(2rem, 3.2vw, 3.75rem);
+  gap: clamp(4rem, 7.06vw, 7.625rem);
   position: sticky;
   top: 0;
   z-index: 1;
   align-content: center;
   min-height: 100svh;
-  padding: clamp(1.75rem, 3.2vw, 3.5rem) 0;
+  padding: clamp(2rem, 4.6vw, 5rem) 0;
   background: var(--black);
 }
 
@@ -2581,15 +2581,15 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: clamp(3.25rem, 6.5vw, 7.875rem);
+  font-size: clamp(4rem, 8.56vw, 9.25rem);
   font-weight: 900;
-  line-height: 1.07;
+  line-height: 1.0676;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .product-system__title > span:nth-child(2) {
-  padding-left: clamp(4.25rem, 8.5vw, 11.8rem);
+  padding-left: clamp(7rem, 20.8vw, 22.5rem);
 }
 
 .product-system__title-line {
@@ -2659,15 +2659,15 @@ img {
 }
 
 .product-cutout--interface {
-  --explode-x: -27%;
-  --explode-y: -4%;
+  --explode-x: -43%;
+  --explode-y: -21%;
   --part-scale: 0.93;
   z-index: 3;
 }
 
 .product-cutout--engine {
-  --explode-x: 0%;
-  --explode-y: 0%;
+  --explode-x: -11%;
+  --explode-y: -9%;
   --part-scale: 0.93;
   z-index: 2;
 }
@@ -2693,24 +2693,24 @@ img {
 }
 
 .product-hotspot--interface {
-  top: 41%;
-  left: 29%;
+  top: 24%;
+  left: 3%;
   width: 14%;
   height: 23%;
 }
 
 .product-hotspot--engine {
-  top: 41%;
-  left: 43%;
+  top: 34%;
+  left: 34%;
   width: 14%;
   height: 23%;
 }
 
 .product-hotspot--outer {
-  top: 23%;
-  left: 57%;
-  width: 23%;
-  height: 52%;
+  top: 18%;
+  left: 54%;
+  width: 42%;
+  height: 74%;
 }
 
 .sr-only {
@@ -2750,15 +2750,20 @@ img {
   pointer-events: none;
 }
 
+.part-card-wrap.is-following-pointer {
+  right: auto;
+}
+
 .part-card {
   position: relative;
-  display: grid;
-  grid-template-columns: 6.75rem minmax(0, 1fr);
+  display: flex;
   align-items: center;
-  gap: 1.125rem;
-  width: clamp(21rem, 28vw, 24rem);
-  min-height: 8.25rem;
-  padding: 1.125rem 1.25rem;
+  justify-content: center;
+  gap: 1.75rem;
+  width: auto;
+  min-width: 21.25rem;
+  min-height: 8.8125rem;
+  padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
@@ -2811,8 +2816,9 @@ img {
 }
 
 .part-card__thumb {
-  width: 6.75rem;
-  height: 6.75rem;
+  flex: 0 0 3.3125rem;
+  width: 3.3125rem;
+  height: 3.8125rem;
   display: block;
   object-fit: contain;
   object-position: center;
@@ -2820,19 +2826,24 @@ img {
 }
 
 .part-card-wrap--interface .part-card__thumb {
-  transform: scale(2.32);
+  transform: scale(3.95);
 }
 
 .part-card-wrap--engine .part-card__thumb {
-  transform: scale(2.32);
+  transform: scale(3.95);
 }
 
 .part-card-wrap--outer .part-card__thumb {
-  transform: scale(0.9);
+  transform: scale(1.7);
 }
 
 .part-card__text {
+  display: flex;
+  flex: 0 0 12.875rem;
+  flex-direction: column;
+  gap: 0.75rem;
   min-width: 0;
+  width: 12.875rem;
 }
 
 .part-card h3,
@@ -2847,22 +2858,21 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 900;
-  line-height: 1.02;
+  line-height: 1;
   text-transform: uppercase;
 }
 
 .part-card p {
-  margin-top: 0.625rem;
   font-family:
     "F37 Moon",
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 0.98rem;
+  font-size: 1.125rem;
   font-weight: 400;
-  line-height: 1.22;
+  line-height: 1.08;
 }
 
 .part-card-wrap--interface {
@@ -5204,16 +5214,22 @@ img {
   }
 
   .part-card {
-    grid-template-columns: 5.25rem minmax(0, 1fr);
-    width: min(20rem, 86vw);
+    min-width: 0;
+    width: min(21.25rem, 86vw);
     gap: 0.875rem;
     padding: 1rem;
   }
 
   .part-card__thumb,
   .part-card__thumb--large {
-    width: 5.25rem;
-    height: 5.25rem;
+    flex-basis: 4rem;
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .part-card__text {
+    flex-basis: 11rem;
+    width: 11rem;
   }
 
   .part-card h3,
@@ -5651,8 +5667,10 @@ img {
   }
 
   .part-card {
-    width: min(15rem, 26vw);
+    width: auto;
+    min-width: min(18.5rem, 28vw);
     min-height: 6.8rem;
+    gap: 1rem;
     padding: 1rem;
   }
 

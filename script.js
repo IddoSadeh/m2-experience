@@ -600,8 +600,12 @@ function setupProductCutoutScene(figure) {
   }
 
   for (const hotspot of hotspots) {
-    hotspot.addEventListener("pointerenter", () => {
+    hotspot.addEventListener("pointerenter", (event) => {
       setActivePart(hotspot.dataset.partHotspot, cards);
+      movePartCardToPointer(hotspot.dataset.partHotspot, cards, figure, event);
+    });
+    hotspot.addEventListener("pointermove", (event) => {
+      movePartCardToPointer(hotspot.dataset.partHotspot, cards, figure, event);
     });
     hotspot.addEventListener("focus", () => {
       setActivePart(hotspot.dataset.partHotspot, cards);
@@ -611,6 +615,7 @@ function setupProductCutoutScene(figure) {
     });
     hotspot.addEventListener("blur", () => {
       setActivePart(null, cards);
+      resetPartCardPosition(hotspot.dataset.partHotspot, cards);
     });
   }
 
@@ -618,6 +623,40 @@ function setupProductCutoutScene(figure) {
   updateProgress();
   window.addEventListener("scroll", updateProgress, { passive: true });
   window.addEventListener("resize", updateProgress);
+}
+
+function movePartCardToPointer(part, cards, figure, event) {
+  const card = cards.get(part);
+  const wrap = card?.closest(".part-card-wrap");
+
+  if (!card || !wrap || !figure || !event) return;
+
+  const figureRect = figure.getBoundingClientRect();
+  const cardWidth = card.offsetWidth || 340;
+  const cardHeight = card.offsetHeight || 141;
+  const gutter = 12;
+  const pointerOffset = 18;
+  const rawX = event.clientX - figureRect.left + pointerOffset;
+  const rawY = event.clientY - figureRect.top - cardHeight / 2;
+  const x = Math.min(Math.max(rawX, gutter), figureRect.width - cardWidth - gutter);
+  const y = Math.min(Math.max(rawY, gutter), figureRect.height - cardHeight - gutter);
+
+  wrap.classList.add("is-following-pointer");
+  wrap.style.left = `${x}px`;
+  wrap.style.top = `${y}px`;
+  wrap.style.right = "auto";
+}
+
+function resetPartCardPosition(part, cards) {
+  const card = cards.get(part);
+  const wrap = card?.closest(".part-card-wrap");
+
+  if (!wrap) return;
+
+  wrap.classList.remove("is-following-pointer");
+  wrap.style.left = "";
+  wrap.style.top = "";
+  wrap.style.right = "";
 }
 
 function setupProductScene(canvas) {
