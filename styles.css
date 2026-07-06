@@ -3352,10 +3352,10 @@ img {
 
 .spec-section__header {
   display: grid;
-  grid-template-columns: minmax(20rem, 32rem) minmax(0, 52rem);
+  grid-template-columns: max-content minmax(0, 1fr);
   align-items: end;
   justify-content: space-between;
-  gap: clamp(2rem, 5.5vw, 6rem);
+  gap: clamp(4rem, 17.13vw, 16.1875rem);
   padding: 0 clamp(1.25rem, 3.7vw, 4rem) clamp(4.5rem, 7.06vw, 7.625rem);
 }
 
@@ -3378,8 +3378,8 @@ img {
 
 .spec-section__header p {
   justify-self: end;
-  width: min(100%, 52rem);
-  max-width: 52rem;
+  width: max-content;
+  max-width: 100%;
   margin: 0;
   font-family:
     "F37 Moon",
@@ -3389,6 +3389,10 @@ img {
   font-size: clamp(1rem, 1.39vw, 1.5rem);
   line-height: 1.22;
   text-align: right;
+}
+
+.spec-section__header p span {
+  display: block;
 }
 
 .spec-grid {
@@ -3408,7 +3412,7 @@ img {
 
 .spec-panel__label {
   margin: 0;
-  padding: 1.375rem clamp(1.25rem, 3.7vw, 4rem);
+  padding: clamp(3.5rem, 3.7vw, 4rem) clamp(1.25rem, 3.7vw, 4rem) 1.375rem;
   font-family:
     "Saans Mono",
     "Roboto Mono",
@@ -3550,7 +3554,7 @@ img {
 }
 
 .spec-panel--image img {
-  width: min(58%, 21.625rem);
+  width: min(69.6%, 25.95rem);
 }
 
 .spec-list--box {
@@ -5365,8 +5369,13 @@ img {
   }
 
   .spec-section__header p {
+    width: auto;
     max-width: none;
     text-align: left;
+  }
+
+  .spec-section__header p span {
+    display: inline;
   }
 
   .spec-grid {
