@@ -2,6 +2,8 @@ let THREE;
 let GLTFLoader;
 
 const localeTime = document.querySelector("#locale-time");
+const siteMenu = document.querySelector(".site-menu");
+const siteMenuButton = document.querySelector(".site-menu__icon");
 const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
 const wordRevealGroups = document.querySelectorAll("[data-word-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
@@ -426,6 +428,33 @@ if (homeSymbolLayer) {
 
 for (const card of textureCards) {
   setupTextureCardHover(card);
+}
+
+if (siteMenu && siteMenuButton) {
+  siteMenuButton.setAttribute("aria-expanded", "false");
+
+  siteMenuButton.addEventListener("click", () => {
+    const isOpen = siteMenu.classList.toggle("is-menu-open");
+    siteMenuButton.setAttribute("aria-expanded", String(isOpen));
+    siteMenu.classList.remove("is-dot-swapping");
+    void siteMenu.offsetWidth;
+    siteMenu.classList.add("is-dot-swapping");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!siteMenu.contains(event.target)) {
+      siteMenu.classList.remove("is-menu-open");
+      siteMenuButton.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      siteMenu.classList.remove("is-menu-open");
+      siteMenuButton.setAttribute("aria-expanded", "false");
+      siteMenuButton.focus();
+    }
+  });
 }
 
 for (const element of maskRevealTitles) {

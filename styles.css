@@ -134,8 +134,7 @@ img {
   transition: width 180ms ease;
 }
 
-.site-menu__nav:hover,
-.site-menu__nav:focus-within {
+.site-menu.is-menu-open .site-menu__nav {
   width: min(40.7vw, 36.625rem);
   min-width: 28rem;
 }
@@ -170,8 +169,23 @@ img {
   pointer-events: auto;
 }
 
-.site-menu__nav:hover a,
-.site-menu__nav:focus-within a {
+.site-menu__label-full {
+  display: none;
+}
+
+.site-menu__label-preview {
+  display: inline;
+}
+
+.site-menu.is-menu-open .site-menu__label-full {
+  display: inline;
+}
+
+.site-menu.is-menu-open .site-menu__label-preview {
+  display: none;
+}
+
+.site-menu.is-menu-open .site-menu__nav a {
   flex: 1 1 auto;
   order: 0;
   opacity: 1;
@@ -197,16 +211,16 @@ img {
 .site-menu__mark {
   position: relative;
   display: block;
-  width: 14px;
-  height: 12px;
+  width: 10.65px;
+  height: 9.77px;
 }
 
 .site-menu__mark span {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  min-width: 4px;
-  min-height: 4px;
+  width: 2.6px;
+  height: 2.6px;
+  min-width: 2.6px;
+  min-height: 2.6px;
   border-radius: 50%;
   background: currentColor;
   transform: translate3d(0, 0, 0);
@@ -215,32 +229,29 @@ img {
 
 .site-menu__mark span:nth-child(1) {
   top: 0;
-  left: 5px;
+  left: 4.03px;
 }
 
 .site-menu__mark span:nth-child(2) {
-  top: 8px;
+  top: 7.17px;
   left: 0;
 }
 
 .site-menu__mark span:nth-child(3) {
-  top: 8px;
-  left: 10px;
+  top: 7.17px;
+  left: 8.05px;
 }
 
-.site-menu__icon:hover .site-menu__mark span:nth-child(1),
-.site-menu__icon:focus-visible .site-menu__mark span:nth-child(1) {
-  animation: dotOrbitTop 1600ms linear infinite;
+.site-menu.is-dot-swapping .site-menu__mark span:nth-child(1) {
+  animation: dotOrbitTop 900ms ease-in-out 1;
 }
 
-.site-menu__icon:hover .site-menu__mark span:nth-child(2),
-.site-menu__icon:focus-visible .site-menu__mark span:nth-child(2) {
-  animation: dotOrbitLeft 1600ms linear infinite;
+.site-menu.is-dot-swapping .site-menu__mark span:nth-child(2) {
+  animation: dotOrbitLeft 900ms ease-in-out 1;
 }
 
-.site-menu__icon:hover .site-menu__mark span:nth-child(3),
-.site-menu__icon:focus-visible .site-menu__mark span:nth-child(3) {
-  animation: dotOrbitRight 1600ms linear infinite;
+.site-menu.is-dot-swapping .site-menu__mark span:nth-child(3) {
+  animation: dotOrbitRight 900ms ease-in-out 1;
 }
 
 @keyframes dotOrbitTop {
@@ -250,11 +261,11 @@ img {
   }
 
   33% {
-    transform: translate3d(-5px, 8px, 0);
+    transform: translate3d(-4.03px, 7.17px, 0);
   }
 
   66% {
-    transform: translate3d(5px, 8px, 0);
+    transform: translate3d(4.02px, 7.17px, 0);
   }
 }
 
@@ -265,11 +276,11 @@ img {
   }
 
   33% {
-    transform: translate3d(10px, 0, 0);
+    transform: translate3d(8.05px, 0, 0);
   }
 
   66% {
-    transform: translate3d(5px, -8px, 0);
+    transform: translate3d(4.03px, -7.17px, 0);
   }
 }
 
@@ -280,11 +291,11 @@ img {
   }
 
   33% {
-    transform: translate3d(-5px, -8px, 0);
+    transform: translate3d(-4.02px, -7.17px, 0);
   }
 
   66% {
-    transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-8.05px, 0, 0);
   }
 }
 
@@ -4666,8 +4677,7 @@ img {
       height 180ms ease;
   }
 
-  .site-menu__nav:hover,
-  .site-menu__nav:focus-within {
+  .site-menu.is-menu-open .site-menu__nav {
     width: 6.25rem;
     height: 16.875rem;
   }
@@ -4692,8 +4702,7 @@ img {
     order: 0;
   }
 
-  .site-menu__nav:hover a:not(:first-child),
-  .site-menu__nav:focus-within a:not(:first-child) {
+  .site-menu.is-menu-open .site-menu__nav a:not(:first-child) {
     opacity: 1;
     pointer-events: auto;
   }
