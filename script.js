@@ -10,6 +10,8 @@ const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const homeLetterTexts = document.querySelectorAll(".home-letters");
 const homeSymbolLayer = document.querySelector(".home-symbols");
 const homeProcessItems = document.querySelectorAll(".home-process__item");
+const homeMemory = document.querySelector(".home-memory");
+const homeSystemIndex = document.querySelector(".home-system-index");
 const siteFooter = document.querySelector(".site-footer");
 const osRevealStack = document.querySelector(".reveal--os");
 const osReturnStack = document.querySelector(".os-return");
@@ -470,6 +472,26 @@ function updateOsReturnStack() {
 updateOsReturnStack();
 window.addEventListener("scroll", updateOsReturnStack, { passive: true });
 window.addEventListener("resize", updateOsReturnStack);
+
+function updateHomeSystemIndexCover() {
+  if (!homeSystemIndex) return;
+
+  const rect = homeSystemIndex.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const coverProgress = Math.min(Math.max((viewportHeight - rect.top) / viewportHeight, 0), 1);
+  const imageProgress = Math.min(Math.max(coverProgress / 0.5, 0), 1);
+  const textProgress = Math.min(Math.max((coverProgress - 0.5) / 0.5, 0), 1);
+  const isCovering = rect.top <= viewportHeight && rect.top > 0;
+
+  homeSystemIndex.style.setProperty("--home-system-image-cover", imageProgress.toFixed(4));
+  homeSystemIndex.style.setProperty("--home-system-text-cover", textProgress.toFixed(4));
+  homeSystemIndex.classList.toggle("is-home-system-covering", isCovering);
+  homeMemory?.classList.toggle("is-home-memory-underlay", isCovering);
+}
+
+updateHomeSystemIndexCover();
+window.addEventListener("scroll", updateHomeSystemIndexCover, { passive: true });
+window.addEventListener("resize", updateHomeSystemIndexCover);
 
 if (memoryTabs.length > 0 && memoryPanes.length > 0) {
   for (const tab of memoryTabs) {
