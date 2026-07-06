@@ -223,6 +223,8 @@ function setupHomeSymbols(layer) {
 
       const cell = document.createElement("i");
       cell.textContent = character;
+      cell.style.setProperty("--symbol-enter-x", `${(Math.random() - 0.5) * 0.9}rem`);
+      cell.style.setProperty("--symbol-enter-y", `${0.35 + Math.random() * 0.9}rem`);
       fragment.appendChild(cell);
       states.push({
         cell,
@@ -239,20 +241,20 @@ function setupHomeSymbols(layer) {
   }
 
   const shuffled = [...states].sort(() => Math.random() - 0.5);
-  const revealStart = 980;
-  const revealStep = 34;
+  const revealStart = 460;
+  const revealStep = 22;
 
   shuffled.forEach(({ cell }, index) => {
     window.setTimeout(() => {
       cell.classList.add("is-symbol-active");
-    }, revealStart + index * revealStep + Math.random() * 220);
+    }, revealStart + index * revealStep + Math.random() * 360);
   });
 
   window.setInterval(() => {
     for (const state of states) {
       if (!state.cell.classList.contains("is-symbol-active")) continue;
 
-      if (state.life <= 0 || Math.random() > 0.76) {
+      if (state.life <= 0 || Math.random() > 0.62) {
         const turns = [
           [state.dy, -state.dx],
           [-state.dy, state.dx],
@@ -261,27 +263,27 @@ function setupHomeSymbols(layer) {
         const [nextDx, nextDy] = turns[Math.floor(Math.random() * turns.length)];
         state.dx = nextDx;
         state.dy = nextDy;
-        state.life = 2 + Math.floor(Math.random() * 4);
+        state.life = 1 + Math.floor(Math.random() * 3);
       }
 
       state.x += state.dx;
       state.y += state.dy;
 
-      if (state.x > 3 || state.x < -3) {
+      if (state.x > 4 || state.x < -4) {
         state.dx *= -1;
-        state.x = Math.max(-3, Math.min(3, state.x));
+        state.x = Math.max(-4, Math.min(4, state.x));
       }
 
-      if (state.y > 3 || state.y < -3) {
+      if (state.y > 4 || state.y < -4) {
         state.dy *= -1;
-        state.y = Math.max(-3, Math.min(3, state.y));
+        state.y = Math.max(-4, Math.min(4, state.y));
       }
 
-      state.cell.style.setProperty("--symbol-tx", `${state.x * 0.42}rem`);
-      state.cell.style.setProperty("--symbol-ty", `${state.y * 0.42}rem`);
+      state.cell.style.setProperty("--symbol-tx", `${state.x * 0.28}rem`);
+      state.cell.style.setProperty("--symbol-ty", `${state.y * 0.28}rem`);
       state.life -= 1;
     }
-  }, 760);
+  }, 460);
 }
 
 function setupHomeLetters(element, startIndex = 0) {

@@ -399,14 +399,15 @@ img {
   margin-top: -100svh;
   color: var(--acid);
   font-family:
+    "Sudo Var",
     "Saans Mono",
     "Roboto Mono",
     "SFMono-Regular",
     Consolas,
     monospace;
-  font-size: clamp(0.45rem, 0.58vw, 0.625rem);
-  font-weight: 500;
-  line-height: 1;
+  font-size: clamp(0.5rem, 0.694vw, 0.75rem);
+  font-weight: 400;
+  line-height: normal;
   pointer-events: none;
 }
 
@@ -422,10 +423,15 @@ img {
   display: inline-block;
   font-style: normal;
   opacity: 0;
-  transform: translate3d(var(--symbol-tx, 0), calc(var(--symbol-ty, 0) + 0.45rem), 0);
+  text-shadow: 0 0 0.35rem rgba(197, 255, 174, 0.45);
+  transform: translate3d(
+    calc(var(--symbol-tx, 0) + var(--symbol-enter-x, 0)),
+    calc(var(--symbol-ty, 0) + var(--symbol-enter-y, 0.65rem)),
+    0
+  );
   transition:
-    opacity 520ms ease,
-    transform 720ms steps(3, end);
+    opacity 180ms linear,
+    transform 520ms steps(2, end);
 }
 
 .home-symbols i.is-symbol-active {
@@ -587,12 +593,22 @@ img {
   justify-self: center;
   width: min(100%, 36rem);
   margin: 0;
+  perspective: 80rem;
 }
 
 .home-product__figure img {
   width: 100%;
   height: auto;
   border-radius: 0.5rem;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  animation: home-product-spin 14s linear infinite;
+}
+
+@keyframes home-product-spin {
+  to {
+    transform: rotateY(360deg);
+  }
 }
 
 .home-product__copy {
@@ -757,16 +773,14 @@ img {
 }
 
 .home-memory {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  gap: clamp(5rem, 7.1vw, 7.625rem);
-  min-height: 100svh;
-  padding: clamp(6.5rem, 7.1vw, 7.625rem) 0 0 clamp(1.25rem, 3.7vw, 4rem);
-  overflow: hidden;
   background: #070707;
   color: rgba(255, 255, 255, 0.5);
+}
+
+.home-memory .home-memory__inner {
+  align-items: flex-end;
+  justify-content: center;
+  padding: clamp(6.5rem, 7.1vw, 7.625rem) 0 0 clamp(1.25rem, 3.7vw, 4rem);
 }
 
 .home-memory__text {
@@ -796,13 +810,15 @@ img {
 }
 
 .home-system-index {
+  color: #070707;
+}
+
+.home-system-index__stage {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  height: 100svh;
-  min-height: 0;
-  overflow: hidden;
-  background: #f1f0ef;
-  color: #070707;
+  min-height: 100svh;
+  padding: 0;
+  background: transparent;
 }
 
 .home-system-index__inner {
@@ -1646,6 +1662,49 @@ img {
   justify-content: space-between;
   width: 100%;
   gap: 2rem;
+}
+
+.reveal--os.home-memory .reveal__inner.home-memory__inner {
+  align-items: flex-end;
+  justify-content: center;
+  padding: clamp(2.5rem, 3.7vw, 4rem) 0 clamp(2.5rem, 3.7vw, 4rem) clamp(1.25rem, 3.7vw, 4rem);
+  background: #070707;
+}
+
+.reveal--os.home-memory .reveal__text.home-memory__text {
+  width: 100%;
+  max-width: none;
+  padding-right: clamp(1.25rem, 3.7vw, 4rem);
+  font-family:
+    "F37 Moon",
+    Arial,
+    sans-serif;
+  font-size: clamp(2.125rem, 3.125vw, 3.375rem);
+  font-weight: 700;
+  line-height: 1.185;
+  letter-spacing: 0.01em;
+  text-align: left;
+  text-indent: 12%;
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+.os-return__stage.home-system-index__stage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  min-height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  color: #070707;
+}
+
+.home-system-index.is-os-return-active .home-system-index__stage {
+  inset: 0;
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
 }
 
 .os-return__title {
@@ -4732,6 +4791,7 @@ img {
     gap: 4rem;
     min-height: auto;
     padding: 5rem 0 0 1rem;
+    position: relative;
   }
 
   .home-memory__text {
@@ -4741,7 +4801,29 @@ img {
     text-indent: 0;
   }
 
+  .reveal--os.home-memory .reveal__inner.home-memory__inner {
+    padding: 3rem 0 3rem 1rem;
+  }
+
+  .reveal--os.home-memory .reveal__text.home-memory__text {
+    padding-right: 1rem;
+    font-size: clamp(2rem, 10vw, 3rem);
+    line-height: 1.12;
+    text-indent: 0;
+  }
+
   .home-system-index {
+    min-height: 100svh;
+  }
+
+  .home-system-index__stage {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
+
+  .os-return__stage.home-system-index__stage {
     grid-template-columns: 1fr;
     height: auto;
     min-height: 100svh;
