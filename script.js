@@ -10,6 +10,7 @@ const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const homeLetterTexts = document.querySelectorAll(".home-letters");
 const homeSymbolLayer = document.querySelector(".home-symbols");
 const homeProcessItems = document.querySelectorAll(".home-process__item");
+const textureCards = document.querySelectorAll(".texture-card");
 const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const siteFooter = document.querySelector(".site-footer");
@@ -423,6 +424,10 @@ if (homeSymbolLayer) {
   setupHomeSymbols(homeSymbolLayer);
 }
 
+for (const card of textureCards) {
+  setupTextureCardHover(card);
+}
+
 for (const element of maskRevealTitles) {
   setupMaskRevealTitle(element);
 }
@@ -657,6 +662,48 @@ function resetPartCardPosition(part, cards) {
   wrap.style.left = "";
   wrap.style.top = "";
   wrap.style.right = "";
+}
+
+function setupTextureCardHover(card) {
+  const label = card.querySelector(".texture-card__label");
+  const stack = card.closest(".texture-stack");
+
+  if (!label || !stack) return;
+
+  card.addEventListener("pointerenter", (event) => {
+    moveTextureLabelToPointer(card, label, stack, event);
+  });
+
+  card.addEventListener("pointermove", (event) => {
+    moveTextureLabelToPointer(card, label, stack, event);
+  });
+
+  card.addEventListener("focus", () => {
+    label.classList.remove("is-following-pointer");
+    label.style.left = "";
+    label.style.top = "";
+  });
+}
+
+function moveTextureLabelToPointer(card, label, stack, event) {
+  const cardRect = card.getBoundingClientRect();
+  const stackRect = stack.getBoundingClientRect();
+  const labelWidth = label.offsetWidth || 150;
+  const labelHeight = label.offsetHeight || 70;
+  const gutter = 10;
+  const pointerOffset = 16;
+  const minX = stackRect.left - cardRect.left + gutter;
+  const maxX = stackRect.right - cardRect.left - labelWidth - gutter;
+  const minY = stackRect.top - cardRect.top + gutter;
+  const maxY = stackRect.bottom - cardRect.top - labelHeight - gutter;
+  const rawX = event.clientX - cardRect.left + pointerOffset;
+  const rawY = event.clientY - cardRect.top - labelHeight / 2;
+  const x = Math.min(Math.max(rawX, minX), maxX);
+  const y = Math.min(Math.max(rawY, minY), maxY);
+
+  label.classList.add("is-following-pointer");
+  label.style.left = `${x}px`;
+  label.style.top = `${y}px`;
 }
 
 function setupProductScene(canvas) {

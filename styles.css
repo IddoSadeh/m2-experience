@@ -3262,6 +3262,11 @@ img {
     transform 180ms ease;
 }
 
+.texture-card__label.is-following-pointer {
+  top: 0;
+  left: 0;
+}
+
 .texture-card:hover .texture-card__label,
 .texture-card:focus-visible .texture-card__label,
 .texture-card.is-featured .texture-card__label {
