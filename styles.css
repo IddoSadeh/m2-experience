@@ -2670,8 +2670,8 @@ img {
 }
 
 .product-cutout--interface {
-  --explode-x: -43%;
-  --explode-y: -21%;
+  --explode-x: -39%;
+  --explode-y: -18%;
   --part-scale: 0.93;
   z-index: 3;
 }
@@ -2679,13 +2679,13 @@ img {
 .product-cutout--engine {
   --explode-x: -11%;
   --explode-y: -9%;
-  --part-scale: 0.93;
+  --part-scale: 0.98;
   z-index: 2;
 }
 
 .product-cutout--outer {
-  --explode-x: 28%;
-  --explode-y: 9%;
+  --explode-x: 24%;
+  --explode-y: 7%;
   --part-scale: 0.93;
   z-index: 1;
 }
@@ -2774,7 +2774,7 @@ img {
   width: auto;
   min-width: 21.25rem;
   min-height: 8.8125rem;
-  padding: 1.5rem;
+  padding: 1.25rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
@@ -2840,12 +2840,21 @@ img {
   transform: scale(3.95);
 }
 
+.part-card-wrap--interface .part-card {
+  min-width: 20.75rem;
+}
+
+.part-card-wrap--interface .part-card__text {
+  flex-basis: 12.35rem;
+  width: 12.35rem;
+}
+
 .part-card-wrap--engine .part-card__thumb {
   transform: scale(3.95);
 }
 
 .part-card-wrap--outer .part-card__thumb {
-  transform: scale(1.7);
+  transform: scale(1.85);
 }
 
 .part-card__text {
@@ -3591,7 +3600,7 @@ img {
 }
 
 .spec-panel--image img {
-  width: min(69.6%, 25.95rem);
+  width: min(76%, 28.5rem);
 }
 
 .spec-list--box {
