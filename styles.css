@@ -2901,11 +2901,36 @@ img {
   right: 5.81%;
 }
 
+.product-steps-frame {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  background: var(--black);
+  color: var(--white);
+}
+
+.product-steps-frame__inner {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  background: var(--black);
+}
+
+.product-steps-frame.is-product-steps-active .product-steps-frame__inner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+}
+
 .system-steps {
   position: relative;
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  min-height: 100svh;
   margin: 0;
   padding: 0;
   border-top: 1px dashed #838383;
@@ -3027,9 +3052,10 @@ img {
 
 .response-hero {
   position: relative;
+  z-index: 2;
   display: flex;
   align-items: flex-end;
-  min-height: min(100svh, 54.05vw);
+  min-height: 100svh;
   overflow: hidden;
   background: #181818;
   padding: clamp(1.5rem, 3.7vw, 4rem);

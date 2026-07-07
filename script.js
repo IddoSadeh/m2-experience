@@ -16,6 +16,7 @@ const textureCards = document.querySelectorAll(".texture-card");
 const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const siteFooter = document.querySelector(".site-footer");
+const productStepsFrame = document.querySelector(".product-steps-frame");
 const osRevealStack = document.querySelector(".reveal--os");
 const osReturnStack = document.querySelector(".os-return");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
@@ -478,6 +479,20 @@ function updateFooterCover() {
 updateFooterCover();
 window.addEventListener("scroll", updateFooterCover, { passive: true });
 window.addEventListener("resize", updateFooterCover);
+
+function updateProductStepsFrame() {
+  if (!productStepsFrame) return;
+
+  const rect = productStepsFrame.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const isActive = rect.top <= 0 && rect.bottom > viewportHeight * 0.05;
+
+  productStepsFrame.classList.toggle("is-product-steps-active", isActive);
+}
+
+updateProductStepsFrame();
+window.addEventListener("scroll", updateProductStepsFrame, { passive: true });
+window.addEventListener("resize", updateProductStepsFrame);
 
 function updateOsRevealStack() {
   if (!osRevealStack) return;
