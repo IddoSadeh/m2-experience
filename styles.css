@@ -2305,6 +2305,155 @@ img {
   width: 100%;
 }
 
+.os-breath-chart__plot {
+  position: relative;
+  width: 100%;
+  height: 7.5rem;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.72);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    monospace;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.os-breath-chart__scale {
+  position: absolute;
+  right: 0;
+  color: var(--white);
+  pointer-events: none;
+}
+
+.os-breath-chart__scale--top {
+  top: 0;
+}
+
+.os-breath-chart__scale--bottom {
+  bottom: 1.5rem;
+}
+
+.os-breath-chart__axis {
+  position: absolute;
+  left: 0;
+  right: 5%;
+  top: 50%;
+  height: 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+.os-breath-chart__baseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  height: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+}
+
+.os-breath-chart__times {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.75rem;
+  color: var(--white);
+  pointer-events: none;
+}
+
+.os-breath-chart__times span {
+  position: absolute;
+  left: var(--x);
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.os-breath-chart__tooltip {
+  position: absolute;
+  left: var(--active-x, 50%);
+  top: 0;
+  color: rgba(255, 255, 255, 0.75);
+  transform: translateX(-50%);
+  pointer-events: none;
+  opacity: 0;
+  white-space: nowrap;
+  transition:
+    left 120ms ease,
+    opacity 120ms ease;
+}
+
+.os-breath-chart__plot:has(.os-br-column:hover) .os-breath-chart__tooltip,
+.os-breath-chart__plot:has(.os-br-column:focus-visible) .os-breath-chart__tooltip {
+  opacity: 1;
+}
+
+.os-br-column {
+  position: absolute;
+  left: var(--x);
+  top: 50%;
+  width: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  gap: 2px;
+}
+
+.os-br-column--up {
+  flex-direction: column-reverse;
+  transform: translate(-50%, -100%);
+}
+
+.os-br-column--down {
+  flex-direction: column;
+  transform: translateX(-50%);
+}
+
+.os-br-column:hover,
+.os-br-column:focus-visible {
+  outline: none;
+}
+
+.os-br-cell {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  align-self: center;
+  border-radius: 1.32px;
+  background: #66835a;
+  transition: background 100ms ease;
+}
+
+.os-br-cell--g {
+  background: #777777;
+}
+
+.os-br-cell--m {
+  background: #66835a;
+}
+
+.os-br-cell--a {
+  background: #c5ffae;
+}
+
+.os-br-column:hover > .os-br-cell,
+.os-br-column:focus-visible > .os-br-cell {
+  background: #c5ffae;
+}
+
+.os-breath-chart__plot:not(:has(.os-br-column:hover)):not(:has(.os-br-column:focus-visible))
+  .os-br-column.is-default
+  > .os-br-cell {
+  background: #c5ffae;
+}
+
 .os-heart-chart img {
   width: min(100%, 23.375rem);
   margin: 0 auto;

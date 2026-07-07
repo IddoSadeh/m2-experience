@@ -582,6 +582,110 @@ for (const card of document.querySelectorAll("[data-temp-card]")) {
   }
 }
 
+// 50-column breathing pattern. Each entry: [colorCode, direction].
+// colorCode = string of chars from axis outward:
+//   "g" grey #777777 (noise floor / baseline)
+//   "m" mid green #66835A (active breath body)
+//   "a" acid #C5FFAE (bright accents scattered across taller stacks)
+// direction: "u" (above axis) or "d" (below axis).
+const breathPattern = [
+  ["g",       "u"], ["gg",     "u"], ["g",       "u"], ["g",       "d"], ["gm",      "u"],
+  ["g",       "u"], ["gg",     "d"], ["gmm",     "u"], ["gmma",    "u"], ["gmm",     "u"],
+  ["gmmma",   "u"], ["gmmmma", "u"], ["gmmma",   "u"], ["gmm",     "d"], ["aaaaaa",  "u"],
+  ["gmmma",   "u"], ["gmma",   "u"], ["gmm",     "d"], ["gmm",     "u"], ["gg",      "u"],
+  ["g",       "u"], ["gg",     "u"], ["gma",     "u"], ["g",       "d"], ["gg",      "u"],
+  ["g",       "u"], ["gg",     "u"], ["gma",     "u"], ["gm",      "d"], ["g",       "u"],
+  ["gg",      "u"], ["g",      "u"], ["gg",      "u"], ["gma",     "u"], ["g",       "d"],
+  ["gg",      "u"], ["g",      "u"], ["g",       "u"], ["gm",      "u"], ["g",       "d"],
+  ["gg",      "u"], ["g",      "u"], ["g",       "u"], ["gg",      "u"], ["g",       "u"],
+  ["g",       "u"], ["gg",     "u"], ["g",       "d"], ["g",       "u"], ["g",       "u"],
+];
+const BREATH_PEAK_INDEX = 14; // 30% x, matches PNG "00:06" label
+const breathValues = {
+  whale: [
+    14, 17, 15, 12, 18, 16, 13, 20, 24, 22, 26, 30, 27, 15, 22,
+    28, 24, 14, 21, 19, 16, 20, 23, 13, 19, 17, 20, 24, 15, 17,
+    20, 18, 21, 23, 14, 19, 17, 18, 20, 13, 19, 17, 18, 20, 17,
+    16, 19, 14, 17, 16,
+  ],
+  street: [
+    20, 23, 21, 18, 24, 22, 19, 26, 30, 28, 32, 36, 33, 21, 28,
+    34, 30, 20, 27, 25, 22, 26, 29, 19, 25, 23, 26, 30, 21, 23,
+    26, 24, 27, 29, 20, 25, 23, 24, 26, 19, 25, 23, 24, 26, 23,
+    22, 25, 20, 23, 22,
+  ],
+  studio: [
+    12, 15, 13, 11, 16, 14, 11, 18, 21, 19, 22, 26, 23, 13, 19,
+    24, 21, 12, 18, 16, 14, 17, 20, 11, 16, 15, 17, 21, 13, 15,
+    17, 16, 18, 20, 12, 16, 15, 15, 17, 11, 16, 15, 15, 17, 15,
+    14, 16, 12, 15, 14,
+  ],
+};
+
+function breathTimeAt(i, total) {
+  // Timeline spans 00:00 to 00:20 across `total` columns.
+  const secs = Math.round((i / (total - 1)) * 20);
+  return `00:${String(secs).padStart(2, "0")}`;
+}
+
+for (const card of document.querySelectorAll("[data-breath-card]")) {
+  const memory = card.dataset.breathCard;
+  const values = breathValues[memory];
+  const plot = card.querySelector(".os-breath-chart__plot");
+  const tooltip = card.querySelector(".os-breath-chart__tooltip");
+  const reading = card.querySelector("[data-breath-reading]");
+  if (!values || !plot || !reading) continue;
+
+  const defaultValue = reading.dataset.breathDefault ?? reading.textContent;
+  const total = breathPattern.length;
+  const xRange = 89; // dots span 3% to 92% so they line up under 00:00, 00:10, 00:20
+
+  for (let i = 0; i < total; i++) {
+    const [colors, dir] = breathPattern[i];
+    const cells = colors.length;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    const dirClass = dir === "u" ? "up" : "down";
+    btn.className = `os-br-column os-br-column--${dirClass}`;
+    const x = 3 + (i * xRange) / (total - 1);
+    btn.style.setProperty("--x", x.toFixed(2) + "%");
+    const time = breathTimeAt(i, total);
+    btn.dataset.time = time;
+    btn.dataset.value = values[i];
+    btn.setAttribute(
+      "aria-label",
+      `${time}, ${values[i]} breaths per minute`,
+    );
+    if (i === BREATH_PEAK_INDEX) btn.classList.add("is-default");
+    for (let c = 0; c < cells; c++) {
+      const cell = document.createElement("span");
+      cell.className = `os-br-cell os-br-cell--${colors[c]}`;
+      btn.appendChild(cell);
+    }
+    plot.appendChild(btn);
+  }
+
+  for (const col of plot.querySelectorAll(".os-br-column")) {
+    const value = col.dataset.value;
+    const time = col.dataset.time;
+    const x = col.style.getPropertyValue("--x");
+
+    const enter = () => {
+      plot.style.setProperty("--active-x", x);
+      if (tooltip) tooltip.textContent = time;
+      reading.textContent = value;
+    };
+    const leave = () => {
+      reading.textContent = defaultValue;
+    };
+
+    col.addEventListener("mouseenter", enter);
+    col.addEventListener("focus", enter);
+    col.addEventListener("mouseleave", leave);
+    col.addEventListener("blur", leave);
+  }
+}
+
 for (const card of document.querySelectorAll("[data-bpm-card]")) {
   const reading = card.querySelector("[data-bpm-reading]");
   const plot = card.querySelector(".os-heart-chart__plot");
