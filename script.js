@@ -560,6 +560,28 @@ if (memoryTabs.length > 0 && memoryPanes.length > 0) {
   }
 }
 
+for (const card of document.querySelectorAll("[data-temp-card]")) {
+  const reading = card.querySelector("[data-temp-reading]");
+  const points = card.querySelectorAll(".os-temp-point");
+  if (!reading || points.length === 0) continue;
+
+  const defaultValue = reading.dataset.tempDefault ?? reading.textContent;
+
+  const show = (value) => {
+    reading.textContent = value;
+  };
+
+  for (const point of points) {
+    const value = point.dataset.value;
+    if (!value) continue;
+
+    point.addEventListener("mouseenter", () => show(value));
+    point.addEventListener("focus", () => show(value));
+    point.addEventListener("mouseleave", () => show(defaultValue));
+    point.addEventListener("blur", () => show(defaultValue));
+  }
+}
+
 if (letterDropTexts.length > 0) {
   const letterDropObserver = new IntersectionObserver(
     (entries) => {
