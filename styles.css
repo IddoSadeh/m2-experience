@@ -2422,6 +2422,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
   margin: 0;
 }
 
@@ -2435,8 +2436,10 @@ img {
 }
 
 .os-sound-card > div img {
-  width: 4.5rem;
+  flex: 0 1 4.5rem;
+  width: clamp(3.75rem, 4.2vw, 4.5rem);
   height: 1.625rem;
+  min-width: 0;
 }
 
 .os-sound-card__wave {
