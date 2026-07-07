@@ -2310,6 +2310,176 @@ img {
   margin: 0 auto;
 }
 
+.os-heart-chart__plot {
+  position: relative;
+  width: min(100%, 25.9375rem);
+  height: 7.5rem;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.72);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    monospace;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.os-heart-chart__scale {
+  position: absolute;
+  right: 0;
+  color: var(--white);
+  pointer-events: none;
+}
+
+.os-heart-chart__scale--top {
+  top: 0;
+}
+
+.os-heart-chart__scale--bottom {
+  bottom: 1.25rem;
+}
+
+.os-heart-chart__axis {
+  position: absolute;
+  left: 0;
+  right: 14%;
+  top: 87%;
+  height: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+}
+
+.os-heart-chart__active-line {
+  position: absolute;
+  left: var(--active-x, 52%);
+  top: var(--active-y, 28%);
+  height: calc(87% - var(--active-y, 28%));
+  width: 0;
+  border-left: 1px dashed rgba(255, 255, 255, 0.45);
+  transform: translateX(-50%);
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    left 120ms ease,
+    top 120ms ease,
+    height 120ms ease,
+    opacity 120ms ease;
+}
+
+.os-heart-chart__plot:has(.os-bpm-point:hover) .os-heart-chart__active-line,
+.os-heart-chart__plot:has(.os-bpm-point:focus-visible) .os-heart-chart__active-line {
+  opacity: 1;
+}
+
+.os-heart-chart__times {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.75rem;
+  color: var(--white);
+  pointer-events: none;
+}
+
+.os-heart-chart__times span {
+  position: absolute;
+  left: var(--x);
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.os-bpm-point {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: clamp(1rem, 3.2vw, 1.3rem);
+  height: clamp(1rem, 3.2vw, 1.3rem);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.os-bpm-point::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 0.125rem;
+  background: #c5ffae;
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.os-bpm-point::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: radial-gradient(
+    circle,
+    rgba(197, 255, 174, 0.55) 0%,
+    rgba(197, 255, 174, 0.18) 35%,
+    rgba(197, 255, 174, 0) 70%
+  );
+  content: "";
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 120ms ease;
+  pointer-events: none;
+}
+
+.os-bpm-point span {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.05rem);
+  color: rgba(255, 255, 255, 0.75);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    monospace;
+  font-size: 0.75rem;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  transition: opacity 120ms ease;
+}
+
+.os-bpm-point:hover,
+.os-bpm-point:focus-visible {
+  outline: none;
+}
+
+.os-bpm-point:hover::after,
+.os-bpm-point:focus-visible::after,
+.os-bpm-point:hover span,
+.os-bpm-point:focus-visible span,
+.os-bpm-point.is-default::after,
+.os-bpm-point.is-default span {
+  opacity: 1;
+}
+
+.os-heart-chart__plot:has(.os-bpm-point:hover)
+  .os-bpm-point.is-default:not(:hover)::after,
+.os-heart-chart__plot:has(.os-bpm-point:focus-visible)
+  .os-bpm-point.is-default:not(:focus-visible)::after,
+.os-heart-chart__plot:has(.os-bpm-point:hover)
+  .os-bpm-point.is-default:not(:hover)
+  span,
+.os-heart-chart__plot:has(.os-bpm-point:focus-visible)
+  .os-bpm-point.is-default:not(:focus-visible)
+  span {
+  opacity: 0;
+}
+
 .os-temp-chart img {
   width: min(100%, 25.9375rem);
   margin: 0 auto;
@@ -2367,7 +2537,7 @@ img {
 .os-temp-chart__times {
   position: absolute;
   left: 0;
-  right: 14%;
+  right: 0;
   bottom: 0;
   height: 0.75rem;
   pointer-events: none;

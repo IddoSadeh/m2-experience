@@ -582,6 +582,36 @@ for (const card of document.querySelectorAll("[data-temp-card]")) {
   }
 }
 
+for (const card of document.querySelectorAll("[data-bpm-card]")) {
+  const reading = card.querySelector("[data-bpm-reading]");
+  const plot = card.querySelector(".os-heart-chart__plot");
+  const points = card.querySelectorAll(".os-bpm-point");
+  if (!reading || !plot || points.length === 0) continue;
+
+  const defaultValue = reading.dataset.bpmDefault ?? reading.textContent;
+
+  for (const point of points) {
+    const value = point.dataset.value;
+    if (!value) continue;
+    const x = point.style.getPropertyValue("--x");
+    const y = point.style.getPropertyValue("--y");
+
+    const enter = () => {
+      plot.style.setProperty("--active-x", x);
+      plot.style.setProperty("--active-y", y);
+      reading.textContent = value;
+    };
+    const leave = () => {
+      reading.textContent = defaultValue;
+    };
+
+    point.addEventListener("mouseenter", enter);
+    point.addEventListener("focus", enter);
+    point.addEventListener("mouseleave", leave);
+    point.addEventListener("blur", leave);
+  }
+}
+
 if (letterDropTexts.length > 0) {
   const letterDropObserver = new IntersectionObserver(
     (entries) => {
