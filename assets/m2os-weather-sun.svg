@@ -1,0 +1,18 @@
+<svg width="43" height="24" viewBox="0 0 42.5196 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="sunClip">
+      <rect x="0" y="0" width="42.5196" height="19.887" />
+    </clipPath>
+    <filter id="sunGlow" x="2.4" y="2.1" width="32.5" height="26.95" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="3.29037" />
+    </filter>
+  </defs>
+  <g clip-path="url(#sunClip)">
+    <path d="M21.2598 33.845C29.3092 33.845 35.8346 27.5972 35.8346 19.8902C35.8346 12.1832 29.3092 5.93542 21.2598 5.93542C13.2104 5.93542 6.68506 12.1832 6.68506 19.8902C6.68506 27.5972 13.2104 33.845 21.2598 33.845Z" fill="#C5FFAE"/>
+    <g filter="url(#sunGlow)">
+      <path d="M19.7029 17.1256C24.8014 14.5328 27.6855 10.1793 26.1448 7.4018C24.604 4.62438 19.2218 4.47473 14.1233 7.0676C9.02478 9.66041 6.1407 14.0139 7.68146 16.7914C9.22222 19.5688 14.6044 19.7185 19.7029 17.1256Z" fill="#C5FFAE"/>
+    </g>
+  </g>
+  <path d="M25.1418 20.0007H17.9226L21.4641 22.3844L25.1418 20.0007Z" fill="#C5FFAE"/>
+  <path d="M1.64519 20.5899H17.6588L21.4543 23.1248L25.3462 20.5899H40.8744" stroke="#D0D0D0" stroke-width="3.29037" stroke-linecap="round"/>
+</svg>
