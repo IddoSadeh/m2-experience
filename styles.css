@@ -50,12 +50,14 @@ html {
     Consolas,
     "Liberation Mono",
     monospace;
-  overflow-x: hidden;
+  /* clip, not hidden: overflow-x hidden turns html/body into scroll
+     containers, which disables position: sticky everywhere on the page. */
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 button {
@@ -2957,11 +2959,14 @@ img {
 }
 
 .product-system {
-  --product-scroll-range: 12svh;
-  overflow: hidden;
+  --product-pad: clamp(1.25rem, 3.25vw, 4rem);
+  /* overflow: hidden would turn the section into the sticky containment box
+     and break position: sticky for the intro and steps frame; clip crops
+     without creating a scroll container. */
+  overflow: clip;
   background: var(--black);
   color: var(--white);
-  padding: 0 clamp(1.25rem, 3.25vw, 4rem) clamp(2.5rem, 3vw, 3.4rem);
+  padding: 0 var(--product-pad);
 }
 
 .product-system--tuner {
@@ -3030,27 +3035,39 @@ img {
 }
 
 .product-system__inner {
-  display: grid;
-  gap: 0;
   width: 100%;
+}
+
+.product-system--tuner .product-system__inner {
   max-width: 100rem;
   margin: 0 auto;
+}
+
+/* One frame holding the explosion and the steps text. It scrolls in as a
+   single unit, pins bottom-anchored once its bottom edge reaches the viewport
+   bottom (it is taller than the viewport), and unpins exactly when the
+   response-hero cover completes. --product-stage-h is measured by script.js
+   on load/resize. */
+.product-system__stage {
+  position: sticky;
+  top: min(0px, calc(100svh - var(--product-stage-h, 100svh)));
+  z-index: 1;
+  background: var(--black);
 }
 
 .product-system__intro {
   display: grid;
   gap: clamp(4rem, 7.06vw, 7.625rem);
-  position: sticky;
-  top: 0;
-  z-index: 1;
   align-content: center;
+  max-width: 100rem;
   min-height: 100svh;
+  margin: 0 auto;
   padding: clamp(2rem, 4.6vw, 5rem) 0;
   background: var(--black);
 }
 
-.product-system__scroll-range {
-  height: var(--product-scroll-range);
+.product-system__cover-runway {
+  height: 130svh;
 }
 
 .product-system__title {
@@ -3383,35 +3400,18 @@ img {
 }
 
 .product-steps-frame {
-  position: relative;
-  z-index: 1;
-  min-height: 100svh;
+  margin: 0 calc(-1 * var(--product-pad));
   background: var(--black);
   color: var(--white);
 }
 
 .product-steps-frame__inner {
-  position: relative;
-  z-index: 1;
-  min-height: 100svh;
-  background: var(--black);
-}
-
-.product-steps-frame.is-product-steps-active .product-steps-frame__inner {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 1;
+  width: 100%;
 }
 
 .system-steps {
-  position: relative;
-  z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: end;
-  min-height: 100svh;
   margin: 0;
   padding: 0;
   border-top: 1px dashed #838383;
@@ -3533,12 +3533,15 @@ img {
 
 .response-hero {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   align-items: flex-end;
   min-height: 100svh;
   overflow: hidden;
   background: #181818;
+  /* Rides up over the product-system cover runway so it covers the pinned
+     explosion + steps frame while they stay stationary. */
+  margin-top: -100svh;
   padding: clamp(1.5rem, 3.7vw, 4rem);
 }
 
@@ -5647,7 +5650,7 @@ img {
   }
 
   .product-system {
-    padding-inline: 1rem;
+    --product-pad: 1rem;
   }
 
   .product-system__intro {
@@ -5657,7 +5660,11 @@ img {
     gap: 2rem;
   }
 
-  .product-system__scroll-range {
+  .product-system__stage {
+    position: relative;
+  }
+
+  .product-system__cover-runway {
     display: none;
   }
 
@@ -5796,6 +5803,7 @@ img {
 
   .response-hero {
     min-height: 78svh;
+    margin-top: 0;
   }
 
   .response-hero__image {
@@ -6177,7 +6185,7 @@ img {
   }
 
   .product-system {
-    padding-inline: 2rem;
+    --product-pad: 2rem;
   }
 
   .product-system__intro {

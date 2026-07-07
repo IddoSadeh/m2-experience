@@ -16,7 +16,6 @@ const textureCards = document.querySelectorAll(".texture-card");
 const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const siteFooter = document.querySelector(".site-footer");
-const productStepsFrame = document.querySelector(".product-steps-frame");
 const osRevealStack = document.querySelector(".reveal--os");
 const osReturnStack = document.querySelector(".os-return");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
@@ -480,19 +479,18 @@ updateFooterCover();
 window.addEventListener("scroll", updateFooterCover, { passive: true });
 window.addEventListener("resize", updateFooterCover);
 
-function updateProductStepsFrame() {
-  if (!productStepsFrame) return;
+function updateProductStageMetrics() {
+  const stage = document.querySelector(".product-system__stage");
 
-  const rect = productStepsFrame.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const isActive = rect.top <= 0 && rect.bottom > viewportHeight * 0.05;
-
-  productStepsFrame.classList.toggle("is-product-steps-active", isActive);
+  if (stage) {
+    stage.style.setProperty("--product-stage-h", `${stage.offsetHeight}px`);
+  }
 }
 
-updateProductStepsFrame();
-window.addEventListener("scroll", updateProductStepsFrame, { passive: true });
-window.addEventListener("resize", updateProductStepsFrame);
+updateProductStageMetrics();
+window.addEventListener("load", updateProductStageMetrics);
+window.addEventListener("resize", updateProductStageMetrics);
+document.fonts?.ready.then(updateProductStageMetrics);
 
 function updateOsRevealStack() {
   if (!osRevealStack) return;
