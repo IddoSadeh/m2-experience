@@ -1897,8 +1897,9 @@ img {
 
 .os-memory-separator {
   width: 100%;
-  height: 0.875rem;
-  object-fit: fill;
+  height: 0;
+  margin: 0.875rem 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.3);
 }
 
 .os-memory-pane {
