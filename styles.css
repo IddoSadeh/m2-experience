@@ -1962,7 +1962,76 @@ img {
   overflow: hidden;
   padding: 1.5rem;
   border-radius: 1.375rem;
-  background: url("assets/m2os-left-video-still.png") center / cover no-repeat #07315f;
+  background: #07315f;
+}
+
+.os-video-card--whale {
+  background:
+    url("assets/m2os-left-video-still.png") center / cover no-repeat,
+    #07315f;
+}
+
+.os-video-card__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.os-video-card__audio {
+  display: none;
+}
+
+.os-video-card--whale .os-video-card__topline {
+  visibility: visible;
+}
+
+.os-video-card__play,
+.os-video-card__volume {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.os-video-card__play {
+  position: relative;
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+.os-video-card__play-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.os-video-card__play-icon--pause {
+  display: none;
+  padding: 0.25rem;
+}
+
+.os-video-card[data-video-playing] .os-video-card__play-icon--play {
+  display: none;
+}
+
+.os-video-card[data-video-playing] .os-video-card__play-icon--pause {
+  display: block;
+}
+
+.os-video-card__time {
+  display: inline-flex;
+  gap: 0.25rem;
 }
 
 .os-video-card--street {
@@ -2123,20 +2192,57 @@ img {
   height: 0.375rem;
 }
 
-.os-significance__curve {
+.os-significance__curve-svg {
+  position: absolute;
   left: 7.09%;
   top: 1.3125rem;
   width: 92.67%;
   height: 5.088rem;
   transform: scaleY(-1);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.os-significance__curve-base {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.32);
+  stroke-linejoin: bevel;
+  vector-effect: non-scaling-stroke;
+}
+
+.os-significance__curve-reveal {
+  fill: none;
+  stroke: #c5ffae;
+  stroke-linejoin: bevel;
+  vector-effect: non-scaling-stroke;
+  transition: stroke-dashoffset 80ms linear;
+}
+
+.os-significance__marker {
+  position: absolute;
+  left: calc(7.09% + var(--marker-x, 0%) * 0.9267);
+  top: calc(1.3125rem + var(--marker-y, 0.5) * 5.088rem);
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #c5ffae;
+  border-radius: 0.125rem;
+  box-shadow: 0 0 0.6rem rgba(197, 255, 174, 0.6);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition:
+    left 80ms linear,
+    top 80ms linear,
+    opacity 200ms ease;
+  pointer-events: none;
+}
+
+.os-video-card--whale[data-video-playing] .os-significance__marker,
+.os-video-card--whale[data-video-progress]:not([data-video-progress="0"]) .os-significance__marker {
+  opacity: 1;
 }
 
 .os-significance__active {
-  left: 51.81%;
-  top: 1.3125rem;
-  width: 11.62%;
-  height: 3.13rem;
-  transform: scaleY(-1);
+  display: none;
 }
 
 .os-significance__point {
@@ -2937,9 +3043,90 @@ img {
 }
 
 .os-sound-card__wave {
+  position: relative;
   width: 100%;
   height: 1.5625rem;
   object-fit: fill;
+}
+
+img.os-sound-card__wave {
+  display: block;
+}
+
+.os-sound-card__wave-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.os-sound-card__wave-base {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.os-sound-card__wave-highlight {
+  fill: none;
+  stroke: #c5ffae;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  clip-path: inset(-30% var(--seg-right, 100%) -30% var(--seg-left, 0%));
+}
+
+.os-sound-card__wave-playhead {
+  position: absolute;
+  left: var(--playhead-x, 0%);
+  top: -0.2rem;
+  bottom: -0.2rem;
+  width: 1px;
+  background: rgba(197, 255, 174, 0.9);
+  box-shadow: 0 0 4px rgba(197, 255, 174, 0.7);
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    left 80ms linear,
+    opacity 200ms ease;
+}
+
+.os-sound-card[data-sound-playing] .os-sound-card__wave-playhead {
+  opacity: 1;
+}
+
+.os-sound-card__play {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+}
+
+.os-sound-card__play-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.os-sound-card__play-icon--pause {
+  display: none;
+  padding: 0.2rem;
+}
+
+.os-sound-card[data-sound-playing] .os-sound-card__play-icon--play {
+  display: none;
+}
+
+.os-sound-card[data-sound-playing] .os-sound-card__play-icon--pause {
+  display: block;
 }
 
 .os-sound-card p img {

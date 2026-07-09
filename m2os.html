@@ -283,12 +283,39 @@
             </p>
 
             <div class="os-memory-grid">
-              <article class="os-video-card">
+              <article class="os-video-card os-video-card--whale" data-video-card>
+                <video
+                  class="os-video-card__video"
+                  data-video-source
+                  src="assets/Underwater.mp4"
+                  poster="assets/m2os-left-video-still.png"
+                  playsinline
+                  muted
+                  loop
+                  preload="metadata"
+                ></video>
+                <audio
+                  class="os-video-card__audio"
+                  data-video-audio
+                  src="assets/Underwater %E2%80%93 Sound.mp3"
+                  preload="metadata"
+                  loop
+                ></audio>
+
                 <div class="os-video-card__media">
                   <div class="os-video-card__topline">
-                    <span>00:00:25</span>
-                    <img src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
-                    <img src="assets/m2os-memory-volume.svg" alt="" aria-hidden="true" />
+                    <span class="os-video-card__time">
+                      <span data-video-current>00:00</span>
+                      <span aria-hidden="true"> / </span>
+                      <span data-video-duration>00:25</span>
+                    </span>
+                    <button class="os-video-card__play" type="button" data-video-play aria-label="Play memory preview">
+                      <img class="os-video-card__play-icon os-video-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                      <img class="os-video-card__play-icon os-video-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                    </button>
+                    <button class="os-video-card__volume" type="button" data-video-mute aria-label="Toggle sound">
+                      <img src="assets/m2os-memory-volume.svg" alt="" aria-hidden="true" />
+                    </button>
                     <span class="os-video-card__preview">
                       <img src="assets/m2os-memory-dot.svg" alt="" aria-hidden="true" />
                       Preview video
@@ -296,9 +323,11 @@
                   </div>
                 </div>
 
-                <div class="os-significance">
+                <div class="os-significance" data-significance>
                   <p>Memory Significance</p>
-                  <strong>78.3<span>/100</span></strong>
+                  <strong>
+                    <span data-significance-reading data-significance-default="78.3">78.3</span><span>/100</span>
+                  </strong>
                   <div class="os-significance__graph" aria-hidden="true">
                     <span class="os-significance__line os-significance__line--one"></span>
                     <span class="os-significance__line os-significance__line--two"></span>
@@ -306,11 +335,13 @@
                     <span class="os-significance__line os-significance__line--four"></span>
                     <span class="os-significance__line os-significance__line--five"></span>
                     <img class="os-significance__bars" src="assets/m2os-memory-active-bars.svg" alt="" />
-                    <img class="os-significance__curve" src="assets/m2os-memory-significance-line.svg" alt="" />
-                    <img class="os-significance__active" src="assets/m2os-memory-significance-active.svg" alt="" />
-                    <img class="os-significance__point os-significance__point--one" src="assets/m2os-memory-significance-point-1.svg" alt="" />
-                    <img class="os-significance__point os-significance__point--two" src="assets/m2os-memory-significance-point-2.svg" alt="" />
-                    <img class="os-significance__mini" src="assets/m2os-memory-significance-mini.svg" alt="" />
+                    <svg
+                      class="os-significance__curve-svg"
+                      viewBox="0 0 367.041 82.41"
+                      preserveAspectRatio="none"
+                      data-significance-svg
+                    ></svg>
+                    <span class="os-significance__marker" data-significance-marker aria-hidden="true"></span>
                   </div>
                   <div class="os-significance__times" aria-hidden="true">
                     <span>00:01</span><span>00:05</span><span>00:10</span><span>00:15</span><span>00:20</span><span>00:25</span>
@@ -385,17 +416,59 @@
                 </div>
 
                 <div class="os-memory-row os-memory-row--bottom">
-                  <article class="os-sound-card">
+                  <article
+                    class="os-sound-card"
+                    data-sound-card
+                    data-sound-start="3"
+                    data-sound-end="13"
+                    data-sound-initial="8"
+                    data-sound-total="25"
+                  >
+                    <audio
+                      data-sound-audio
+                      src="assets/Underwater %E2%80%93 Sound.mp3"
+                      preload="metadata"
+                    ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
-                    <img class="os-sound-card__wave" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
-                    <p><img src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" /><span>00:08 / 00:25</span></p>
+                    <div class="os-sound-card__wave">
+                      <svg class="os-sound-card__wave-svg" viewBox="0 0 219.479 20.7832" preserveAspectRatio="none" data-sound-svg aria-hidden="true"></svg>
+                      <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
+                    </div>
+                    <p>
+                      <button class="os-sound-card__play" type="button" data-sound-play aria-label="Play soundscape">
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                      </button>
+                      <span><span data-sound-current>00:08</span> / 00:25</span>
+                    </p>
                     <footer><span>Ambient flow</span><span>08:07 AM</span></footer>
                   </article>
 
-                  <article class="os-sound-card">
+                  <article
+                    class="os-sound-card"
+                    data-sound-card
+                    data-sound-start="20"
+                    data-sound-end="25"
+                    data-sound-initial="23"
+                    data-sound-total="25"
+                  >
+                    <audio
+                      data-sound-audio
+                      src="assets/Underwater %E2%80%93 Sound.mp3"
+                      preload="metadata"
+                    ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
-                    <img class="os-sound-card__wave" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
-                    <p><img src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" /><span>00:23 / 00:25</span></p>
+                    <div class="os-sound-card__wave">
+                      <svg class="os-sound-card__wave-svg" viewBox="0 0 219.479 20.7832" preserveAspectRatio="none" data-sound-svg aria-hidden="true"></svg>
+                      <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
+                    </div>
+                    <p>
+                      <button class="os-sound-card__play" type="button" data-sound-play aria-label="Play soundscape">
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                      </button>
+                      <span><span data-sound-current>00:23</span> / 00:25</span>
+                    </p>
                     <footer><span>Emotional spike</span><span>08:37 AM</span></footer>
                   </article>
 

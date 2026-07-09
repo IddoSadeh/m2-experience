@@ -626,6 +626,292 @@ function breathTimeAt(i, total) {
   return `00:${String(secs).padStart(2, "0")}`;
 }
 
+function formatVideoTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) return "00:00";
+  const s = Math.floor(seconds);
+  const mm = String(Math.floor(s / 60)).padStart(2, "0");
+  const ss = String(s % 60).padStart(2, "0");
+  return `${mm}:${ss}`;
+}
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+const SIGNIFICANCE_VB_X = 367.041;
+const SIGNIFICANCE_VB_Y = 82.41;
+
+let significancePathPromise = null;
+function loadSignificancePath() {
+  if (!significancePathPromise) {
+    significancePathPromise = fetch("assets/m2os-memory-significance-line.svg")
+      .then((r) => r.text())
+      .then((text) => {
+        const doc = new DOMParser().parseFromString(text, "image/svg+xml");
+        const path = doc.querySelector("path");
+        return path ? path.getAttribute("d") : null;
+      })
+      .catch(() => null);
+  }
+  return significancePathPromise;
+}
+
+async function setupSignificanceCurve(card, video) {
+  const svg = card.querySelector("[data-significance-svg]");
+  const marker = card.querySelector("[data-significance-marker]");
+  const reading = card.querySelector("[data-significance-reading]");
+  if (!svg) return null;
+
+  const d = await loadSignificancePath();
+  if (!d) return null;
+
+  const basePath = document.createElementNS(SVG_NS, "path");
+  basePath.setAttribute("d", d);
+  basePath.setAttribute("class", "os-significance__curve-base");
+  svg.appendChild(basePath);
+
+  const revealPath = document.createElementNS(SVG_NS, "path");
+  revealPath.setAttribute("d", d);
+  revealPath.setAttribute("class", "os-significance__curve-reveal");
+  svg.appendChild(revealPath);
+
+  const totalLength = revealPath.getTotalLength();
+  revealPath.setAttribute("stroke-dasharray", totalLength);
+  revealPath.style.strokeDashoffset = totalLength;
+
+  const defaultReading = reading
+    ? reading.dataset.significanceDefault || reading.textContent
+    : null;
+
+  const applyProgress = (progress) => {
+    const pct = Math.min(Math.max(progress, 0), 1);
+    revealPath.style.strokeDashoffset = totalLength * (1 - pct);
+
+    const point = revealPath.getPointAtLength(pct * totalLength);
+    if (marker) {
+      marker.style.setProperty(
+        "--marker-x",
+        `${((point.x / SIGNIFICANCE_VB_X) * 100).toFixed(2)}%`,
+      );
+      // SVG has scaleY(-1) applied via CSS, so higher SVG y = higher visual position
+      // Marker is a plain DOM element (not inside SVG) — compute unflipped y offset.
+      marker.style.setProperty(
+        "--marker-y",
+        (1 - point.y / SIGNIFICANCE_VB_Y).toFixed(4),
+      );
+    }
+    if (reading) {
+      if (pct <= 0) {
+        reading.textContent = defaultReading;
+      } else {
+        const value = (point.y / SIGNIFICANCE_VB_Y) * 100;
+        reading.textContent = value.toFixed(1);
+      }
+    }
+    card.setAttribute("data-video-progress", pct.toFixed(3));
+  };
+
+  applyProgress(0);
+  return applyProgress;
+}
+
+let soundWavePathPromise = null;
+function loadSoundWavePath() {
+  if (!soundWavePathPromise) {
+    soundWavePathPromise = fetch("assets/m2os-sound-wave.svg")
+      .then((r) => r.text())
+      .then((text) => {
+        const doc = new DOMParser().parseFromString(text, "image/svg+xml");
+        const path = doc.querySelector("path");
+        return path ? path.getAttribute("d") : null;
+      })
+      .catch(() => null);
+  }
+  return soundWavePathPromise;
+}
+
+async function setupSoundCard(card) {
+  const svg = card.querySelector("[data-sound-svg]");
+  const audio = card.querySelector("[data-sound-audio]");
+  const playBtn = card.querySelector("[data-sound-play]");
+  const currentEl = card.querySelector("[data-sound-current]");
+  const playhead = card.querySelector("[data-sound-playhead]");
+
+  if (!audio || !svg) return;
+
+  const total = parseFloat(card.dataset.soundTotal || "25");
+  const segStart = parseFloat(card.dataset.soundStart || "0");
+  const segEnd = parseFloat(card.dataset.soundEnd || String(total));
+  const initial = parseFloat(card.dataset.soundInitial || String(segStart));
+
+  const d = await loadSoundWavePath();
+  if (d) {
+    const base = document.createElementNS(SVG_NS, "path");
+    base.setAttribute("d", d);
+    base.setAttribute("class", "os-sound-card__wave-base");
+    svg.appendChild(base);
+
+    const highlight = document.createElementNS(SVG_NS, "path");
+    highlight.setAttribute("d", d);
+    highlight.setAttribute("class", "os-sound-card__wave-highlight");
+    highlight.style.setProperty(
+      "--seg-left",
+      `${((segStart / total) * 100).toFixed(2)}%`,
+    );
+    highlight.style.setProperty(
+      "--seg-right",
+      `${(((total - segEnd) / total) * 100).toFixed(2)}%`,
+    );
+    svg.appendChild(highlight);
+  }
+
+  if (playhead) {
+    playhead.style.setProperty(
+      "--playhead-x",
+      `${((initial / total) * 100).toFixed(2)}%`,
+    );
+  }
+
+  const setPlaying = (playing) => {
+    if (playing) card.setAttribute("data-sound-playing", "");
+    else card.removeAttribute("data-sound-playing");
+    if (playBtn) {
+      playBtn.setAttribute(
+        "aria-label",
+        playing ? "Pause soundscape" : "Play soundscape",
+      );
+    }
+  };
+
+  const updateFromCurrentTime = (t) => {
+    if (currentEl) currentEl.textContent = formatVideoTime(t);
+    if (playhead) {
+      playhead.style.setProperty(
+        "--playhead-x",
+        `${((t / total) * 100).toFixed(2)}%`,
+      );
+    }
+    card.setAttribute("data-sound-progress", t.toFixed(2));
+  };
+
+  if (playBtn) {
+    playBtn.addEventListener("click", () => {
+      if (audio.paused) {
+        // Pause any other playing soundscape so only one plays at a time.
+        for (const other of document.querySelectorAll(
+          "[data-sound-card] [data-sound-audio]",
+        )) {
+          if (other !== audio) other.pause();
+        }
+        if (audio.currentTime < segStart || audio.currentTime >= segEnd) {
+          audio.currentTime = segStart;
+        }
+        audio.play().catch(() => {});
+      } else {
+        audio.pause();
+      }
+    });
+  }
+
+  audio.addEventListener("play", () => setPlaying(true));
+  audio.addEventListener("pause", () => setPlaying(false));
+  audio.addEventListener("timeupdate", () => {
+    if (audio.currentTime >= segEnd) {
+      audio.pause();
+      audio.currentTime = segEnd;
+      updateFromCurrentTime(segEnd);
+      return;
+    }
+    updateFromCurrentTime(audio.currentTime);
+  });
+  audio.addEventListener("ended", () => {
+    audio.currentTime = segStart;
+    setPlaying(false);
+  });
+}
+
+for (const card of document.querySelectorAll("[data-sound-card]")) {
+  setupSoundCard(card);
+}
+
+for (const card of document.querySelectorAll("[data-video-card]")) {
+  const video = card.querySelector("[data-video-source]");
+  const audio = card.querySelector("[data-video-audio]");
+  const playBtn = card.querySelector("[data-video-play]");
+  const muteBtn = card.querySelector("[data-video-mute]");
+  const currentEl = card.querySelector("[data-video-current]");
+  const durationEl = card.querySelector("[data-video-duration]");
+
+  if (!video) continue;
+
+  let applyProgress = () => {};
+  setupSignificanceCurve(card, video).then((fn) => {
+    if (fn) applyProgress = fn;
+  });
+
+  const setPlayingState = (playing) => {
+    if (playing) card.setAttribute("data-video-playing", "");
+    else card.removeAttribute("data-video-playing");
+    if (playBtn) {
+      playBtn.setAttribute(
+        "aria-label",
+        playing ? "Pause memory preview" : "Play memory preview",
+      );
+    }
+  };
+
+  if (durationEl) {
+    if (Number.isFinite(video.duration) && video.duration > 0) {
+      durationEl.textContent = formatVideoTime(video.duration);
+    } else {
+      video.addEventListener(
+        "loadedmetadata",
+        () => {
+          durationEl.textContent = formatVideoTime(video.duration);
+        },
+        { once: true },
+      );
+    }
+  }
+
+  video.addEventListener("timeupdate", () => {
+    if (currentEl) currentEl.textContent = formatVideoTime(video.currentTime);
+    if (video.duration > 0) applyProgress(video.currentTime / video.duration);
+  });
+
+  video.addEventListener("play", () => setPlayingState(true));
+  video.addEventListener("pause", () => setPlayingState(false));
+  video.addEventListener("ended", () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    setPlayingState(false);
+    applyProgress(0);
+  });
+
+  if (playBtn) {
+    playBtn.addEventListener("click", () => {
+      if (video.paused) {
+        video.play().catch(() => {});
+        if (audio) {
+          audio.currentTime = video.currentTime;
+          audio.play().catch(() => {});
+        }
+      } else {
+        video.pause();
+        if (audio) audio.pause();
+      }
+    });
+  }
+
+  if (muteBtn && audio) {
+    let muted = false;
+    muteBtn.addEventListener("click", () => {
+      muted = !muted;
+      audio.muted = muted;
+      muteBtn.style.opacity = muted ? "0.4" : "1";
+    });
+  }
+}
+
 for (const card of document.querySelectorAll("[data-breath-card]")) {
   const memory = card.dataset.breathCard;
   const values = breathValues[memory];
