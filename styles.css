@@ -3943,6 +3943,7 @@ img {
     sans-serif;
   font-size: clamp(0.75rem, 1.04vw, 1.125rem);
   line-height: 1;
+  white-space: nowrap;
   backdrop-filter: blur(2px);
   opacity: 0;
   pointer-events: none;
@@ -3998,7 +3999,7 @@ img {
   --sprite-left: -11.63%;
   --label-top: 28%;
   --label-left: 10%;
-  --label-width: 9.375rem;
+  --label-width: 10.25rem;
 }
 
 .texture-card--frost {
@@ -4031,7 +4032,7 @@ img {
   --sprite-left: -516.86%;
   --label-top: 27%;
   --label-left: 48%;
-  --label-width: 9.1875rem;
+  --label-width: 10.25rem;
 }
 
 .spec-section {
