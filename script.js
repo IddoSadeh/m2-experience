@@ -552,10 +552,53 @@ if (memoryTabs.length > 0 && memoryPanes.length > 0) {
       }
 
       for (const pane of memoryPanes) {
-        pane.classList.toggle("is-active", pane.dataset.memoryPane === target);
+        const isActive = pane.dataset.memoryPane === target;
+        pane.classList.toggle("is-active", isActive);
+        if (!isActive) {
+          for (const media of pane.querySelectorAll("video, audio")) {
+            media.pause();
+          }
+        }
       }
     });
   }
+}
+
+const memoryDateToggle = document.querySelector("[data-memory-date-toggle]");
+const memoryDateMenu = document.querySelector("[data-memory-date-menu]");
+
+if (memoryDateToggle && memoryDateMenu) {
+  const dateLabel = memoryDateToggle.querySelector("[data-memory-date-label]");
+
+  const setOpen = (open) => {
+    memoryDateMenu.hidden = !open;
+    memoryDateToggle.setAttribute("aria-expanded", String(open));
+  };
+
+  memoryDateToggle.addEventListener("click", () => {
+    setOpen(memoryDateMenu.hidden);
+  });
+
+  for (const option of memoryDateMenu.querySelectorAll("button")) {
+    option.addEventListener("click", () => {
+      if (dateLabel) dateLabel.textContent = option.textContent.trim();
+      for (const other of memoryDateMenu.querySelectorAll("button")) {
+        other.setAttribute("aria-selected", String(other === option));
+      }
+      setOpen(false);
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    if (!memoryDateToggle.parentElement.contains(event.target)) setOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !memoryDateMenu.hidden) {
+      setOpen(false);
+      memoryDateToggle.focus();
+    }
+  });
 }
 
 for (const card of document.querySelectorAll("[data-temp-card]")) {
@@ -580,51 +623,129 @@ for (const card of document.querySelectorAll("[data-temp-card]")) {
   }
 }
 
-// 50-column breathing pattern. Each entry: [colorCode, direction].
-// colorCode = string of chars from axis outward:
-//   "g" grey #777777 (noise floor / baseline)
-//   "m" mid green #66835A (active breath body)
-//   "a" acid #C5FFAE (bright accents scattered across taller stacks)
-// direction: "u" (above axis) or "d" (below axis).
-const breathPattern = [
-  ["g",       "u"], ["gg",     "u"], ["g",       "u"], ["g",       "d"], ["gm",      "u"],
-  ["g",       "u"], ["gg",     "d"], ["gmm",     "u"], ["gmma",    "u"], ["gmm",     "u"],
-  ["gmmma",   "u"], ["gmmmma", "u"], ["gmmma",   "u"], ["gmm",     "d"], ["aaaaaa",  "u"],
-  ["gmmma",   "u"], ["gmma",   "u"], ["gmm",     "d"], ["gmm",     "u"], ["gg",      "u"],
-  ["g",       "u"], ["gg",     "u"], ["gma",     "u"], ["g",       "d"], ["gg",      "u"],
-  ["g",       "u"], ["gg",     "u"], ["gma",     "u"], ["gm",      "d"], ["g",       "u"],
-  ["gg",      "u"], ["g",      "u"], ["gg",      "u"], ["gma",     "u"], ["g",       "d"],
-  ["gg",      "u"], ["g",      "u"], ["g",       "u"], ["gm",      "u"], ["g",       "d"],
-  ["gg",      "u"], ["g",      "u"], ["g",       "u"], ["gg",      "u"], ["g",       "u"],
-  ["g",       "u"], ["gg",     "u"], ["g",       "d"], ["g",       "u"], ["g",       "u"],
-];
-const BREATH_PEAK_INDEX = 14; // 30% x, matches PNG "00:06" label
-const breathValues = {
+// Breathing charts extracted from Figma: per memory, columns at exact x
+// positions with cells at exact y offsets (percent of the 7.5rem plot).
+// Colors: g grey #777777, m mid green #66835A, a acid #C5FFAE.
+const breathCharts = {
   whale: [
-    14, 17, 15, 12, 18, 16, 13, 20, 24, 22, 26, 30, 27, 15, 22,
-    28, 24, 14, 21, 19, 16, 20, 23, 13, 19, 17, 20, 24, 15, 17,
-    20, 18, 21, 23, 14, 19, 17, 18, 20, 13, 19, 17, 18, 20, 17,
-    16, 19, 14, 17, 16,
+    { x: 1.49, time: "00:00", value: 21, cells: [[56.7, "g"]] },
+    { x: 4.85, time: "00:00", value: 21, cells: [[56.7, "g"]] },
+    { x: 8.21, time: "00:01", value: 21, cells: [[56.7, "g"], [64.2, "g"]] },
+    { x: 11.57, time: "00:02", value: 27, cells: [[40, "m"], [46.7, "m"], [56.7, "g"]] },
+    { x: 14.93, time: "00:03", value: 21, cells: [[56.7, "g"], [64.2, "g"]] },
+    { x: 18.28, time: "00:04", value: 21, cells: [[56.7, "g"]] },
+    { x: 22.39, time: "00:05", value: 21, cells: [[56.7, "m"]] },
+    { x: 23.88, time: "00:06", value: 21, cells: [[56.7, "m"]] },
+    { x: 25.37, time: "00:06", value: 21, cells: [[56.7, "m"]] },
+    { x: 26.87, time: "00:06", value: 21, cells: [[56.7, "m"]] },
+    { x: 28.36, time: "00:07", value: 23, cells: [[50, "m"], [56.7, "m"], [63.3, "m"]] },
+    { x: 29.85, time: "00:07", value: 28, cells: [[36.7, "a"], [43.3, "a"], [50, "m"], [56.7, "m"]] },
+    { x: 31.34, time: "00:06", value: 22, isDefault: true, cells: [[30, "a"], [36.7, "a"], [43.3, "a"], [50, "m"], [56.7, "a"], [67.5, "m"], [74.2, "m"]] },
+    { x: 32.84, time: "00:08", value: 21, cells: [[56.7, "a"]] },
+    { x: 34.33, time: "00:08", value: 23, cells: [[50, "a"], [56.7, "a"]] },
+    { x: 35.82, time: "00:09", value: 31, cells: [[30, "a"], [36.7, "m"], [43.3, "m"], [50, "m"], [56.7, "m"], [66.7, "g"], [75, "g"], [83.3, "g"]] },
+    { x: 37.31, time: "00:09", value: 21, cells: [[56.7, "m"]] },
+    { x: 41.42, time: "00:10", value: 26, cells: [[43.3, "a"], [50, "m"], [57.5, "m"], [66.7, "g"], [75, "g"]] },
+    { x: 44.78, time: "00:11", value: 26, cells: [[43.3, "m"], [50, "m"], [57.5, "g"]] },
+    { x: 48.13, time: "00:12", value: 21, cells: [[57.5, "g"], [65, "g"], [74.2, "g"]] },
+    { x: 51.49, time: "00:13", value: 26, cells: [[43.3, "m"], [50, "m"], [57.5, "g"], [65, "g"]] },
+    { x: 54.85, time: "00:14", value: 23, cells: [[50.8, "m"], [57.5, "g"]] },
+    { x: 58.21, time: "00:15", value: 21, cells: [[57.5, "g"]] },
+    { x: 60.07, time: "00:15", value: 21, cells: [[57.5, "g"]] },
+    { x: 61.94, time: "00:16", value: 28, cells: [[37.5, "a"], [44.2, "m"], [50.8, "g"], [57.5, "g"]] },
+    { x: 63.81, time: "00:16", value: 26, cells: [[44.2, "m"], [50.8, "g"], [57.5, "g"]] },
+    { x: 66.79, time: "00:17", value: 23, cells: [[50.8, "m"], [57.5, "g"]] },
+    { x: 68.66, time: "00:18", value: 23, cells: [[50.8, "g"], [57.5, "g"]] },
+    { x: 70.52, time: "00:18", value: 21, cells: [[57.5, "g"]] },
+    { x: 72.39, time: "00:19", value: 21, cells: [[57.5, "g"], [65, "g"]] },
+    { x: 74.25, time: "00:19", value: 21, cells: [[57.5, "g"]] },
+    { x: 76.12, time: "00:20", value: 21, cells: [[57.5, "g"]] },
+    { x: 79.48, time: "00:21", value: 21, cells: [[57.5, "g"]] },
+    { x: 82.84, time: "00:22", value: 21, cells: [[57.5, "g"]] },
+    { x: 86.19, time: "00:22", value: 24, cells: [[47.5, "m"], [57.5, "g"]] },
+    { x: 89.55, time: "00:23", value: 21, cells: [[57.5, "g"]] },
+    { x: 92.91, time: "00:24", value: 21, cells: [[57.5, "g"]] },
   ],
   street: [
-    20, 23, 21, 18, 24, 22, 19, 26, 30, 28, 32, 36, 33, 21, 28,
-    34, 30, 20, 27, 25, 22, 26, 29, 19, 25, 23, 26, 30, 21, 23,
-    26, 24, 27, 29, 20, 25, 23, 24, 26, 19, 25, 23, 24, 26, 23,
-    22, 25, 20, 23, 22,
+    { x: 1.49, time: "00:00", value: 21, cells: [[56.7, "g"]] },
+    { x: 4.85, time: "00:00", value: 21, cells: [[56.7, "g"]] },
+    { x: 8.21, time: "00:01", value: 21, cells: [[56.7, "g"]] },
+    { x: 11.57, time: "00:02", value: 21, cells: [[56.7, "g"]] },
+    { x: 14.93, time: "00:03", value: 24, cells: [[47.5, "g"], [56.7, "g"]] },
+    { x: 18.28, time: "00:04", value: 21, cells: [[56.7, "g"]] },
+    { x: 20.71, time: "00:05", value: 21, cells: [[56.7, "m"]] },
+    { x: 22.2, time: "00:05", value: 21, cells: [[56.7, "m"]] },
+    { x: 23.69, time: "00:06", value: 21, cells: [[56.7, "m"]] },
+    { x: 25.19, time: "00:06", value: 21, cells: [[56.7, "m"], [66.7, "g"]] },
+    { x: 26.87, time: "00:06", value: 21, cells: [[56.7, "m"]] },
+    { x: 28.36, time: "00:07", value: 23, cells: [[50, "m"], [56.7, "m"], [63.3, "m"]] },
+    { x: 29.85, time: "00:07", value: 26, cells: [[43.3, "m"], [50, "m"], [56.7, "m"]] },
+    { x: 31.34, time: "00:08", value: 23, cells: [[50, "m"], [56.7, "m"], [67.5, "m"]] },
+    { x: 32.84, time: "00:08", value: 26, cells: [[43.3, "a"], [50, "a"], [56.7, "m"]] },
+    { x: 34.33, time: "00:08", value: 26, cells: [[43.3, "a"], [50, "a"], [56.7, "a"]] },
+    { x: 35.82, time: "00:09", value: 28, cells: [[36.7, "a"], [43.3, "a"], [50, "a"], [56.7, "m"]] },
+    { x: 37.31, time: "00:09", value: 26, cells: [[43.3, "a"], [50, "a"], [56.7, "a"]] },
+    { x: 38.81, time: "00:11", value: 28, isDefault: true, cells: [[23.3, "a"], [30, "a"], [36.7, "a"], [43.3, "a"], [50, "a"], [56.7, "a"], [66.7, "g"]] },
+    { x: 40.3, time: "00:10", value: 33, cells: [[23.3, "a"], [30, "a"], [36.7, "a"], [43.3, "a"], [50, "a"], [56.7, "a"]] },
+    { x: 41.79, time: "00:10", value: 36, cells: [[16.7, "a"], [23.3, "a"], [30, "a"], [36.7, "a"], [43.3, "a"], [50, "a"], [56.7, "a"], [66.7, "g"], [73.3, "g"]] },
+    { x: 43.28, time: "00:11", value: 28, cells: [[36.7, "a"], [43.3, "a"], [50, "a"], [56.7, "a"]] },
+    { x: 44.78, time: "00:11", value: 28, cells: [[36.7, "a"], [43.3, "a"], [50, "a"], [56.7, "a"]] },
+    { x: 46.27, time: "00:12", value: 26, cells: [[43.3, "a"], [50, "a"], [56.7, "a"]] },
+    { x: 48.13, time: "00:12", value: 23, cells: [[50, "m"], [56.7, "g"], [65, "g"], [73.3, "g"]] },
+    { x: 51.49, time: "00:13", value: 31, cells: [[30, "a"], [36.7, "a"], [43.3, "a"], [50, "m"], [57.5, "m"], [65, "g"]] },
+    { x: 54.85, time: "00:14", value: 28, cells: [[36.7, "a"], [43.3, "a"], [50.8, "m"], [57.5, "m"]] },
+    { x: 58.21, time: "00:15", value: 21, cells: [[57.5, "g"]] },
+    { x: 60.07, time: "00:15", value: 21, cells: [[57.5, "g"]] },
+    { x: 61.94, time: "00:16", value: 28, cells: [[37.5, "a"], [44.2, "a"], [50.8, "m"], [57.5, "g"]] },
+    { x: 63.81, time: "00:16", value: 26, cells: [[44.2, "a"], [50.8, "m"], [57.5, "g"]] },
+    { x: 66.79, time: "00:17", value: 23, cells: [[50.8, "m"], [57.5, "g"]] },
+    { x: 68.66, time: "00:18", value: 23, cells: [[50.8, "g"], [57.5, "g"]] },
+    { x: 70.52, time: "00:18", value: 23, cells: [[50.8, "g"], [57.5, "g"], [65, "g"]] },
+    { x: 72.39, time: "00:19", value: 23, cells: [[50.8, "g"], [57.5, "g"]] },
+    { x: 74.63, time: "00:19", value: 21, cells: [[57.5, "g"]] },
+    { x: 76.87, time: "00:20", value: 23, cells: [[50.8, "g"], [57.5, "g"]] },
+    { x: 78.73, time: "00:20", value: 26, cells: [[44.2, "m"], [50.8, "g"], [57.5, "g"]] },
   ],
   studio: [
-    12, 15, 13, 11, 16, 14, 11, 18, 21, 19, 22, 26, 23, 13, 19,
-    24, 21, 12, 18, 16, 14, 17, 20, 11, 16, 15, 17, 21, 13, 15,
-    17, 16, 18, 20, 12, 16, 15, 15, 17, 11, 16, 15, 15, 17, 15,
-    14, 16, 12, 15, 14,
+    { x: 1.49, time: "00:00", value: 21, cells: [[56.7, "g"]] },
+    { x: 4.85, time: "00:00", value: 21, cells: [[56.7, "g"]] },
+    { x: 8.21, time: "00:01", value: 21, cells: [[56.7, "g"], [64.2, "g"]] },
+    { x: 11.57, time: "00:02", value: 21, cells: [[56.7, "g"]] },
+    { x: 14.93, time: "00:03", value: 21, cells: [[56.7, "g"], [64.2, "g"]] },
+    { x: 18.28, time: "00:04", value: 21, cells: [[56.7, "g"]] },
+    { x: 22.39, time: "00:05", value: 21, cells: [[56.7, "m"]] },
+    { x: 23.88, time: "00:06", value: 21, cells: [[56.7, "m"]] },
+    { x: 25.37, time: "00:06", value: 26, cells: [[42.5, "m"], [49.2, "m"], [56.7, "m"]] },
+    { x: 26.87, time: "00:06", value: 29, cells: [[35.8, "a"], [42.5, "m"], [49.2, "m"], [56.7, "m"]] },
+    { x: 28.36, time: "00:07", value: 29, cells: [[35.8, "a"], [43.3, "m"], [50, "m"], [56.7, "m"], [63.3, "m"]] },
+    { x: 29.85, time: "00:07", value: 26, cells: [[43.3, "m"], [50, "m"], [56.7, "m"]] },
+    { x: 31.34, time: "00:08", value: 26, cells: [[43.3, "m"], [50, "m"], [56.7, "a"], [67.5, "m"], [74.2, "m"]] },
+    { x: 32.84, time: "00:08", value: 21, cells: [[56.7, "a"]] },
+    { x: 34.33, time: "00:08", value: 23, cells: [[50, "a"], [56.7, "a"]] },
+    { x: 35.82, time: "00:09", value: 19, isDefault: true, cells: [[36.7, "m"], [43.3, "m"], [50, "m"], [56.7, "m"]] },
+    { x: 37.31, time: "00:09", value: 21, cells: [[56.7, "m"]] },
+    { x: 41.42, time: "00:10", value: 26, cells: [[43.3, "a"], [50, "m"], [57.5, "m"]] },
+    { x: 44.78, time: "00:11", value: 26, cells: [[43.3, "m"], [50, "m"], [57.5, "g"]] },
+    { x: 48.13, time: "00:12", value: 21, cells: [[57.5, "g"], [65, "g"], [74.2, "g"]] },
+    { x: 51.49, time: "00:13", value: 26, cells: [[43.3, "m"], [50, "m"], [57.5, "g"], [65, "g"]] },
+    { x: 54.85, time: "00:14", value: 23, cells: [[50.8, "m"], [57.5, "g"]] },
+    { x: 58.21, time: "00:15", value: 21, cells: [[57.5, "g"]] },
+    { x: 60.07, time: "00:15", value: 21, cells: [[57.5, "g"]] },
+    { x: 61.94, time: "00:16", value: 23, cells: [[50.8, "g"], [57.5, "g"]] },
+    { x: 63.81, time: "00:16", value: 23, cells: [[50.8, "g"], [57.5, "g"]] },
+    { x: 66.79, time: "00:17", value: 23, cells: [[50.8, "m"], [57.5, "g"]] },
+    { x: 68.66, time: "00:18", value: 23, cells: [[50.8, "g"], [57.5, "g"]] },
+    { x: 70.52, time: "00:18", value: 21, cells: [[57.5, "g"]] },
+    { x: 72.39, time: "00:19", value: 21, cells: [[57.5, "g"], [65, "g"]] },
+    { x: 74.25, time: "00:19", value: 21, cells: [[57.5, "g"]] },
+    { x: 76.12, time: "00:20", value: 21, cells: [[57.5, "g"]] },
+    { x: 79.48, time: "00:21", value: 21, cells: [[57.5, "g"]] },
+    { x: 82.84, time: "00:22", value: 21, cells: [[57.5, "g"]] },
+    { x: 86.19, time: "00:22", value: 24, cells: [[47.5, "m"], [57.5, "g"]] },
+    { x: 89.55, time: "00:23", value: 21, cells: [[57.5, "g"]] },
+    { x: 92.91, time: "00:24", value: 21, cells: [[57.5, "g"]] },
   ],
 };
-
-function breathTimeAt(i, total) {
-  // Timeline spans 00:00 to 00:20 across `total` columns.
-  const secs = Math.round((i / (total - 1)) * 20);
-  return `00:${String(secs).padStart(2, "0")}`;
-}
 
 function formatVideoTime(seconds) {
   if (!Number.isFinite(seconds) || seconds < 0) return "00:00";
@@ -634,33 +755,49 @@ function formatVideoTime(seconds) {
   return `${mm}:${ss}`;
 }
 
-const SVG_NS = "http://www.w3.org/2000/svg";
-const SIGNIFICANCE_VB_X = 367.041;
-const SIGNIFICANCE_VB_Y = 82.41;
+function formatVideoClock(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) return "00:00:00";
+  const s = Math.round(seconds);
+  const hh = String(Math.floor(s / 3600)).padStart(2, "0");
+  const mm = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+  const ss = String(s % 60).padStart(2, "0");
+  return `${hh}:${mm}:${ss}`;
+}
 
-let significancePathPromise = null;
-function loadSignificancePath() {
-  if (!significancePathPromise) {
-    significancePathPromise = fetch("assets/m2os-memory-significance-line.svg")
-      .then((r) => r.text())
-      .then((text) => {
-        const doc = new DOMParser().parseFromString(text, "image/svg+xml");
-        const path = doc.querySelector("path");
-        return path ? path.getAttribute("d") : null;
-      })
-      .catch(() => null);
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+const significancePathPromises = new Map();
+function loadSignificancePath(src) {
+  if (!significancePathPromises.has(src)) {
+    significancePathPromises.set(
+      src,
+      fetch(src)
+        .then((r) => r.text())
+        .then((text) => {
+          const doc = new DOMParser().parseFromString(text, "image/svg+xml");
+          const path = doc.querySelector("path");
+          return path ? path.getAttribute("d") : null;
+        })
+        .catch(() => null),
+    );
   }
-  return significancePathPromise;
+  return significancePathPromises.get(src);
 }
 
 async function setupSignificanceCurve(card, video) {
   const svg = card.querySelector("[data-significance-svg]");
   const marker = card.querySelector("[data-significance-marker]");
   const reading = card.querySelector("[data-significance-reading]");
-  if (!svg) return null;
+  if (!svg || !svg.dataset.sigSrc) return null;
 
-  const d = await loadSignificancePath();
+  const d = await loadSignificancePath(svg.dataset.sigSrc);
   if (!d) return null;
+
+  const vbX = svg.viewBox.baseVal.width || 1;
+  const vbY = svg.viewBox.baseVal.height || 1;
+  // Curves exported y-up are flipped via CSS scaleY(-1); an unflipped curve
+  // (data-sig-flip="false") is already top-down.
+  const flipped = svg.dataset.sigFlip !== "false";
 
   const basePath = document.createElementNS(SVG_NS, "path");
   basePath.setAttribute("d", d);
@@ -672,9 +809,35 @@ async function setupSignificanceCurve(card, video) {
   revealPath.setAttribute("class", "os-significance__curve-reveal");
   svg.appendChild(revealPath);
 
+  // The base path is drawn with gaps (separate subpaths; the colored segment
+  // images fill them), so a dash-offset reveal would animate every subpath in
+  // parallel. Instead the reveal sweeps left to right along x — the time
+  // axis — via a clip rectangle, and the marker rides a pre-sampled x -> y
+  // lookup of the curve (interpolated across the gaps).
   const totalLength = revealPath.getTotalLength();
-  revealPath.setAttribute("stroke-dasharray", totalLength);
-  revealPath.style.strokeDashoffset = totalLength;
+  const SAMPLE_COUNT = 400;
+  const samples = [];
+  for (let i = 0; i <= SAMPLE_COUNT; i++) {
+    const pt = revealPath.getPointAtLength((i / SAMPLE_COUNT) * totalLength);
+    samples.push({ x: pt.x, y: pt.y });
+  }
+  samples.sort((a, b) => a.x - b.x);
+
+  const yAtX = (x) => {
+    if (x <= samples[0].x) return samples[0].y;
+    let lo = 0;
+    let hi = samples.length - 1;
+    if (x >= samples[hi].x) return samples[hi].y;
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1;
+      if (samples[mid].x <= x) lo = mid;
+      else hi = mid;
+    }
+    const a = samples[lo];
+    const b = samples[hi];
+    const t = b.x === a.x ? 0 : (x - a.x) / (b.x - a.x);
+    return a.y + (b.y - a.y) * t;
+  };
 
   const defaultReading = reading
     ? reading.dataset.significanceDefault || reading.textContent
@@ -682,85 +845,63 @@ async function setupSignificanceCurve(card, video) {
 
   const applyProgress = (progress) => {
     const pct = Math.min(Math.max(progress, 0), 1);
-    revealPath.style.strokeDashoffset = totalLength * (1 - pct);
+    revealPath.style.clipPath = `inset(-10% ${(100 - pct * 100).toFixed(2)}% -10% -2%)`;
 
-    const point = revealPath.getPointAtLength(pct * totalLength);
+    const y = yAtX(pct * vbX);
+    const heightFraction = flipped ? y / vbY : 1 - y / vbY;
     if (marker) {
-      marker.style.setProperty(
-        "--marker-x",
-        `${((point.x / SIGNIFICANCE_VB_X) * 100).toFixed(2)}%`,
-      );
-      // SVG has scaleY(-1) applied via CSS, so higher SVG y = higher visual position
-      // Marker is a plain DOM element (not inside SVG) — compute unflipped y offset.
-      marker.style.setProperty(
-        "--marker-y",
-        (1 - point.y / SIGNIFICANCE_VB_Y).toFixed(4),
-      );
+      marker.style.setProperty("--marker-x", `${(pct * 100).toFixed(2)}%`);
+      // Marker is a plain DOM element (not inside the SVG) — its y offset runs
+      // top-down from the curve box top.
+      marker.style.setProperty("--marker-y", (1 - heightFraction).toFixed(4));
     }
     if (reading) {
       if (pct <= 0) {
         reading.textContent = defaultReading;
       } else {
-        const value = (point.y / SIGNIFICANCE_VB_Y) * 100;
-        reading.textContent = value.toFixed(1);
+        reading.textContent = (heightFraction * 100).toFixed(1);
       }
     }
-    card.setAttribute("data-video-progress", pct.toFixed(3));
+    // "0" exactly at rest so the CSS [data-video-progress="0"] marker-hiding
+    // selector matches.
+    card.setAttribute("data-video-progress", pct === 0 ? "0" : pct.toFixed(3));
   };
 
   applyProgress(0);
   return applyProgress;
 }
 
-let soundWavePathPromise = null;
-function loadSoundWavePath() {
-  if (!soundWavePathPromise) {
-    soundWavePathPromise = fetch("assets/m2os-sound-wave.svg")
-      .then((r) => r.text())
-      .then((text) => {
-        const doc = new DOMParser().parseFromString(text, "image/svg+xml");
-        const path = doc.querySelector("path");
-        return path ? path.getAttribute("d") : null;
-      })
-      .catch(() => null);
+// Pause every other piece of memory-lab media (videos, video audio tracks,
+// soundscapes) so only one thing plays at a time.
+function pauseOtherMemoryMedia(except = []) {
+  for (const media of document.querySelectorAll(
+    ".os-memory-pane video, .os-memory-pane audio",
+  )) {
+    if (!except.includes(media)) media.pause();
   }
-  return soundWavePathPromise;
 }
 
-async function setupSoundCard(card) {
-  const svg = card.querySelector("[data-sound-svg]");
+function setupSoundCard(card) {
   const audio = card.querySelector("[data-sound-audio]");
   const playBtn = card.querySelector("[data-sound-play]");
   const currentEl = card.querySelector("[data-sound-current]");
   const playhead = card.querySelector("[data-sound-playhead]");
 
-  if (!audio || !svg) return;
+  if (!audio) return;
 
   const total = parseFloat(card.dataset.soundTotal || "25");
   const segStart = parseFloat(card.dataset.soundStart || "0");
   const segEnd = parseFloat(card.dataset.soundEnd || String(total));
   const initial = parseFloat(card.dataset.soundInitial || String(segStart));
 
-  const d = await loadSoundWavePath();
-  if (d) {
-    const base = document.createElementNS(SVG_NS, "path");
-    base.setAttribute("d", d);
-    base.setAttribute("class", "os-sound-card__wave-base");
-    svg.appendChild(base);
-
-    const highlight = document.createElementNS(SVG_NS, "path");
-    highlight.setAttribute("d", d);
-    highlight.setAttribute("class", "os-sound-card__wave-highlight");
-    highlight.style.setProperty(
-      "--seg-left",
-      `${((segStart / total) * 100).toFixed(2)}%`,
-    );
-    highlight.style.setProperty(
-      "--seg-right",
-      `${(((total - segEnd) / total) * 100).toFixed(2)}%`,
-    );
-    svg.appendChild(highlight);
-  }
+  card.style.setProperty(
+    "--seg-left",
+    `${((segStart / total) * 100).toFixed(2)}%`,
+  );
+  card.style.setProperty(
+    "--seg-right",
+    `${(((total - segEnd) / total) * 100).toFixed(2)}%`,
+  );
 
   if (playhead) {
     playhead.style.setProperty(
@@ -794,12 +935,7 @@ async function setupSoundCard(card) {
   if (playBtn) {
     playBtn.addEventListener("click", () => {
       if (audio.paused) {
-        // Pause any other playing soundscape so only one plays at a time.
-        for (const other of document.querySelectorAll(
-          "[data-sound-card] [data-sound-audio]",
-        )) {
-          if (other !== audio) other.pause();
-        }
+        pauseOtherMemoryMedia([audio]);
         if (audio.currentTime < segStart || audio.currentTime >= segEnd) {
           audio.currentTime = segStart;
         }
@@ -833,14 +969,16 @@ for (const card of document.querySelectorAll("[data-sound-card]")) {
 
 for (const card of document.querySelectorAll("[data-video-card]")) {
   const video = card.querySelector("[data-video-source]");
+  // Whale and studio pair a muted video with a separate audio track; the
+  // protest video carries its own audio and is unmuted on the play gesture.
   const audio = card.querySelector("[data-video-audio]");
   const playBtn = card.querySelector("[data-video-play]");
   const muteBtn = card.querySelector("[data-video-mute]");
-  const currentEl = card.querySelector("[data-video-current]");
-  const durationEl = card.querySelector("[data-video-duration]");
+  const timeEl = card.querySelector("[data-video-time]");
 
   if (!video) continue;
 
+  let muted = false;
   let applyProgress = () => {};
   setupSignificanceCurve(card, video).then((fn) => {
     if (fn) applyProgress = fn;
@@ -857,22 +995,18 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
     }
   };
 
-  if (durationEl) {
-    if (Number.isFinite(video.duration) && video.duration > 0) {
-      durationEl.textContent = formatVideoTime(video.duration);
-    } else {
-      video.addEventListener(
-        "loadedmetadata",
-        () => {
-          durationEl.textContent = formatVideoTime(video.duration);
-        },
-        { once: true },
-      );
-    }
+  if (timeEl) {
+    video.addEventListener(
+      "loadedmetadata",
+      () => {
+        timeEl.textContent = formatVideoClock(video.duration);
+      },
+      { once: true },
+    );
   }
 
   video.addEventListener("timeupdate", () => {
-    if (currentEl) currentEl.textContent = formatVideoTime(video.currentTime);
+    if (timeEl) timeEl.textContent = formatVideoClock(video.currentTime);
     if (video.duration > 0) applyProgress(video.currentTime / video.duration);
   });
 
@@ -890,6 +1024,8 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
   if (playBtn) {
     playBtn.addEventListener("click", () => {
       if (video.paused) {
+        pauseOtherMemoryMedia(audio ? [video, audio] : [video]);
+        if (!audio) video.muted = muted;
         video.play().catch(() => {});
         if (audio) {
           audio.currentTime = video.currentTime;
@@ -902,11 +1038,11 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
     });
   }
 
-  if (muteBtn && audio) {
-    let muted = false;
+  if (muteBtn) {
+    const soundTarget = audio ?? video;
     muteBtn.addEventListener("click", () => {
       muted = !muted;
-      audio.muted = muted;
+      soundTarget.muted = muted;
       muteBtn.style.opacity = muted ? "0.4" : "1";
     });
   }
@@ -914,53 +1050,59 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
 
 for (const card of document.querySelectorAll("[data-breath-card]")) {
   const memory = card.dataset.breathCard;
-  const values = breathValues[memory];
+  const columns = breathCharts[memory];
   const plot = card.querySelector(".os-breath-chart__plot");
   const tooltip = card.querySelector(".os-breath-chart__tooltip");
   const reading = card.querySelector("[data-breath-reading]");
-  if (!values || !plot || !reading) continue;
+  if (!columns || !plot || !reading) continue;
 
   const defaultValue = reading.dataset.breathDefault ?? reading.textContent;
-  const total = breathPattern.length;
-  const xRange = 89; // dots span 3% to 92% so they line up under 00:00, 00:10, 00:20
+  let defaultColumn = null;
 
-  for (let i = 0; i < total; i++) {
-    const [colors, dir] = breathPattern[i];
-    const cells = colors.length;
+  for (const column of columns) {
     const btn = document.createElement("button");
     btn.type = "button";
-    const dirClass = dir === "u" ? "up" : "down";
-    btn.className = `os-br-column os-br-column--${dirClass}`;
-    const x = 3 + (i * xRange) / (total - 1);
-    btn.style.setProperty("--x", x.toFixed(2) + "%");
-    const time = breathTimeAt(i, total);
-    btn.dataset.time = time;
-    btn.dataset.value = values[i];
+    btn.className = "os-br-column";
+    btn.style.setProperty("--x", column.x + "%");
+    btn.dataset.time = column.time;
+    btn.dataset.value = column.value;
+    btn.dataset.top = column.cells[0][0];
     btn.setAttribute(
       "aria-label",
-      `${time}, ${values[i]} breaths per minute`,
+      `${column.time}, ${column.value} breaths per minute`,
     );
-    if (i === BREATH_PEAK_INDEX) btn.classList.add("is-default");
-    for (let c = 0; c < cells; c++) {
+    if (column.isDefault) {
+      btn.classList.add("is-default");
+      defaultColumn = btn;
+    }
+    for (const [y, color] of column.cells) {
       const cell = document.createElement("span");
-      cell.className = `os-br-cell os-br-cell--${colors[c]}`;
+      cell.className = `os-br-cell os-br-cell--${color}`;
+      cell.style.setProperty("--cell-y", y + "%");
       btn.appendChild(cell);
     }
     plot.appendChild(btn);
   }
 
-  for (const col of plot.querySelectorAll(".os-br-column")) {
-    const value = col.dataset.value;
-    const time = col.dataset.time;
-    const x = col.style.getPropertyValue("--x");
+  const showColumn = (col) => {
+    plot.style.setProperty("--active-x", col.style.getPropertyValue("--x"));
+    plot.style.setProperty("--active-top", col.dataset.top + "%");
+    if (tooltip) tooltip.textContent = col.dataset.time;
+  };
 
+  if (defaultColumn) {
+    showColumn(defaultColumn);
+    plot.classList.add("is-default-visible");
+  }
+
+  for (const col of plot.querySelectorAll(".os-br-column")) {
     const enter = () => {
-      plot.style.setProperty("--active-x", x);
-      if (tooltip) tooltip.textContent = time;
-      reading.textContent = value;
+      showColumn(col);
+      reading.textContent = col.dataset.value;
     };
     const leave = () => {
       reading.textContent = defaultValue;
+      if (defaultColumn) showColumn(defaultColumn);
     };
 
     col.addEventListener("mouseenter", enter);
@@ -977,20 +1119,26 @@ for (const card of document.querySelectorAll("[data-bpm-card]")) {
   if (!reading || !plot || points.length === 0) continue;
 
   const defaultValue = reading.dataset.bpmDefault ?? reading.textContent;
+  const defaultPoint = card.querySelector(".os-bpm-point.is-default");
+
+  const showPoint = (point) => {
+    plot.style.setProperty("--active-x", point.style.getPropertyValue("--x"));
+    plot.style.setProperty("--active-y", point.style.getPropertyValue("--y"));
+  };
+
+  if (defaultPoint) showPoint(defaultPoint);
 
   for (const point of points) {
     const value = point.dataset.value;
     if (!value) continue;
-    const x = point.style.getPropertyValue("--x");
-    const y = point.style.getPropertyValue("--y");
 
     const enter = () => {
-      plot.style.setProperty("--active-x", x);
-      plot.style.setProperty("--active-y", y);
+      showPoint(point);
       reading.textContent = value;
     };
     const leave = () => {
       reading.textContent = defaultValue;
+      if (defaultPoint) showPoint(defaultPoint);
     };
 
     point.addEventListener("mouseenter", enter);

@@ -81,7 +81,7 @@
                   <span>High<br />Activation</span>
                   <span>Elevated</span>
                   <span>Neutral</span>
-                  <span>Clam</span>
+                  <span>Calm</span>
                   <span>Low<br />Arousal</span>
                 </div>
 
@@ -258,20 +258,27 @@
           <div class="os-memory-lab__top">
             <div class="os-memory-tabs" role="tablist" aria-label="Memory selection">
               <button class="is-active" type="button" role="tab" aria-selected="true" data-memory-tab="whale">
-                Memory 0427 B
+                Memory 0427-B
               </button>
               <button type="button" role="tab" aria-selected="false" data-memory-tab="street">
-                Memory 0428 B
+                Memory 0428-B
               </button>
               <button type="button" role="tab" aria-selected="false" data-memory-tab="studio">
-                Memory 0429 B
+                Memory 0429-B
               </button>
             </div>
 
-            <div class="os-memory-date" aria-label="Memory date">
-              <img src="assets/m2os-memory-calendar.svg" alt="" aria-hidden="true" />
-              <span>21 Jon 2027</span>
-              <img src="assets/m2os-memory-arrow.svg" alt="" aria-hidden="true" />
+            <div class="os-memory-date-wrap">
+              <button class="os-memory-date" type="button" aria-haspopup="listbox" aria-expanded="false" data-memory-date-toggle>
+                <img src="assets/m2os-memory-calendar.svg" alt="" aria-hidden="true" />
+                <span data-memory-date-label>21 Jan 2027</span>
+                <img src="assets/m2os-memory-arrow.svg" alt="" aria-hidden="true" />
+              </button>
+              <ul class="os-memory-date__menu" role="listbox" aria-label="Memory date" data-memory-date-menu hidden>
+                <li><button type="button" role="option" aria-selected="true">21 Jan 2027</button></li>
+                <li><button type="button" role="option" aria-selected="false">20 Jan 2027</button></li>
+                <li><button type="button" role="option" aria-selected="false">19 Jan 2027</button></li>
+              </ul>
             </div>
           </div>
 
@@ -288,7 +295,7 @@
                   class="os-video-card__video"
                   data-video-source
                   src="assets/Underwater.mp4"
-                  poster="assets/m2os-left-video-still.png"
+                  poster="assets/m2os-poster-whale.jpg"
                   playsinline
                   muted
                   loop
@@ -304,11 +311,7 @@
 
                 <div class="os-video-card__media">
                   <div class="os-video-card__topline">
-                    <span class="os-video-card__time">
-                      <span data-video-current>00:00</span>
-                      <span aria-hidden="true"> / </span>
-                      <span data-video-duration>00:25</span>
-                    </span>
+                    <span class="os-video-card__time" data-video-time>00:00:25</span>
                     <button class="os-video-card__play" type="button" data-video-play aria-label="Play memory preview">
                       <img class="os-video-card__play-icon os-video-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
                       <img class="os-video-card__play-icon os-video-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
@@ -340,7 +343,12 @@
                       viewBox="0 0 367.041 82.41"
                       preserveAspectRatio="none"
                       data-significance-svg
+                      data-sig-src="assets/m2os-memory-significance-line.svg"
                     ></svg>
+                    <img class="os-significance__seg os-significance__seg--flip" style="left: 24.3%; top: 5.0625rem; width: 8.08%; height: 1.913rem" src="assets/m2os-memory-significance-mini.svg" alt="" />
+                    <img class="os-significance__seg os-significance__seg--flip" style="left: 51.81%; top: 1.3125rem; width: 11.62%; height: 3.13rem" src="assets/m2os-memory-significance-active.svg" alt="" />
+                    <span class="os-significance__dot" style="left: 50.89%; top: 4rem"></span>
+                    <span class="os-significance__dot" style="left: 62.28%; top: 4rem"></span>
                     <span class="os-significance__marker" data-significance-marker aria-hidden="true"></span>
                   </div>
                   <div class="os-significance__times" aria-hidden="true">
@@ -362,13 +370,11 @@
                         <span class="os-breath-chart__scale os-breath-chart__scale--top">40</span>
                         <span class="os-breath-chart__scale os-breath-chart__scale--bottom">10</span>
                         <span class="os-breath-chart__axis"></span>
-                        <span class="os-breath-chart__baseline"></span>
                         <span class="os-breath-chart__tooltip" aria-hidden="true"></span>
-                        <div class="os-breath-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 50%">00:10</span>
-                          <span style="--x: 92%">00:20</span>
-                        </div>
+                      </div>
+                      <span class="os-breath-chart__baseline" aria-hidden="true"></span>
+                      <div class="os-breath-chart__times" aria-hidden="true">
+                        <span>00:00</span><span>00:05</span><span>00:10</span><span>00:15</span><span>00:20</span><span>00:25</span>
                       </div>
                     </div>
                   </article>
@@ -376,7 +382,7 @@
                   <article class="os-metric-card os-metric-card--heart" data-bpm-card>
                     <h3>
                       <strong data-bpm-reading data-bpm-default="102">102</strong>
-                      <span>bmp</span>
+                      <span>bpm</span>
                     </h3>
                     <p>Elevated During Recognition</p>
                     <div class="os-heart-chart">
@@ -385,22 +391,21 @@
                         <span class="os-heart-chart__scale os-heart-chart__scale--bottom">40</span>
                         <span class="os-heart-chart__axis"></span>
                         <span class="os-heart-chart__active-line" aria-hidden="true"></span>
-                        <button class="os-bpm-point" type="button" style="--x: 3%; --y: 62%" data-time="00:00" data-value="78" aria-label="00:00, 78 BPM"><span>00:00</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 11%; --y: 78%" data-time="00:02" data-value="64" aria-label="00:02, 64 BPM"><span>00:02</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 19%; --y: 55%" data-time="00:04" data-value="86" aria-label="00:04, 86 BPM"><span>00:04</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 27%; --y: 52%" data-time="00:06" data-value="89" aria-label="00:06, 89 BPM"><span>00:06</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 35%; --y: 50%" data-time="00:08" data-value="92" aria-label="00:08, 92 BPM"><span>00:08</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 39%; --y: 47%" data-time="00:09" data-value="95" aria-label="00:09, 95 BPM"><span>00:09</span></button>
-                        <button class="os-bpm-point is-default" type="button" style="--x: 46%; --y: 28%" data-time="00:11" data-value="102" aria-label="00:11, 102 BPM"><span>00:11</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 54%; --y: 45%" data-time="00:13" data-value="97" aria-label="00:13, 97 BPM"><span>00:13</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 58%; --y: 62%" data-time="00:14" data-value="78" aria-label="00:14, 78 BPM"><span>00:14</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 66%; --y: 50%" data-time="00:16" data-value="92" aria-label="00:16, 92 BPM"><span>00:16</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 74%; --y: 46%" data-time="00:18" data-value="96" aria-label="00:18, 96 BPM"><span>00:18</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 82%; --y: 48%" data-time="00:20" data-value="94" aria-label="00:20, 94 BPM"><span>00:20</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 0.8%; --y: 77.1%" data-time="00:00" data-value="46" aria-label="00:00, 46 BPM"><span>00:00</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 7.75%; --y: 66%" data-time="00:01" data-value="60" aria-label="00:01, 60 BPM"><span>00:01</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 14.2%; --y: 71.5%" data-time="00:03" data-value="53" aria-label="00:03, 53 BPM"><span>00:03</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 23.3%; --y: 63.9%" data-time="00:05" data-value="63" aria-label="00:05, 63 BPM"><span>00:05</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 32.1%; --y: 50%" data-time="00:07" data-value="81" aria-label="00:07, 81 BPM"><span>00:07</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 41.4%; --y: 49.3%" data-time="00:09" data-value="82" aria-label="00:09, 82 BPM"><span>00:09</span></button>
+                        <button class="os-bpm-point is-default" type="button" style="--x: 51.2%; --y: 33.6%" data-time="00:11" data-value="102" aria-label="00:11, 102 BPM"><span>00:11</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 60.2%; --y: 39.6%" data-time="00:14" data-value="95" aria-label="00:14, 95 BPM"><span>00:14</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 69.5%; --y: 54.2%" data-time="00:16" data-value="76" aria-label="00:16, 76 BPM"><span>00:16</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 76.8%; --y: 48.6%" data-time="00:18" data-value="83" aria-label="00:18, 83 BPM"><span>00:18</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 82.6%; --y: 48.6%" data-time="00:20" data-value="83" aria-label="00:20, 83 BPM"><span>00:20</span></button>
                         <div class="os-heart-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 44%">00:10</span>
-                          <span style="--x: 82%">00:20</span>
+                          <span style="--x: 5.2%">00:00</span>
+                          <span style="--x: 43.2%">00:10</span>
+                          <span style="--x: 81.2%">00:20</span>
                         </div>
                       </div>
                     </div>
@@ -410,8 +415,8 @@
                 <div class="os-weather-strip">
                   <div><span>Visibility</span><strong><img src="assets/m2os-weather-visibility.svg" alt="" />6.5 mi</strong></div>
                   <div><span>Air quality</span><strong><img src="assets/m2os-weather-air.svg" alt="" />136</strong></div>
-                  <div><span>Humidity</span><strong><img src="assets/m2os-weather-humidity.svg" alt="" />40</strong></div>
-                  <div><span>Wind</span><strong><img src="assets/m2os-weather-wind.svg" alt="" />6 Km h</strong></div>
+                  <div><span>Humidity</span><strong><img src="assets/m2os-weather-humidity.svg" alt="" />40%</strong></div>
+                  <div><span>Wind</span><strong><img src="assets/m2os-weather-wind.svg" alt="" />6 Km / h</strong></div>
                   <img class="os-weather-strip__sun" src="assets/m2os-weather-sun.svg" alt="" aria-hidden="true" />
                 </div>
 
@@ -419,9 +424,9 @@
                   <article
                     class="os-sound-card"
                     data-sound-card
-                    data-sound-start="3"
-                    data-sound-end="13"
-                    data-sound-initial="8"
+                    data-sound-start="1.4"
+                    data-sound-end="8.3"
+                    data-sound-initial="8.3"
                     data-sound-total="25"
                   >
                     <audio
@@ -431,7 +436,8 @@
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
-                      <svg class="os-sound-card__wave-svg" viewBox="0 0 219.479 20.7832" preserveAspectRatio="none" data-sound-svg aria-hidden="true"></svg>
+                      <img class="os-sound-card__wave-img" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
+                      <span class="os-sound-card__seg" aria-hidden="true"></span>
                       <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
                     </div>
                     <p>
@@ -447,9 +453,9 @@
                   <article
                     class="os-sound-card"
                     data-sound-card
-                    data-sound-start="20"
-                    data-sound-end="25"
-                    data-sound-initial="23"
+                    data-sound-start="14.6"
+                    data-sound-end="21.5"
+                    data-sound-initial="21.5"
                     data-sound-total="25"
                   >
                     <audio
@@ -459,7 +465,8 @@
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
-                      <svg class="os-sound-card__wave-svg" viewBox="0 0 219.479 20.7832" preserveAspectRatio="none" data-sound-svg aria-hidden="true"></svg>
+                      <img class="os-sound-card__wave-img" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
+                      <span class="os-sound-card__seg" aria-hidden="true"></span>
                       <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
                     </div>
                     <p>
@@ -467,7 +474,7 @@
                         <img class="os-sound-card__play-icon os-sound-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
                         <img class="os-sound-card__play-icon os-sound-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
                       </button>
-                      <span><span data-sound-current>00:23</span> / 00:25</span>
+                      <span><span data-sound-current>00:21</span> / 00:25</span>
                     </p>
                     <footer><span>Emotional spike</span><span>08:37 AM</span></footer>
                   </article>
@@ -475,41 +482,32 @@
                   <article class="os-metric-card os-metric-card--temp" data-temp-card>
                     <h3>
                       <strong data-temp-reading data-temp-default="36.9">36.9</strong>
-                      <span>°C</span>
+                      <span>c</span>
                     </h3>
                     <p>Subtle Thermal Shift</p>
                     <div class="os-temp-chart">
                       <div class="os-temp-chart__plot" aria-label="Temperature over time">
-                        <span class="os-temp-chart__grid" style="--y: 31%"></span>
-                        <span class="os-temp-chart__grid" style="--y: 62%"></span>
-                        <span class="os-temp-chart__axis" style="--y: 87%"></span>
-                        <span class="os-temp-chart__level" style="--y: 15%">High</span>
-                        <span class="os-temp-chart__level" style="--y: 48%">Elevated</span>
-                        <span class="os-temp-chart__level" style="--y: 75%">Low</span>
-                        <svg
+                        <span class="os-temp-chart__grid" style="--y: 31.3%"></span>
+                        <span class="os-temp-chart__grid" style="--y: 56.7%"></span>
+                        <span class="os-temp-chart__axis" style="--y: 82%"></span>
+                        <span class="os-temp-chart__level" style="--y: 19.7%">High</span>
+                        <span class="os-temp-chart__level" style="--y: 41.7%">Elevated</span>
+                        <span class="os-temp-chart__level" style="--y: 63.7%">Low</span>
+                        <img
                           class="os-temp-chart__curve"
-                          viewBox="0 0 100 100"
-                          preserveAspectRatio="none"
+                          style="left: 3.9%; top: 35%; width: 68.1%; height: 34.3%"
+                          src="assets/m2os-temp-curve-whale.svg"
+                          alt=""
                           aria-hidden="true"
-                        >
-                          <path
-                            d="M 3 74 C 10 63, 15 47, 22 40 C 32 38, 37 42, 44 42 C 54 42, 60 30, 67 22 C 74 27, 78 34, 82 40"
-                            fill="none"
-                            stroke="rgba(255,255,255,0.55)"
-                            stroke-width="1"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            vector-effect="non-scaling-stroke"
-                          />
-                        </svg>
-                        <button class="os-temp-point" type="button" style="--x: 3%; --y: 74%" data-time="00:00" data-value="36.4" aria-label="00:00, 36.4 degrees Celsius"><span>00:00</span></button>
-                        <button class="os-temp-point" type="button" style="--x: 22%; --y: 40%" data-time="00:06" data-value="36.7" aria-label="00:06, 36.7 degrees Celsius"><span>00:06</span></button>
-                        <button class="os-temp-point" type="button" style="--x: 44%; --y: 42%" data-time="00:10" data-value="36.7" aria-label="00:10, 36.7 degrees Celsius"><span>00:10</span></button>
-                        <button class="os-temp-point is-default" type="button" style="--x: 67%; --y: 22%" data-time="00:16" data-value="36.9" aria-label="00:16, 36.9 degrees Celsius"><span>00:16</span></button>
+                        />
+                        <button class="os-temp-point" type="button" style="--x: 3.7%; --y: 69.3%" data-time="00:00" data-value="36.4" aria-label="00:00, 36.4 degrees Celsius"><span>00:00</span></button>
+                        <button class="os-temp-point" type="button" style="--x: 21.2%; --y: 43.3%" data-time="00:04" data-value="36.7" aria-label="00:04, 36.7 degrees Celsius"><span>00:04</span></button>
+                        <button class="os-temp-point" type="button" style="--x: 39.5%; --y: 46%" data-time="00:09" data-value="36.7" aria-label="00:09, 36.7 degrees Celsius"><span>00:09</span></button>
+                        <button class="os-temp-point is-default" type="button" style="--x: 63.2%; --y: 34.7%" data-time="00:16" data-value="36.9" aria-label="00:16, 36.9 degrees Celsius"><span>00:16</span></button>
                         <div class="os-temp-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 44%">00:10</span>
-                          <span style="--x: 82%">00:20</span>
+                          <span style="--x: 5.2%">00:00</span>
+                          <span style="--x: 43.2%">00:10</span>
+                          <span style="--x: 81.2%">00:20</span>
                         </div>
                       </div>
                     </div>
@@ -523,12 +521,28 @@
             <p class="os-memory-lab__label">Memory 0428-B // Protest // 20s</p>
 
             <div class="os-memory-grid">
-              <article class="os-video-card os-video-card--street">
+              <article class="os-video-card os-video-card--street" data-video-card>
+                <video
+                  class="os-video-card__video"
+                  data-video-source
+                  src="assets/Protest (with Sound).mp4"
+                  poster="assets/m2os-poster-street.jpg"
+                  playsinline
+                  muted
+                  loop
+                  preload="metadata"
+                ></video>
+
                 <div class="os-video-card__media">
                   <div class="os-video-card__topline">
-                    <span>00:00:20</span>
-                    <img src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
-                    <img src="assets/m2os-memory-volume.svg" alt="" aria-hidden="true" />
+                    <span class="os-video-card__time" data-video-time>00:00:20</span>
+                    <button class="os-video-card__play" type="button" data-video-play aria-label="Play memory preview">
+                      <img class="os-video-card__play-icon os-video-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                      <img class="os-video-card__play-icon os-video-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                    </button>
+                    <button class="os-video-card__volume" type="button" data-video-mute aria-label="Toggle sound">
+                      <img src="assets/m2os-memory-volume.svg" alt="" aria-hidden="true" />
+                    </button>
                     <span class="os-video-card__preview">
                       <img src="assets/m2os-memory-dot.svg" alt="" aria-hidden="true" />
                       Preview video
@@ -536,9 +550,11 @@
                   </div>
                 </div>
 
-                <div class="os-significance os-significance--street">
+                <div class="os-significance os-significance--street" data-significance>
                   <p>Memory Significance</p>
-                  <strong>82<span>/100</span></strong>
+                  <strong>
+                    <span data-significance-reading data-significance-default="82">82</span><span>/100</span>
+                  </strong>
                   <div class="os-significance__graph" aria-hidden="true">
                     <span class="os-significance__line os-significance__line--one"></span>
                     <span class="os-significance__line os-significance__line--two"></span>
@@ -546,70 +562,74 @@
                     <span class="os-significance__line os-significance__line--four"></span>
                     <span class="os-significance__line os-significance__line--five"></span>
                     <img class="os-significance__bars" src="assets/m2os-memory-active-bars.svg" alt="" />
-                    <img class="os-significance__curve" src="assets/m2os-memory-significance-line.svg" alt="" />
-                    <img class="os-significance__active" src="assets/m2os-memory-significance-active.svg" alt="" />
-                    <img class="os-significance__point os-significance__point--one" src="assets/m2os-memory-significance-point-1.svg" alt="" />
-                    <img class="os-significance__point os-significance__point--two" src="assets/m2os-memory-significance-point-2.svg" alt="" />
-                    <img class="os-significance__mini" src="assets/m2os-memory-significance-mini.svg" alt="" />
+                    <svg
+                      class="os-significance__curve-svg"
+                      viewBox="0 0 287.77 76.6003"
+                      preserveAspectRatio="none"
+                      data-significance-svg
+                      data-sig-src="assets/m2os-significance-line-street.svg"
+                      data-sig-flip="false"
+                    ></svg>
+                    <img class="os-significance__seg" style="left: -0.04%; top: 5.4063rem; width: 9.15%; height: 1.312rem" src="assets/m2os-significance-seg-street-start.svg" alt="" />
+                    <img class="os-significance__seg" style="left: 46.84%; top: 0.625rem; width: 7.72%; height: 3.758rem" src="assets/m2os-significance-seg-street-peak.svg" alt="" />
+                    <span class="os-significance__dot" style="left: 46.58%; top: 4.0625rem"></span>
+                    <span class="os-significance__dot" style="left: 53.42%; top: 4.0625rem"></span>
+                    <span class="os-significance__marker" data-significance-marker aria-hidden="true"></span>
                   </div>
                   <div class="os-significance__times" aria-hidden="true">
-                    <span>01:00</span><span>05:00</span><span>10:00</span><span>15:00</span><span>20:00</span><span>25:00</span>
+                    <span>00:01</span><span>00:05</span><span>00:10</span><span>00:15</span><span>00:20</span><span>00:25</span>
                   </div>
                 </div>
               </article>
 
               <div class="os-memory-stack">
                 <div class="os-memory-row">
-                  <article class="os-metric-card os-metric-card--wide os-metric-card--street-breath" data-breath-card="street">
+                  <article class="os-metric-card os-metric-card--wide" data-breath-card="street">
                     <h3>
                       <strong data-breath-reading data-breath-default="28">28</strong>
                       <span>br/min</span>
                     </h3>
                     <p>Heightened Engagement</p>
-                    <div class="os-breath-chart os-breath-chart--street">
+                    <div class="os-breath-chart">
                       <div class="os-breath-chart__plot" aria-label="Adaptive breathing pattern">
-                        <span class="os-breath-chart__scale os-breath-chart__scale--top">50</span>
-                        <span class="os-breath-chart__scale os-breath-chart__scale--bottom">15</span>
+                        <span class="os-breath-chart__scale os-breath-chart__scale--top">40</span>
+                        <span class="os-breath-chart__scale os-breath-chart__scale--bottom">10</span>
                         <span class="os-breath-chart__axis"></span>
-                        <span class="os-breath-chart__baseline"></span>
                         <span class="os-breath-chart__tooltip" aria-hidden="true"></span>
-                        <div class="os-breath-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 50%">00:10</span>
-                          <span style="--x: 92%">00:20</span>
-                        </div>
+                      </div>
+                      <span class="os-breath-chart__baseline" aria-hidden="true"></span>
+                      <div class="os-breath-chart__times" aria-hidden="true">
+                        <span>00:00</span><span>00:05</span><span>00:10</span><span>00:15</span><span>00:20</span><span>00:25</span>
                       </div>
                     </div>
                   </article>
 
-                  <article class="os-metric-card os-metric-card--heart os-metric-card--street-heart" data-bpm-card>
+                  <article class="os-metric-card os-metric-card--heart" data-bpm-card>
                     <h3>
                       <strong data-bpm-reading data-bpm-default="124">124</strong>
-                      <span>bmp</span>
+                      <span>bpm</span>
                     </h3>
                     <p>Elevated During Collective Response</p>
-                    <div class="os-heart-chart os-heart-chart--street">
+                    <div class="os-heart-chart">
                       <div class="os-heart-chart__plot" aria-label="Heart rate over time">
-                        <span class="os-heart-chart__scale os-heart-chart__scale--top">150</span>
-                        <span class="os-heart-chart__scale os-heart-chart__scale--bottom">60</span>
+                        <span class="os-heart-chart__scale os-heart-chart__scale--top">140</span>
+                        <span class="os-heart-chart__scale os-heart-chart__scale--bottom">40</span>
                         <span class="os-heart-chart__axis"></span>
                         <span class="os-heart-chart__active-line" aria-hidden="true"></span>
-                        <button class="os-bpm-point" type="button" style="--x: 3%; --y: 62%" data-time="00:00" data-value="96" aria-label="00:00, 96 BPM"><span>00:00</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 11%; --y: 78%" data-time="00:02" data-value="80" aria-label="00:02, 80 BPM"><span>00:02</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 19%; --y: 55%" data-time="00:04" data-value="104" aria-label="00:04, 104 BPM"><span>00:04</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 27%; --y: 52%" data-time="00:06" data-value="108" aria-label="00:06, 108 BPM"><span>00:06</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 35%; --y: 50%" data-time="00:08" data-value="112" aria-label="00:08, 112 BPM"><span>00:08</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 39%; --y: 47%" data-time="00:09" data-value="116" aria-label="00:09, 116 BPM"><span>00:09</span></button>
-                        <button class="os-bpm-point is-default" type="button" style="--x: 46%; --y: 28%" data-time="00:11" data-value="124" aria-label="00:11, 124 BPM"><span>00:11</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 54%; --y: 45%" data-time="00:13" data-value="118" aria-label="00:13, 118 BPM"><span>00:13</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 58%; --y: 62%" data-time="00:14" data-value="96" aria-label="00:14, 96 BPM"><span>00:14</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 66%; --y: 50%" data-time="00:16" data-value="110" aria-label="00:16, 110 BPM"><span>00:16</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 74%; --y: 46%" data-time="00:18" data-value="116" aria-label="00:18, 116 BPM"><span>00:18</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 82%; --y: 48%" data-time="00:20" data-value="112" aria-label="00:20, 112 BPM"><span>00:20</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 0.8%; --y: 79.9%" data-time="00:00" data-value="43" aria-label="00:00, 43 BPM"><span>00:00</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 9.9%; --y: 79.2%" data-time="00:02" data-value="44" aria-label="00:02, 44 BPM"><span>00:02</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 15.24%; --y: 66%" data-time="00:04" data-value="61" aria-label="00:04, 61 BPM"><span>00:04</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 21.66%; --y: 48.6%" data-time="00:06" data-value="83" aria-label="00:06, 83 BPM"><span>00:06</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 30.08%; --y: 35.4%" data-time="00:08" data-value="100" aria-label="00:08, 100 BPM"><span>00:08</span></button>
+                        <button class="os-bpm-point is-default" type="button" style="--x: 44.2%; --y: 19.7%" data-time="00:12" data-value="124" aria-label="00:12, 124 BPM"><span>00:12</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 54.81%; --y: 20.8%" data-time="00:13" data-value="120" aria-label="00:13, 120 BPM"><span>00:13</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 63.37%; --y: 20.8%" data-time="00:15" data-value="120" aria-label="00:15, 120 BPM"><span>00:15</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 71.92%; --y: 20.8%" data-time="00:18" data-value="120" aria-label="00:18, 120 BPM"><span>00:18</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 80.48%; --y: 20.8%" data-time="00:20" data-value="120" aria-label="00:20, 120 BPM"><span>00:20</span></button>
                         <div class="os-heart-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 44%">00:10</span>
-                          <span style="--x: 82%">00:20</span>
+                          <span style="--x: 5.2%">00:00</span>
+                          <span style="--x: 43.2%">00:10</span>
+                          <span style="--x: 81.2%">00:20</span>
                         </div>
                       </div>
                     </div>
@@ -621,62 +641,98 @@
                   <div><span>Air quality</span><strong><img src="assets/m2os-weather-air.svg" alt="" />149</strong></div>
                   <div><span>Humidity</span><strong><img src="assets/m2os-weather-humidity.svg" alt="" />44%</strong></div>
                   <div><span>Wind</span><strong><img src="assets/m2os-weather-wind.svg" alt="" />10 Km / h</strong></div>
-                  <img class="os-weather-strip__sun" src="assets/m2os-weather-sun.svg" alt="" aria-hidden="true" />
+                  <img class="os-weather-strip__sun os-weather-strip__sun--moon" src="assets/m2os-weather-moon.svg" alt="" aria-hidden="true" />
                 </div>
 
                 <div class="os-memory-row os-memory-row--bottom">
-                  <article class="os-sound-card">
+                  <article
+                    class="os-sound-card"
+                    data-sound-card
+                    data-sound-start="1.1"
+                    data-sound-end="4.8"
+                    data-sound-initial="4.8"
+                    data-sound-total="20"
+                  >
+                    <audio
+                      data-sound-audio
+                      src="assets/Protest (with Sound).mp4"
+                      preload="metadata"
+                    ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
-                    <img class="os-sound-card__wave" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
-                    <p><img src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" /><span>00:05 / 00:20</span></p>
+                    <div class="os-sound-card__wave">
+                      <img class="os-sound-card__wave-img" src="assets/m2os-sound-wave-street.svg" alt="" aria-hidden="true" />
+                      <span class="os-sound-card__seg" aria-hidden="true"></span>
+                      <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
+                    </div>
+                    <p>
+                      <button class="os-sound-card__play" type="button" data-sound-play aria-label="Play soundscape">
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                      </button>
+                      <span><span data-sound-current>00:05</span> / 00:20</span>
+                    </p>
                     <footer><span>Ambient flow</span><span>08:45 PM</span></footer>
                   </article>
 
-                  <article class="os-sound-card">
+                  <article
+                    class="os-sound-card"
+                    data-sound-card
+                    data-sound-start="9.6"
+                    data-sound-end="15.2"
+                    data-sound-initial="15.2"
+                    data-sound-total="20"
+                  >
+                    <audio
+                      data-sound-audio
+                      src="assets/Protest (with Sound).mp4"
+                      preload="metadata"
+                    ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
-                    <img class="os-sound-card__wave" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
-                    <p><img src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" /><span>00:17 / 00:20</span></p>
+                    <div class="os-sound-card__wave">
+                      <img class="os-sound-card__wave-img" src="assets/m2os-sound-wave-street.svg" alt="" aria-hidden="true" />
+                      <span class="os-sound-card__seg" aria-hidden="true"></span>
+                      <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
+                    </div>
+                    <p>
+                      <button class="os-sound-card__play" type="button" data-sound-play aria-label="Play soundscape">
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                      </button>
+                      <span><span data-sound-current>00:15</span> / 00:20</span>
+                    </p>
                     <footer><span>Emotional spike</span><span>09:15 PM</span></footer>
                   </article>
 
-                  <article class="os-metric-card os-metric-card--temp os-metric-card--street-temp" data-temp-card>
+                  <article class="os-metric-card os-metric-card--temp" data-temp-card>
                     <h3>
                       <strong data-temp-reading data-temp-default="38">38</strong>
                       <span>c</span>
                     </h3>
                     <p>Increased Response</p>
-                    <div class="os-temp-chart os-temp-chart--street">
+                    <div class="os-temp-chart">
                       <div class="os-temp-chart__plot" aria-label="Temperature over time">
-                        <span class="os-temp-chart__grid" style="--y: 31%"></span>
-                        <span class="os-temp-chart__grid" style="--y: 62%"></span>
-                        <span class="os-temp-chart__axis" style="--y: 87%"></span>
-                        <span class="os-temp-chart__level" style="--y: 15%">High</span>
-                        <span class="os-temp-chart__level" style="--y: 48%">Elevated</span>
-                        <span class="os-temp-chart__level" style="--y: 75%">Low</span>
-                        <svg
+                        <span class="os-temp-chart__grid" style="--y: 31.3%"></span>
+                        <span class="os-temp-chart__grid" style="--y: 56.7%"></span>
+                        <span class="os-temp-chart__axis" style="--y: 82%"></span>
+                        <span class="os-temp-chart__level" style="--y: 19.7%">High</span>
+                        <span class="os-temp-chart__level" style="--y: 41.7%">Elevated</span>
+                        <span class="os-temp-chart__level" style="--y: 63.7%">Low</span>
+                        <img
                           class="os-temp-chart__curve"
-                          viewBox="0 0 100 100"
-                          preserveAspectRatio="none"
+                          style="left: 5.9%; top: 30.7%; width: 56.2%; height: 40.3%"
+                          src="assets/m2os-temp-curve-street.svg"
+                          alt=""
                           aria-hidden="true"
-                        >
-                          <path
-                            d="M 3 74 C 10 63, 15 47, 22 40 C 32 38, 37 42, 44 42 C 54 42, 60 30, 67 22 C 74 27, 78 34, 82 40"
-                            fill="none"
-                            stroke="rgba(255,255,255,0.55)"
-                            stroke-width="1"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            vector-effect="non-scaling-stroke"
-                          />
-                        </svg>
-                        <button class="os-temp-point" type="button" style="--x: 3%; --y: 74%" data-time="00:00" data-value="37.4" aria-label="00:00, 37.4 degrees"><span>00:00</span></button>
-                        <button class="os-temp-point" type="button" style="--x: 22%; --y: 40%" data-time="00:06" data-value="37.7" aria-label="00:06, 37.7 degrees"><span>00:06</span></button>
-                        <button class="os-temp-point" type="button" style="--x: 44%; --y: 42%" data-time="00:10" data-value="37.7" aria-label="00:10, 37.7 degrees"><span>00:10</span></button>
-                        <button class="os-temp-point is-default" type="button" style="--x: 67%; --y: 22%" data-time="00:16" data-value="38" aria-label="00:16, 38 degrees"><span>00:16</span></button>
+                        />
+                        <button class="os-temp-point" type="button" style="--x: 5.95%; --y: 69.3%" data-time="00:00" data-value="37.4" aria-label="00:00, 37.4 degrees Celsius"><span>00:00</span></button>
+                        <button class="os-temp-point" type="button" style="--x: 27.8%; --y: 55.3%" data-time="00:06" data-value="37.6" aria-label="00:06, 37.6 degrees Celsius"><span>00:06</span></button>
+                        <button class="os-temp-point" type="button" style="--x: 39%; --y: 48%" data-time="00:09" data-value="37.7" aria-label="00:09, 37.7 degrees Celsius"><span>00:09</span></button>
+                        <button class="os-temp-point" type="button" style="--x: 50.7%; --y: 54.7%" data-time="00:12" data-value="37.6" aria-label="00:12, 37.6 degrees Celsius"><span>00:12</span></button>
+                        <button class="os-temp-point is-default" type="button" style="--x: 61.3%; --y: 30.9%" data-time="00:17" data-value="38" aria-label="00:17, 38 degrees Celsius"><span>00:17</span></button>
                         <div class="os-temp-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 44%">00:10</span>
-                          <span style="--x: 82%">00:20</span>
+                          <span style="--x: 5.2%">00:00</span>
+                          <span style="--x: 43.2%">00:10</span>
+                          <span style="--x: 81.2%">00:20</span>
                         </div>
                       </div>
                     </div>
@@ -690,12 +746,35 @@
             <p class="os-memory-lab__label">Memory 0429-B // Cultural Discovery In India // 23s</p>
 
             <div class="os-memory-grid">
-              <article class="os-video-card os-video-card--studio">
+              <article class="os-video-card os-video-card--studio" data-video-card>
+                <video
+                  class="os-video-card__video"
+                  data-video-source
+                  src="assets/Local Market.mp4"
+                  poster="assets/m2os-poster-studio.jpg"
+                  playsinline
+                  muted
+                  loop
+                  preload="metadata"
+                ></video>
+                <audio
+                  class="os-video-card__audio"
+                  data-video-audio
+                  src="assets/Local Market- sound.mp3"
+                  preload="metadata"
+                  loop
+                ></audio>
+
                 <div class="os-video-card__media">
                   <div class="os-video-card__topline">
-                    <span>00:00:20</span>
-                    <img src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
-                    <img src="assets/m2os-memory-volume.svg" alt="" aria-hidden="true" />
+                    <span class="os-video-card__time" data-video-time>00:00:23</span>
+                    <button class="os-video-card__play" type="button" data-video-play aria-label="Play memory preview">
+                      <img class="os-video-card__play-icon os-video-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                      <img class="os-video-card__play-icon os-video-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                    </button>
+                    <button class="os-video-card__volume" type="button" data-video-mute aria-label="Toggle sound">
+                      <img src="assets/m2os-memory-volume.svg" alt="" aria-hidden="true" />
+                    </button>
                     <span class="os-video-card__preview">
                       <img src="assets/m2os-memory-dot.svg" alt="" aria-hidden="true" />
                       Preview video
@@ -703,9 +782,11 @@
                   </div>
                 </div>
 
-                <div class="os-significance os-significance--studio">
+                <div class="os-significance os-significance--studio" data-significance>
                   <p>Memory Significance</p>
-                  <strong>72.5<span>/100</span></strong>
+                  <strong>
+                    <span data-significance-reading data-significance-default="72.5">72.5</span><span>/100</span>
+                  </strong>
                   <div class="os-significance__graph" aria-hidden="true">
                     <span class="os-significance__line os-significance__line--one"></span>
                     <span class="os-significance__line os-significance__line--two"></span>
@@ -713,70 +794,75 @@
                     <span class="os-significance__line os-significance__line--four"></span>
                     <span class="os-significance__line os-significance__line--five"></span>
                     <img class="os-significance__bars" src="assets/m2os-memory-active-bars.svg" alt="" />
-                    <img class="os-significance__curve" src="assets/m2os-memory-significance-line.svg" alt="" />
-                    <img class="os-significance__active" src="assets/m2os-memory-significance-active.svg" alt="" />
-                    <img class="os-significance__point os-significance__point--one" src="assets/m2os-memory-significance-point-1.svg" alt="" />
-                    <img class="os-significance__point os-significance__point--two" src="assets/m2os-memory-significance-point-2.svg" alt="" />
-                    <img class="os-significance__mini" src="assets/m2os-memory-significance-mini.svg" alt="" />
+                    <svg
+                      class="os-significance__curve-svg"
+                      viewBox="0 0 317.62 54.6262"
+                      preserveAspectRatio="none"
+                      data-significance-svg
+                      data-sig-src="assets/m2os-significance-line-studio.svg"
+                    ></svg>
+                    <img class="os-significance__seg os-significance__seg--flip" style="left: 13.16%; top: 5.0625rem; width: 4.09%; height: 0.8925rem" src="assets/m2os-significance-seg-studio-mini.svg" alt="" />
+                    <img class="os-significance__seg os-significance__seg--flip" style="left: 43.16%; top: 1.6875rem; width: 10.51%; height: 2.669rem" src="assets/m2os-significance-seg-studio-peak.svg" alt="" />
+                    <span class="os-significance__dot" style="left: 42.53%; top: 3.75rem"></span>
+                    <span class="os-significance__dot" style="left: 52.41%; top: 3.75rem"></span>
+                    <span class="os-significance__marker" data-significance-marker aria-hidden="true"></span>
                   </div>
                   <div class="os-significance__times" aria-hidden="true">
-                    <span>01:00</span><span>05:00</span><span>10:00</span><span>15:00</span><span>20:00</span><span>25:00</span>
+                    <span>00:01</span><span>00:05</span><span>00:10</span><span>00:15</span><span>00:20</span><span>00:25</span>
                   </div>
                 </div>
               </article>
 
               <div class="os-memory-stack">
                 <div class="os-memory-row">
-                  <article class="os-metric-card os-metric-card--wide os-metric-card--studio-breath" data-breath-card="studio">
+                  <article class="os-metric-card os-metric-card--wide" data-breath-card="studio">
                     <h3>
                       <strong data-breath-reading data-breath-default="19">19</strong>
                       <span>br/min</span>
                     </h3>
                     <p>Focused Observation</p>
-                    <div class="os-breath-chart os-breath-chart--studio">
+                    <div class="os-breath-chart">
                       <div class="os-breath-chart__plot" aria-label="Adaptive breathing pattern">
-                        <span class="os-breath-chart__scale os-breath-chart__scale--top">35</span>
+                        <span class="os-breath-chart__scale os-breath-chart__scale--top">40</span>
                         <span class="os-breath-chart__scale os-breath-chart__scale--bottom">10</span>
                         <span class="os-breath-chart__axis"></span>
-                        <span class="os-breath-chart__baseline"></span>
                         <span class="os-breath-chart__tooltip" aria-hidden="true"></span>
-                        <div class="os-breath-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 50%">00:10</span>
-                          <span style="--x: 92%">00:20</span>
-                        </div>
+                      </div>
+                      <span class="os-breath-chart__baseline" aria-hidden="true"></span>
+                      <div class="os-breath-chart__times" aria-hidden="true">
+                        <span>00:00</span><span>00:05</span><span>00:10</span><span>00:15</span><span>00:20</span><span>00:25</span>
                       </div>
                     </div>
                   </article>
 
-                  <article class="os-metric-card os-metric-card--heart os-metric-card--studio-heart" data-bpm-card>
+                  <article class="os-metric-card os-metric-card--heart" data-bpm-card>
                     <h3>
                       <strong data-bpm-reading data-bpm-default="92">92</strong>
-                      <span>bmp</span>
+                      <span>bpm</span>
                     </h3>
                     <p>Elevated During Discovery</p>
-                    <div class="os-heart-chart os-heart-chart--studio">
+                    <div class="os-heart-chart">
                       <div class="os-heart-chart__plot" aria-label="Heart rate over time">
-                        <span class="os-heart-chart__scale os-heart-chart__scale--top">120</span>
+                        <span class="os-heart-chart__scale os-heart-chart__scale--top">140</span>
                         <span class="os-heart-chart__scale os-heart-chart__scale--bottom">40</span>
                         <span class="os-heart-chart__axis"></span>
                         <span class="os-heart-chart__active-line" aria-hidden="true"></span>
-                        <button class="os-bpm-point" type="button" style="--x: 3%; --y: 62%" data-time="00:00" data-value="68" aria-label="00:00, 68 BPM"><span>00:00</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 11%; --y: 78%" data-time="00:02" data-value="56" aria-label="00:02, 56 BPM"><span>00:02</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 19%; --y: 55%" data-time="00:04" data-value="76" aria-label="00:04, 76 BPM"><span>00:04</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 27%; --y: 52%" data-time="00:06" data-value="80" aria-label="00:06, 80 BPM"><span>00:06</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 35%; --y: 50%" data-time="00:08" data-value="82" aria-label="00:08, 82 BPM"><span>00:08</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 39%; --y: 47%" data-time="00:09" data-value="85" aria-label="00:09, 85 BPM"><span>00:09</span></button>
-                        <button class="os-bpm-point is-default" type="button" style="--x: 46%; --y: 28%" data-time="00:11" data-value="92" aria-label="00:11, 92 BPM"><span>00:11</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 54%; --y: 45%" data-time="00:13" data-value="87" aria-label="00:13, 87 BPM"><span>00:13</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 58%; --y: 62%" data-time="00:14" data-value="68" aria-label="00:14, 68 BPM"><span>00:14</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 66%; --y: 50%" data-time="00:16" data-value="82" aria-label="00:16, 82 BPM"><span>00:16</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 74%; --y: 46%" data-time="00:18" data-value="86" aria-label="00:18, 86 BPM"><span>00:18</span></button>
-                        <button class="os-bpm-point" type="button" style="--x: 82%; --y: 48%" data-time="00:20" data-value="84" aria-label="00:20, 84 BPM"><span>00:20</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 7.76%; --y: 76.4%" data-time="00:01" data-value="47" aria-label="00:01, 47 BPM"><span>00:01</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 14.57%; --y: 75.7%" data-time="00:02" data-value="48" aria-label="00:02, 48 BPM"><span>00:02</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 21.53%; --y: 67.4%" data-time="00:04" data-value="59" aria-label="00:04, 59 BPM"><span>00:04</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 29.01%; --y: 56.3%" data-time="00:06" data-value="73" aria-label="00:06, 73 BPM"><span>00:06</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 36.5%; --y: 49.3%" data-time="00:08" data-value="82" aria-label="00:08, 82 BPM"><span>00:08</span></button>
+                        <button class="os-bpm-point is-default" type="button" style="--x: 43.14%; --y: 33.6%" data-time="00:10" data-value="92" aria-label="00:10, 92 BPM"><span>00:10</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 52.14%; --y: 33.3%" data-time="00:12" data-value="92" aria-label="00:12, 92 BPM"><span>00:12</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 59.09%; --y: 33.3%" data-time="00:14" data-value="92" aria-label="00:14, 92 BPM"><span>00:14</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 67.38%; --y: 48.6%" data-time="00:16" data-value="84" aria-label="00:16, 84 BPM"><span>00:16</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 76.74%; --y: 48.6%" data-time="00:18" data-value="84" aria-label="00:18, 84 BPM"><span>00:18</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 83.69%; --y: 48.6%" data-time="00:20" data-value="84" aria-label="00:20, 84 BPM"><span>00:20</span></button>
+                        <button class="os-bpm-point" type="button" style="--x: 90.51%; --y: 48.6%" data-time="00:22" data-value="84" aria-label="00:22, 84 BPM"><span>00:22</span></button>
                         <div class="os-heart-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 44%">00:10</span>
-                          <span style="--x: 82%">00:20</span>
+                          <span style="--x: 5.2%">00:00</span>
+                          <span style="--x: 43.2%">00:10</span>
+                          <span style="--x: 81.2%">00:20</span>
                         </div>
                       </div>
                     </div>
@@ -788,62 +874,97 @@
                   <div><span>Air quality</span><strong><img src="assets/m2os-weather-air.svg" alt="" />148</strong></div>
                   <div><span>Humidity</span><strong><img src="assets/m2os-weather-humidity.svg" alt="" />40%</strong></div>
                   <div><span>Wind</span><strong><img src="assets/m2os-weather-wind.svg" alt="" />11 Km / h</strong></div>
-                  <img class="os-weather-strip__sun os-weather-strip__sun--cloud" src="assets/m2os-weather-sun.svg" alt="" aria-hidden="true" />
+                  <img class="os-weather-strip__sun os-weather-strip__sun--suncloud" src="assets/m2os-weather-suncloud.svg" alt="" aria-hidden="true" />
                 </div>
 
                 <div class="os-memory-row os-memory-row--bottom">
-                  <article class="os-sound-card">
+                  <article
+                    class="os-sound-card"
+                    data-sound-card
+                    data-sound-start="11.8"
+                    data-sound-end="16.6"
+                    data-sound-initial="16.6"
+                    data-sound-total="23"
+                  >
+                    <audio
+                      data-sound-audio
+                      src="assets/Local Market- sound.mp3"
+                      preload="metadata"
+                    ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
-                    <img class="os-sound-card__wave" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
-                    <p><img src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" /><span>1:34 / 25:03</span></p>
+                    <div class="os-sound-card__wave">
+                      <img class="os-sound-card__wave-img" src="assets/m2os-sound-wave-studio.svg" alt="" aria-hidden="true" />
+                      <span class="os-sound-card__seg" aria-hidden="true"></span>
+                      <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
+                    </div>
+                    <p>
+                      <button class="os-sound-card__play" type="button" data-sound-play aria-label="Play soundscape">
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                      </button>
+                      <span><span data-sound-current>00:17</span> / 00:23</span>
+                    </p>
                     <footer><span>Ambient flow</span><span>12:53 PM</span></footer>
                   </article>
 
-                  <article class="os-sound-card">
+                  <article
+                    class="os-sound-card"
+                    data-sound-card
+                    data-sound-start="15.1"
+                    data-sound-end="20"
+                    data-sound-initial="20"
+                    data-sound-total="23"
+                  >
+                    <audio
+                      data-sound-audio
+                      src="assets/Local Market- sound.mp3"
+                      preload="metadata"
+                    ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
-                    <img class="os-sound-card__wave" src="assets/m2os-sound-wave.svg" alt="" aria-hidden="true" />
-                    <p><img src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" /><span>1:34 / 25:03</span></p>
+                    <div class="os-sound-card__wave">
+                      <img class="os-sound-card__wave-img" src="assets/m2os-sound-wave-studio.svg" alt="" aria-hidden="true" />
+                      <span class="os-sound-card__seg" aria-hidden="true"></span>
+                      <span class="os-sound-card__wave-playhead" data-sound-playhead aria-hidden="true"></span>
+                    </div>
+                    <p>
+                      <button class="os-sound-card__play" type="button" data-sound-play aria-label="Play soundscape">
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--play" src="assets/m2os-play-icon.svg" alt="" aria-hidden="true" />
+                        <img class="os-sound-card__play-icon os-sound-card__play-icon--pause" src="assets/m2os-memory-play.svg" alt="" aria-hidden="true" />
+                      </button>
+                      <span><span data-sound-current>00:20</span> / 00:23</span>
+                    </p>
                     <footer><span>Emotional spike</span><span>01:05 PM</span></footer>
                   </article>
 
-                  <article class="os-metric-card os-metric-card--temp os-metric-card--studio-temp" data-temp-card>
+                  <article class="os-metric-card os-metric-card--temp" data-temp-card>
                     <h3>
                       <strong data-temp-reading data-temp-default="35">35</strong>
                       <span>c</span>
                     </h3>
                     <p>Mild Thermal Response</p>
-                    <div class="os-temp-chart os-temp-chart--studio">
+                    <div class="os-temp-chart">
                       <div class="os-temp-chart__plot" aria-label="Temperature over time">
-                        <span class="os-temp-chart__grid" style="--y: 31%"></span>
-                        <span class="os-temp-chart__grid" style="--y: 62%"></span>
-                        <span class="os-temp-chart__axis" style="--y: 87%"></span>
-                        <span class="os-temp-chart__level" style="--y: 15%">High</span>
-                        <span class="os-temp-chart__level" style="--y: 48%">Elevated</span>
-                        <span class="os-temp-chart__level" style="--y: 75%">Low</span>
-                        <svg
+                        <span class="os-temp-chart__grid" style="--y: 31.3%"></span>
+                        <span class="os-temp-chart__grid" style="--y: 56.7%"></span>
+                        <span class="os-temp-chart__axis" style="--y: 82%"></span>
+                        <span class="os-temp-chart__level" style="--y: 19.7%">High</span>
+                        <span class="os-temp-chart__level" style="--y: 41.7%">Elevated</span>
+                        <span class="os-temp-chart__level" style="--y: 63.7%">Low</span>
+                        <img
                           class="os-temp-chart__curve"
-                          viewBox="0 0 100 100"
-                          preserveAspectRatio="none"
+                          style="left: 5.9%; top: 43%; width: 65.2%; height: 27%"
+                          src="assets/m2os-temp-curve-studio.svg"
+                          alt=""
                           aria-hidden="true"
-                        >
-                          <path
-                            d="M 3 74 C 10 63, 15 47, 22 40 C 32 38, 37 42, 44 42 C 54 42, 60 30, 67 22 C 74 27, 78 34, 82 40"
-                            fill="none"
-                            stroke="rgba(255,255,255,0.55)"
-                            stroke-width="1"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            vector-effect="non-scaling-stroke"
-                          />
-                        </svg>
-                        <button class="os-temp-point" type="button" style="--x: 3%; --y: 74%" data-time="00:00" data-value="34.6" aria-label="00:00, 34.6 degrees"><span>00:00</span></button>
-                        <button class="os-temp-point" type="button" style="--x: 22%; --y: 40%" data-time="00:06" data-value="34.9" aria-label="00:06, 34.9 degrees"><span>00:06</span></button>
-                        <button class="os-temp-point" type="button" style="--x: 44%; --y: 42%" data-time="00:10" data-value="34.9" aria-label="00:10, 34.9 degrees"><span>00:10</span></button>
-                        <button class="os-temp-point is-default" type="button" style="--x: 67%; --y: 22%" data-time="00:16" data-value="35" aria-label="00:16, 35 degrees"><span>00:16</span></button>
+                        />
+                        <button class="os-temp-point" type="button" style="--x: 5.7%; --y: 69.3%" data-time="00:00" data-value="34.6" aria-label="00:00, 34.6 degrees Celsius"><span>00:00</span></button>
+                        <button class="os-temp-point" type="button" style="--x: 30.46%; --y: 62.7%" data-time="00:07" data-value="34.7" aria-label="00:07, 34.7 degrees Celsius"><span>00:07</span></button>
+                        <button class="os-temp-point" type="button" style="--x: 49.7%; --y: 56.7%" data-time="00:12" data-value="34.8" aria-label="00:12, 34.8 degrees Celsius"><span>00:12</span></button>
+                        <button class="os-temp-point is-default" type="button" style="--x: 59.2%; --y: 43.3%" data-time="00:15" data-value="35" aria-label="00:15, 35 degrees Celsius"><span>00:15</span></button>
                         <div class="os-temp-chart__times" aria-hidden="true">
-                          <span style="--x: 3%">00:00</span>
-                          <span style="--x: 44%">00:10</span>
-                          <span style="--x: 82%">00:20</span>
+                          <span style="--x: 5.2%">00:00</span>
+                          <span style="--x: 43.2%">00:10</span>
+                          <span style="--x: 81.2%">00:20</span>
                         </div>
                       </div>
                     </div>

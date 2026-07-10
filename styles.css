@@ -1883,6 +1883,63 @@ img {
   gap: 0.5rem;
   padding: 0.875rem;
   text-transform: capitalize;
+  cursor: pointer;
+}
+
+.os-memory-date-wrap {
+  position: relative;
+}
+
+.os-memory-date img:last-child {
+  transition: transform 160ms ease;
+}
+
+.os-memory-date[aria-expanded="true"] img:last-child {
+  transform: rotate(180deg);
+}
+
+.os-memory-date__menu {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  right: 0;
+  z-index: 5;
+  min-width: 100%;
+  margin: 0;
+  padding: 0.375rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.5rem;
+  background: #101010;
+  list-style: none;
+}
+
+.os-memory-date__menu button {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-family:
+    "F37 Moon",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: 0.875rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.os-memory-date__menu button:hover,
+.os-memory-date__menu button:focus-visible {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+}
+
+.os-memory-date__menu button[aria-selected="true"] {
+  color: #c5ffae;
 }
 
 .os-memory-date img:first-child {
@@ -1899,7 +1956,7 @@ img {
   width: 100%;
   height: 0;
   margin: 0.875rem 0;
-  border-top: 1px dashed rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .os-memory-pane {
@@ -1967,8 +2024,12 @@ img {
 
 .os-video-card--whale {
   background:
-    url("assets/m2os-left-video-still.png") center / cover no-repeat,
+    url("assets/m2os-poster-whale.jpg") center / cover no-repeat,
     #07315f;
+}
+
+.os-video-card__time {
+  width: 3.6875rem;
 }
 
 .os-video-card__video {
@@ -1983,10 +2044,6 @@ img {
 
 .os-video-card__audio {
   display: none;
-}
-
-.os-video-card--whale .os-video-card__topline {
-  visibility: visible;
 }
 
 .os-video-card__play,
@@ -2029,20 +2086,14 @@ img {
   display: block;
 }
 
-.os-video-card__time {
-  display: inline-flex;
-  gap: 0.25rem;
-}
-
 .os-video-card--street {
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(12, 8, 32, 0.5) 58%, rgba(12, 8, 32, 0.84)),
-    url("assets/m2os-street-video-still.png") center top / 100% auto no-repeat,
+    url("assets/m2os-poster-street.jpg") center / cover no-repeat,
     #090816;
 }
 
 .os-video-card--studio {
-  background: url("assets/m2os-studio-video-still.png") center / cover no-repeat #b4bea0;
+  background: url("assets/m2os-poster-studio.jpg") center / cover no-repeat #b4bea0;
 }
 
 .os-video-card::before {
@@ -2073,17 +2124,6 @@ img {
     "Roboto Mono",
   monospace;
   font-size: 0.75rem;
-  visibility: hidden;
-}
-
-.os-video-card--street .os-video-card__topline {
-  visibility: visible;
-}
-
-.os-video-card--studio::before,
-.os-video-card--studio .os-video-card__topline,
-.os-video-card--studio .os-significance {
-  display: none;
 }
 
 .os-video-card__topline img {
@@ -2107,6 +2147,12 @@ img {
 }
 
 .os-significance {
+  /* Curve placement within the graph, from Figma (whale defaults; per-memory
+     variants override). --sig-w is a fraction of the graph width. */
+  --sig-left: 7.09%;
+  --sig-top: 1.3125rem;
+  --sig-w: 0.9267;
+  --sig-h: 5.088rem;
   position: absolute;
   right: 1.5rem;
   bottom: 1.5rem;
@@ -2115,8 +2161,43 @@ img {
   height: 18.6875rem;
   border-radius: 0.75rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(1px);
+}
+
+/* Each memory's curve keeps its exact Figma placement; the colored segment
+   images below complete the line where the grey base path has gaps. On the
+   shared 25s time axis a shorter memory's curve ends before the right edge. */
+.os-significance--street {
+  --sig-left: 9.01%;
+  --sig-top: 1.6rem;
+  --sig-w: 0.7261;
+  --sig-h: 4.725rem;
+}
+
+.os-significance--studio {
+  --sig-left: 7.09%;
+  --sig-top: 2.83rem;
+  --sig-w: 0.8028;
+  --sig-h: 3.379rem;
+}
+
+/* Colored sections of the significance line (bright green + white) that fill
+   the gaps in the grey base curve, plus the acid dots marking section ends. */
+.os-significance__seg {
+  position: absolute;
+}
+
+.os-significance__seg--flip {
+  transform: scaleY(-1);
+}
+
+.os-significance__dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 1.32px;
+  background: #c5ffae;
 }
 
 .os-significance p,
@@ -2164,11 +2245,7 @@ img {
 }
 
 .os-significance__line,
-.os-significance__bars,
-.os-significance__curve,
-.os-significance__active,
-.os-significance__point,
-.os-significance__mini {
+.os-significance__bars {
   position: absolute;
 }
 
@@ -2194,13 +2271,17 @@ img {
 
 .os-significance__curve-svg {
   position: absolute;
-  left: 7.09%;
-  top: 1.3125rem;
-  width: 92.67%;
-  height: 5.088rem;
+  left: var(--sig-left);
+  top: var(--sig-top);
+  width: calc(var(--sig-w) * 100%);
+  height: var(--sig-h);
   transform: scaleY(-1);
   overflow: visible;
   pointer-events: none;
+}
+
+.os-significance__curve-svg[data-sig-flip="false"] {
+  transform: none;
 }
 
 .os-significance__curve-base {
@@ -2215,13 +2296,14 @@ img {
   stroke: #c5ffae;
   stroke-linejoin: bevel;
   vector-effect: non-scaling-stroke;
-  transition: stroke-dashoffset 80ms linear;
+  clip-path: inset(-10% 100% -10% -2%);
+  transition: clip-path 80ms linear;
 }
 
 .os-significance__marker {
   position: absolute;
-  left: calc(7.09% + var(--marker-x, 0%) * 0.9267);
-  top: calc(1.3125rem + var(--marker-y, 0.5) * 5.088rem);
+  left: calc(var(--sig-left) + var(--marker-x, 0%) * var(--sig-w));
+  top: calc(var(--sig-top) + var(--marker-y, 0.5) * var(--sig-h));
   width: 0.5rem;
   height: 0.5rem;
   background: #c5ffae;
@@ -2236,36 +2318,9 @@ img {
   pointer-events: none;
 }
 
-.os-video-card--whale[data-video-playing] .os-significance__marker,
-.os-video-card--whale[data-video-progress]:not([data-video-progress="0"]) .os-significance__marker {
+.os-video-card[data-video-playing] .os-significance__marker,
+.os-video-card[data-video-progress]:not([data-video-progress="0"]) .os-significance__marker {
   opacity: 1;
-}
-
-.os-significance__active {
-  display: none;
-}
-
-.os-significance__point {
-  width: 0.375rem;
-  height: 0.375rem;
-}
-
-.os-significance__point--one {
-  left: 50.89%;
-  top: 4rem;
-}
-
-.os-significance__point--two {
-  left: 62.28%;
-  top: 4rem;
-}
-
-.os-significance__mini {
-  left: 24.3%;
-  top: 5.0625rem;
-  width: 8.08%;
-  height: 1.914rem;
-  transform: scaleY(-1);
 }
 
 .os-significance__times,
@@ -2283,34 +2338,10 @@ img {
   margin-top: 0.7rem;
 }
 
-.os-significance--street {
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.os-significance--street .os-significance__curve {
-  top: 0.25rem;
-  height: 6.35rem;
-  filter: brightness(1.15) saturate(0.7);
-}
-
-.os-significance--street .os-significance__active {
-  left: 50.5%;
-  top: 0.8rem;
-  width: 9.5%;
-  height: 4rem;
-}
-
-.os-significance--street .os-significance__mini {
-  left: 7%;
-  top: 5.4rem;
-  width: 6.5%;
-  filter: brightness(1.55);
-}
-
 .os-memory-stack {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.08fr) minmax(16rem, 1.36fr);
-  grid-template-rows: minmax(0, 1.42fr) 6.25rem minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1.68fr) 7.125rem minmax(0, 1fr);
   gap: 1.5rem;
   height: var(--memory-dashboard-height);
   min-height: var(--memory-dashboard-height);
@@ -2359,12 +2390,17 @@ img {
 }
 
 .os-metric-card,
-.os-sound-card,
 .os-weather-strip {
   padding: 1.5rem;
 }
 
+.os-sound-card {
+  padding: 1.375rem 1.5rem;
+}
+
 .os-metric-card {
+  display: flex;
+  flex-direction: column;
   min-height: 0;
 }
 
@@ -2395,7 +2431,10 @@ img {
 .os-heart-chart,
 .os-temp-chart {
   position: relative;
-  margin-top: clamp(1.15rem, 1.6vw, 1.7rem);
+  /* Cards are flex columns: the chart sits at the bottom so its time scale
+     stays inside the card even when the grid rows shrink on small screens. */
+  margin-top: auto;
+  padding-top: 1.25rem;
   font-family:
     "Saans Mono",
     "Roboto Mono",
@@ -2403,21 +2442,20 @@ img {
   font-size: 0.75rem;
 }
 
+.os-heart-chart {
+  margin-bottom: 1.0625rem;
+}
+
 .os-breath-chart img,
 .os-heart-chart img,
 .os-temp-chart img {
   display: block;
-  height: auto;
-}
-
-.os-breath-chart img {
-  width: 100%;
 }
 
 .os-breath-chart__plot {
   position: relative;
   width: 100%;
-  height: 7.5rem;
+  height: clamp(6rem, 7.2vw, 7.5rem);
   margin: 0 auto;
   color: rgba(255, 255, 255, 0.72);
   font-family:
@@ -2432,66 +2470,57 @@ img {
   position: absolute;
   right: 0;
   color: var(--white);
+  transform: translateY(-50%);
   pointer-events: none;
 }
 
 .os-breath-chart__scale--top {
-  top: 0;
+  top: 5.8%;
 }
 
 .os-breath-chart__scale--bottom {
-  bottom: 1.5rem;
+  top: 85.8%;
 }
 
 .os-breath-chart__axis {
   position: absolute;
   left: 0;
-  right: 5%;
-  top: 50%;
+  right: 6.3%;
+  top: 60%;
   height: 0;
-  border-top: 1px dashed rgba(255, 255, 255, 0.4);
+  border-top: 1px dashed rgba(255, 255, 255, 0.5);
   pointer-events: none;
 }
 
 .os-breath-chart__baseline {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 1rem;
+  display: block;
+  width: 100%;
   height: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  margin-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
   pointer-events: none;
 }
 
 .os-breath-chart__times {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: clamp(0.65rem, 1.33vw, 1.4375rem);
   color: var(--white);
   pointer-events: none;
-}
-
-.os-breath-chart__times span {
-  position: absolute;
-  left: var(--x);
-  top: 0;
-  transform: translateX(-50%);
-  white-space: nowrap;
 }
 
 .os-breath-chart__tooltip {
   position: absolute;
   left: var(--active-x, 50%);
-  top: 0;
-  color: rgba(255, 255, 255, 0.75);
+  top: calc(var(--active-top, 20%) - 1.4rem);
+  color: rgba(255, 255, 255, 0.5);
   transform: translateX(-50%);
   pointer-events: none;
   opacity: 0;
   white-space: nowrap;
   transition:
     left 120ms ease,
+    top 120ms ease,
     opacity 120ms ease;
 }
 
@@ -2500,10 +2529,16 @@ img {
   opacity: 1;
 }
 
+.os-breath-chart__plot.is-default-visible:not(:has(.os-br-column:hover)):not(:has(.os-br-column:focus-visible))
+  .os-breath-chart__tooltip {
+  opacity: 1;
+}
+
 .os-br-column {
   position: absolute;
   left: var(--x);
-  top: 50%;
+  top: 0;
+  bottom: 0;
   width: 0.5rem;
   margin: 0;
   padding: 0;
@@ -2511,17 +2546,6 @@ img {
   background: transparent;
   color: inherit;
   cursor: pointer;
-  display: flex;
-  gap: 2px;
-}
-
-.os-br-column--up {
-  flex-direction: column-reverse;
-  transform: translate(-50%, -100%);
-}
-
-.os-br-column--down {
-  flex-direction: column;
   transform: translateX(-50%);
 }
 
@@ -2531,12 +2555,14 @@ img {
 }
 
 .os-br-cell {
-  flex: 0 0 auto;
+  position: absolute;
+  left: 50%;
+  top: var(--cell-y);
   width: 6px;
   height: 6px;
-  align-self: center;
   border-radius: 1.32px;
   background: #66835a;
+  transform: translateX(-50%);
   transition: background 100ms ease;
 }
 
@@ -2557,21 +2583,10 @@ img {
   background: #c5ffae;
 }
 
-.os-breath-chart__plot:not(:has(.os-br-column:hover)):not(:has(.os-br-column:focus-visible))
-  .os-br-column.is-default
-  > .os-br-cell {
-  background: #c5ffae;
-}
-
-.os-heart-chart img {
-  width: min(100%, 23.375rem);
-  margin: 0 auto;
-}
-
 .os-heart-chart__plot {
   position: relative;
-  width: min(100%, 25.9375rem);
-  height: 7.5rem;
+  width: min(100%, 23.375rem);
+  height: clamp(6.75rem, 8.7vw, 9rem);
   margin: 0 auto;
   color: rgba(255, 255, 255, 0.72);
   font-family:
@@ -2586,24 +2601,25 @@ img {
   position: absolute;
   right: 0;
   color: var(--white);
+  transform: translateY(-50%);
   pointer-events: none;
 }
 
 .os-heart-chart__scale--top {
-  top: 0;
+  top: 4.9%;
 }
 
 .os-heart-chart__scale--bottom {
-  bottom: 1.25rem;
+  top: 81.9%;
 }
 
 .os-heart-chart__axis {
   position: absolute;
   left: 0;
-  right: 14%;
-  top: 87%;
+  right: 0;
+  top: 94.4%;
   height: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
   pointer-events: none;
 }
 
@@ -2611,12 +2627,11 @@ img {
   position: absolute;
   left: var(--active-x, 52%);
   top: var(--active-y, 28%);
-  height: calc(87% - var(--active-y, 28%));
+  height: calc(94.4% - var(--active-y, 28%));
   width: 0;
   border-left: 1px dashed rgba(255, 255, 255, 0.45);
   transform: translateX(-50%);
   pointer-events: none;
-  opacity: 0;
   transition:
     left 120ms ease,
     top 120ms ease,
@@ -2624,16 +2639,11 @@ img {
     opacity 120ms ease;
 }
 
-.os-heart-chart__plot:has(.os-bpm-point:hover) .os-heart-chart__active-line,
-.os-heart-chart__plot:has(.os-bpm-point:focus-visible) .os-heart-chart__active-line {
-  opacity: 1;
-}
-
 .os-heart-chart__times {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  top: calc(100% + 0.3125rem);
   height: 0.75rem;
   color: var(--white);
   pointer-events: none;
@@ -2738,15 +2748,10 @@ img {
   opacity: 0;
 }
 
-.os-temp-chart img {
-  width: min(100%, 25.9375rem);
-  margin: 0 auto;
-}
-
 .os-temp-chart__plot {
   position: relative;
-  width: min(100%, 25.9375rem);
-  height: 7.5rem;
+  width: min(100%, 25rem);
+  height: clamp(7.25rem, 10.4vw, 9.375rem);
   margin: 0 auto;
   color: rgba(255, 255, 255, 0.72);
   font-family:
@@ -2761,16 +2766,17 @@ img {
 .os-temp-chart__axis {
   position: absolute;
   left: 0;
-  right: 14%;
+  right: 0;
   top: var(--y);
   height: 0;
-  border-top: 1px dashed rgba(255, 255, 255, 0.36);
+  border-top: 1px dashed rgba(255, 255, 255, 0.3);
   pointer-events: none;
 }
 
 .os-temp-chart__axis {
+  right: 6.75%;
   border-top-style: solid;
-  border-top-color: rgba(255, 255, 255, 0.55);
+  border-top-color: rgba(255, 255, 255, 0.5);
 }
 
 .os-temp-chart__level {
@@ -2785,10 +2791,6 @@ img {
 
 .os-temp-chart__curve {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
   pointer-events: none;
 }
 
@@ -2915,36 +2917,12 @@ img {
   opacity: 0;
 }
 
-.os-breath-chart--street img {
-  filter: brightness(1.08) saturate(1.08);
-}
-
-.os-heart-chart--street img {
-  width: min(100%, 21.8rem);
-  filter: brightness(1.22) saturate(1.12);
-}
-
-.os-temp-chart--street img {
-  filter: brightness(1.08) saturate(0.9);
-}
-
-.os-breath-chart--studio img {
-  filter: brightness(0.96) saturate(0.88);
-}
-
-.os-heart-chart--studio img {
-  width: min(100%, 21.8rem);
-  filter: brightness(0.98) saturate(0.92);
-}
-
-.os-temp-chart--studio img {
-  filter: brightness(0.96) saturate(0.82);
-}
-
 .os-weather-strip {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  column-gap: clamp(0.75rem, 1.2vw, 1.5rem);
+  /* Compact metric columns (102px in Figma) keep the four readings evenly
+     spaced; the flexible last column holds the void before the icon. */
+  grid-template-columns: repeat(4, minmax(0, 6.375rem)) minmax(2.5rem, 1fr);
+  column-gap: clamp(0.75rem, 1.3vw, 1.375rem);
   align-items: end;
   height: 100%;
   min-height: 0;
@@ -2996,22 +2974,35 @@ img {
 .os-weather-strip__sun {
   display: block;
   align-self: end;
-  justify-self: center;
+  justify-self: end;
   min-height: 0;
   width: 2.6575rem;
   height: 1.5rem;
   max-width: none;
+  /* Figma's strip uses 18px side padding vs our 24px card padding. */
+  margin-right: -0.375rem;
 }
 
-.os-weather-strip__sun--cloud {
-  width: 2.6575rem;
-  height: 1.5rem;
+.os-weather-strip__sun--moon {
+  width: 3.47rem;
+  height: 3.43rem;
+  /* The moon export bleeds ~17px of glow on its right; pull further so the
+     visible moon body right-aligns with the other panes' icons. */
+  margin-right: -1.4rem;
+  margin-bottom: -0.7rem;
+}
+
+.os-weather-strip__sun--suncloud {
+  width: 2.35rem;
+  height: 1.71rem;
 }
 
 .os-sound-card {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  /* space-between absorbs row-height differences across viewports without
+     crushing the fixed-height wave row. */
+  justify-content: space-between;
   height: 100%;
   min-height: 0;
 }
@@ -3020,6 +3011,7 @@ img {
 .os-sound-card p,
 .os-sound-card footer {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
@@ -3035,7 +3027,7 @@ img {
   font-size: 1.125rem;
 }
 
-.os-sound-card > div img {
+.os-sound-card > div:first-of-type img {
   flex: 0 1 4.5rem;
   width: clamp(3.75rem, 4.2vw, 4.5rem);
   height: 1.625rem;
@@ -3046,34 +3038,46 @@ img {
   position: relative;
   width: 100%;
   height: 1.5625rem;
-  object-fit: fill;
 }
 
-img.os-sound-card__wave {
+.os-sound-card__wave-img {
+  position: absolute;
+  inset: 0;
   display: block;
-}
-
-.os-sound-card__wave-svg {
-  display: block;
+  max-width: none;
   width: 100%;
   height: 100%;
-  overflow: visible;
   pointer-events: none;
 }
 
-.os-sound-card__wave-base {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.4);
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
+/* Highlighted segment: translucent acid box with 3px edge bars, per Figma. */
+.os-sound-card__seg {
+  position: absolute;
+  top: 50%;
+  left: var(--seg-left, 0%);
+  right: var(--seg-right, 100%);
+  height: 1.5rem;
+  background: rgba(197, 255, 174, 0.1);
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
-.os-sound-card__wave-highlight {
-  fill: none;
-  stroke: #c5ffae;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-  clip-path: inset(-30% var(--seg-right, 100%) -30% var(--seg-left, 0%));
+.os-sound-card__seg::before,
+.os-sound-card__seg::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(197, 255, 174, 0.6);
+  content: "";
+}
+
+.os-sound-card__seg::before {
+  left: 0;
+}
+
+.os-sound-card__seg::after {
+  right: 0;
 }
 
 .os-sound-card__wave-playhead {
@@ -3140,10 +3144,6 @@ img.os-sound-card__wave {
 
 .os-sound-card footer {
   font-size: 0.875rem;
-}
-
-.os-temp-chart {
-  margin-top: 2.25rem;
 }
 
 .product-system {
