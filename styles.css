@@ -3347,22 +3347,22 @@ img {
 }
 
 .product-cutout--interface {
-  --explode-x: -39%;
-  --explode-y: -18%;
+  --explode-x: -45%;
+  --explode-y: -44%;
   --part-scale: 0.93;
   z-index: 3;
 }
 
 .product-cutout--engine {
-  --explode-x: -11%;
-  --explode-y: -9%;
-  --part-scale: 0.98;
+  --explode-x: -18%;
+  --explode-y: -25%;
+  --part-scale: 1.08;
   z-index: 2;
 }
 
 .product-cutout--outer {
-  --explode-x: 24%;
-  --explode-y: 7%;
+  --explode-x: 19%;
+  --explode-y: 0%;
   --part-scale: 0.93;
   z-index: 1;
 }
@@ -3381,24 +3381,24 @@ img {
 }
 
 .product-hotspot--interface {
-  top: 24%;
-  left: 3%;
-  width: 14%;
-  height: 23%;
+  top: 6%;
+  left: 4%;
+  width: 12%;
+  height: 12%;
 }
 
 .product-hotspot--engine {
-  top: 34%;
-  left: 34%;
-  width: 14%;
-  height: 23%;
+  top: 20%;
+  left: 26%;
+  width: 16%;
+  height: 16%;
 }
 
 .product-hotspot--outer {
-  top: 18%;
-  left: 54%;
-  width: 42%;
-  height: 74%;
+  top: 13%;
+  left: 44%;
+  width: 47%;
+  height: 75%;
 }
 
 .sr-only {
@@ -5909,7 +5909,7 @@ img {
 
   .product-cutout--outer {
     --explode-x: 15%;
-    --explode-y: 6%;
+    --explode-y: 0%;
   }
 
   .product-hotspot--interface {
