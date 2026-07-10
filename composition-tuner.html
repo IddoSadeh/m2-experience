@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>m2 Composition Tuner</title>
+    <style>
+      :root {
+        --acid: #c5ffae;
+        --panel: #12100f;
+        --stroke: rgba(255, 255, 255, 0.08);
+        --muted: rgba(255, 255, 255, 0.55);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #0a0908;
+        color: #f7f5f0;
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+        font-size: 14px;
+      }
+
+      body {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 1.25rem;
+        padding: 1.25rem;
+      }
+
+      /* ----- Stage ---------- */
+
+      .stage-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        min-width: 0;
+      }
+
+      .stage-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .stage-toolbar strong {
+        color: #fff;
+      }
+
+      .stage {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1600 / 894;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .cutout-scene {
+        position: absolute;
+        inset: 0;
+      }
+
+      .cutout {
+        --x: 0%;
+        --y: 0%;
+        --scale: 1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 89.3%;
+        height: 87.4%;
+        object-fit: contain;
+        pointer-events: none;
+        transform:
+          translate(-50%, -50%)
+          translate3d(var(--x), var(--y), 0)
+          scale(var(--scale));
+        transform-origin: 50% 50%;
+        transition: outline 100ms ease;
+      }
+
+      .hitbox {
+        position: absolute;
+        background: transparent;
+        border: 1.5px solid transparent;
+        border-radius: 4px;
+        cursor: grab;
+        z-index: 4;
+        pointer-events: auto;
+        transition: border-color 100ms ease;
+      }
+
+      .hitbox:hover {
+        border-color: rgba(197, 255, 174, 0.35);
+      }
+
+      .hitbox.is-selected {
+        border-color: var(--acid);
+      }
+
+      .hitbox.is-dragging {
+        cursor: grabbing;
+      }
+
+      /* Resize handles — visible only when the corresponding part is selected */
+      .handle {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        margin: -6px 0 0 -6px;
+        background: var(--acid);
+        border: 1.5px solid #0a0908;
+        border-radius: 2px;
+        z-index: 5;
+        display: none;
+        pointer-events: auto;
+      }
+
+      .handle.is-shown {
+        display: block;
+      }
+
+      .handle[data-corner="tl"],
+      .handle[data-corner="br"] {
+        cursor: nwse-resize;
+      }
+
+      .handle[data-corner="tr"],
+      .handle[data-corner="bl"] {
+        cursor: nesw-resize;
+      }
+
+      /* Hotspot overlay (dashed rectangles) */
+      .hotspot-overlay {
+        position: absolute;
+        border: 1px dashed rgba(100, 220, 255, 0.6);
+        border-radius: 4px;
+        pointer-events: none;
+        z-index: 3;
+        display: none;
+      }
+
+      body.show-hotspots .hotspot-overlay {
+        display: block;
+      }
+
+      /* ----- Sidebar ---------- */
+
+      .sidebar {
+        overflow-y: auto;
+        padding: 1rem;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 12px;
+      }
+
+      .sidebar h1 {
+        margin: 0 0 0.25rem;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .sidebar > p.intro {
+        margin: 0 0 1.25rem;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .part {
+        margin-bottom: 1.25rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--stroke);
+        border-radius: 8px;
+        transition: border-color 100ms ease;
+      }
+
+      .part.is-selected {
+        border-color: var(--acid);
+      }
+
+      .part header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .part header h3 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .part header .swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+      }
+
+      .part .row {
+        display: grid;
+        grid-template-columns: 32px 1fr 80px;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .part .row label {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .part input[type="range"] {
+        width: 100%;
+      }
+
+      .part input[type="number"] {
+        width: 100%;
+        padding: 0.25rem 0.4rem;
+        background: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border: 1px solid var(--stroke);
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 12px;
+      }
+
+      .part .hotspot-preview {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--stroke);
+        color: var(--muted);
+        font-family: "Menlo", "SFMono-Regular", Consolas, monospace;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      .part .hotspot-preview strong {
+        color: rgba(100, 220, 255, 0.9);
+      }
+
+      /* Buttons */
+      .toolbar {
+        display: grid;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      button.action,
+      label.action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.55rem 0.75rem;
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        border: 1px solid var(--stroke);
+        border-radius: 6px;
+        font: inherit;
+        font-size: 12px;
+        cursor: pointer;
+        transition:
+          background 100ms ease,
+          border-color 100ms ease;
+      }
+
+      button.action:hover,
+      label.action:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(197, 255, 174, 0.4);
+      }
+
+      button.action.primary {
+        background: var(--acid);
+        color: #0a0908;
+        border-color: var(--acid);
+      }
+
+      button.action.primary:hover {
+        background: #d5ffbb;
+      }
+
+      label.action input {
+        display: none;
+      }
+
+      /* Export output */
+      .output {
+        margin-top: 1rem;
+      }
+
+      .output h4 {
+        margin: 0 0 0.35rem;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+      }
+
+      .output pre {
+        margin: 0;
+        padding: 0.75rem;
+        background: #000;
+        color: #d0ffb2;
+        border: 1px solid var(--stroke);
+        border-radius: 6px;
+        font-family: "Menlo", "SFMono-Regular", Consolas, monospace;
+        font-size: 11px;
+        line-height: 1.5;
+        max-height: 220px;
+        overflow: auto;
+      }
+
+      .hint {
+        margin-top: 0.75rem;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage-wrap">
+      <div class="stage-toolbar">
+        <strong>Composition Tuner</strong>
+        <span>·</span>
+        <span>Drag to move · Drag corner handles to resize · Arrows nudge · Shift+arrow = coarse</span>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="cutout-scene" id="scene">
+          <img class="cutout" data-part="outer" src="assets/Glass.png" alt="" />
+          <img class="cutout" data-part="engine" src="assets/Chip.png" alt="" />
+          <img class="cutout" data-part="interface" src="assets/Metal.png" alt="" />
+
+          <div class="hotspot-overlay" data-hotspot="interface"></div>
+          <div class="hotspot-overlay" data-hotspot="engine"></div>
+          <div class="hotspot-overlay" data-hotspot="outer"></div>
+
+          <div class="hitbox" data-hit="outer" tabindex="0"></div>
+          <div class="hitbox" data-hit="engine" tabindex="0"></div>
+          <div class="hitbox" data-hit="interface" tabindex="0"></div>
+
+          <div class="handle" data-handle-part="outer" data-corner="tl"></div>
+          <div class="handle" data-handle-part="outer" data-corner="tr"></div>
+          <div class="handle" data-handle-part="outer" data-corner="br"></div>
+          <div class="handle" data-handle-part="outer" data-corner="bl"></div>
+
+          <div class="handle" data-handle-part="engine" data-corner="tl"></div>
+          <div class="handle" data-handle-part="engine" data-corner="tr"></div>
+          <div class="handle" data-handle-part="engine" data-corner="br"></div>
+          <div class="handle" data-handle-part="engine" data-corner="bl"></div>
+
+          <div class="handle" data-handle-part="interface" data-corner="tl"></div>
+          <div class="handle" data-handle-part="interface" data-corner="tr"></div>
+          <div class="handle" data-handle-part="interface" data-corner="br"></div>
+          <div class="handle" data-handle-part="interface" data-corner="bl"></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <h1>Composition Tuner</h1>
+      <p class="intro">
+        Drag pieces on the stage to reposition. Use the scale slider to resize.
+        The values below match the production CSS custom properties.
+      </p>
+
+      <div class="toolbar">
+        <button class="action" id="reset">Reset to current CSS values</button>
+        <button class="action" id="toggle-hotspots">
+          Toggle hotspot rectangles
+        </button>
+        <button class="action primary" id="export">Copy JSON to clipboard</button>
+      </div>
+
+      <div class="part" data-part-panel="interface">
+        <header>
+          <h3>Interface (Ring)</h3>
+          <span class="swatch" style="background: #c8c6c1"></span>
+        </header>
+        <div class="row">
+          <label>x</label>
+          <input type="range" data-slider="interface.x" min="-80" max="80" step="0.5" />
+          <input type="number" data-num="interface.x" step="0.5" />
+        </div>
+        <div class="row">
+          <label>y</label>
+          <input type="range" data-slider="interface.y" min="-80" max="80" step="0.5" />
+          <input type="number" data-num="interface.y" step="0.5" />
+        </div>
+        <div class="row">
+          <label>scale</label>
+          <input type="range" data-slider="interface.scale" min="0.3" max="2" step="0.01" />
+          <input type="number" data-num="interface.scale" step="0.01" />
+        </div>
+        <div class="hotspot-preview" data-hotspot-preview="interface"></div>
+      </div>
+
+      <div class="part" data-part-panel="engine">
+        <header>
+          <h3>Engine (Chip)</h3>
+          <span class="swatch" style="background: #b57648"></span>
+        </header>
+        <div class="row">
+          <label>x</label>
+          <input type="range" data-slider="engine.x" min="-80" max="80" step="0.5" />
+          <input type="number" data-num="engine.x" step="0.5" />
+        </div>
+        <div class="row">
+          <label>y</label>
+          <input type="range" data-slider="engine.y" min="-80" max="80" step="0.5" />
+          <input type="number" data-num="engine.y" step="0.5" />
+        </div>
+        <div class="row">
+          <label>scale</label>
+          <input type="range" data-slider="engine.scale" min="0.3" max="2" step="0.01" />
+          <input type="number" data-num="engine.scale" step="0.01" />
+        </div>
+        <div class="hotspot-preview" data-hotspot-preview="engine"></div>
+      </div>
+
+      <div class="part" data-part-panel="outer">
+        <header>
+          <h3>Outer (Glass)</h3>
+          <span class="swatch" style="background: #1a1a1a"></span>
+        </header>
+        <div class="row">
+          <label>x</label>
+          <input type="range" data-slider="outer.x" min="-80" max="80" step="0.5" />
+          <input type="number" data-num="outer.x" step="0.5" />
+        </div>
+        <div class="row">
+          <label>y</label>
+          <input type="range" data-slider="outer.y" min="-80" max="80" step="0.5" />
+          <input type="number" data-num="outer.y" step="0.5" />
+        </div>
+        <div class="row">
+          <label>scale</label>
+          <input type="range" data-slider="outer.scale" min="0.3" max="2" step="0.01" />
+          <input type="number" data-num="outer.scale" step="0.01" />
+        </div>
+        <div class="hotspot-preview" data-hotspot-preview="outer"></div>
+      </div>
+
+      <div class="output">
+        <h4>Export</h4>
+        <pre id="json-output"></pre>
+      </div>
+
+      <p class="hint">
+        Copy the JSON above and send it back — it's ready to paste into
+        <code>styles.css</code>. Hotspot rectangles are computed from the
+        current position + the estimated piece bounding box (silver ring
+        12% square, chip 16% square, glass triangle 47% × 75%).
+      </p>
+    </aside>
+
+    <script>
+      // === Production math (must stay in sync with styles.css) ===
+      // Each cutout element occupies these fractions of the figure.
+      const ELEMENT_W_PCT = 89.3;
+      const ELEMENT_H_PCT = 87.4;
+
+      // Base sizes of the visible piece within its cutout at scale=1,
+      // expressed as % of the frame. Measured from the Figma reference.
+      const BASE_SIZE = {
+        interface: { w: 12.5, h: 12.5 },
+        engine:    { w: 15.3, h: 15.3 },
+        outer:     { w: 50.0, h: 80.5 },
+      };
+
+      // Baseline values from the current styles.css. `Reset` restores these.
+      const DEFAULT_STATE = {
+        interface: { x: -45, y: -44, scale: 0.93 },
+        engine:    { x: -18, y: -25, scale: 1.08 },
+        outer:     { x:  19, y:   0, scale: 0.93 },
+      };
+
+      const state = structuredClone(DEFAULT_STATE);
+      let selected = "engine";
+
+      // === DOM refs ===
+      const stage   = document.getElementById("stage");
+      const scene   = document.getElementById("scene");
+      const output  = document.getElementById("json-output");
+      const cutouts  = Object.fromEntries(
+        [...scene.querySelectorAll(".cutout")].map((el) => [el.dataset.part, el]),
+      );
+      const hitboxes = Object.fromEntries(
+        [...scene.querySelectorAll(".hitbox")].map((el) => [el.dataset.hit, el]),
+      );
+      const overlays = Object.fromEntries(
+        [...scene.querySelectorAll(".hotspot-overlay")].map((el) => [
+          el.dataset.hotspot, el,
+        ]),
+      );
+      // handles[part] = { tl, tr, br, bl } - each a DOM element
+      const handles = Object.fromEntries(
+        Object.keys(DEFAULT_STATE).map((p) => [p, {}]),
+      );
+      for (const el of scene.querySelectorAll(".handle")) {
+        handles[el.dataset.handlePart][el.dataset.corner] = el;
+      }
+
+      // === Rendering ===
+
+      function stageRect() {
+        return stage.getBoundingClientRect();
+      }
+
+      // Given a part's state, compute the visible piece's center and bounding
+      // box as % of the FRAME. Uses production translate math.
+      function computeBox(part) {
+        const s = state[part];
+        const base = BASE_SIZE[part];
+        // translate is % of element -> % of frame
+        const xFrame = (s.x * ELEMENT_W_PCT) / 100;
+        const yFrame = (s.y * ELEMENT_H_PCT) / 100;
+        const cx = 50 + xFrame;
+        const cy = 50 + yFrame;
+        const w = base.w * s.scale;
+        const h = base.h * s.scale;
+        return {
+          cx, cy, w, h,
+          top: cy - h / 2,
+          left: cx - w / 2,
+        };
+      }
+
+      function applyCutout(part) {
+        const s = state[part];
+        const el = cutouts[part];
+        el.style.setProperty("--x", `${s.x}%`);
+        el.style.setProperty("--y", `${s.y}%`);
+        el.style.setProperty("--scale", s.scale);
+      }
+
+      function applyHitbox(part) {
+        const box = computeBox(part);
+        const el = hitboxes[part];
+        el.style.top = `${box.top}%`;
+        el.style.left = `${box.left}%`;
+        el.style.width = `${box.w}%`;
+        el.style.height = `${box.h}%`;
+      }
+
+      function applyOverlay(part) {
+        const box = computeBox(part);
+        const el = overlays[part];
+        // Round to whole % because that's what CSS will get.
+        const top = Math.round(box.top);
+        const left = Math.round(box.left);
+        const w = Math.round(box.w);
+        const h = Math.round(box.h);
+        el.style.top = `${top}%`;
+        el.style.left = `${left}%`;
+        el.style.width = `${w}%`;
+        el.style.height = `${h}%`;
+      }
+
+      function applyHandles(part) {
+        const box = computeBox(part);
+        const h = handles[part];
+        const corners = {
+          tl: [box.left,           box.top],
+          tr: [box.left + box.w,   box.top],
+          br: [box.left + box.w,   box.top + box.h],
+          bl: [box.left,           box.top + box.h],
+        };
+        for (const [name, [x, y]] of Object.entries(corners)) {
+          h[name].style.left = `${x}%`;
+          h[name].style.top  = `${y}%`;
+        }
+      }
+
+      function applyPart(part) {
+        applyCutout(part);
+        applyHitbox(part);
+        applyOverlay(part);
+        applyHandles(part);
+        // update sidebar controls
+        for (const axis of ["x", "y", "scale"]) {
+          const slider = document.querySelector(`[data-slider="${part}.${axis}"]`);
+          const num    = document.querySelector(`[data-num="${part}.${axis}"]`);
+          if (slider) slider.value = state[part][axis];
+          if (num)    num.value = state[part][axis];
+        }
+        // hotspot preview text
+        const box = computeBox(part);
+        const preview = document.querySelector(`[data-hotspot-preview="${part}"]`);
+        preview.innerHTML =
+          `<strong>hotspot →</strong> ` +
+          `top: ${box.top.toFixed(1)}% · ` +
+          `left: ${box.left.toFixed(1)}% · ` +
+          `w: ${box.w.toFixed(1)}% · ` +
+          `h: ${box.h.toFixed(1)}%`;
+        updateOutput();
+      }
+
+      function applyAll() {
+        for (const part of Object.keys(state)) applyPart(part);
+        updateSelection();
+      }
+
+      function updateSelection() {
+        for (const part of Object.keys(state)) {
+          const isSel = part === selected;
+          hitboxes[part].classList.toggle("is-selected", isSel);
+          document
+            .querySelector(`[data-part-panel="${part}"]`)
+            .classList.toggle("is-selected", isSel);
+          for (const corner of Object.keys(handles[part])) {
+            handles[part][corner].classList.toggle("is-shown", isSel);
+          }
+        }
+      }
+
+      function selectPart(part) {
+        selected = part;
+        updateSelection();
+      }
+
+      // === Drag ===
+
+      function initDrag(part) {
+        const hb = hitboxes[part];
+        let dragging = false;
+        let startX = 0;
+        let startY = 0;
+        let startState = null;
+
+        hb.addEventListener("pointerdown", (e) => {
+          e.preventDefault();
+          selectPart(part);
+          hb.setPointerCapture(e.pointerId);
+          hb.classList.add("is-dragging");
+          dragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          startState = { ...state[part] };
+        });
+
+        hb.addEventListener("pointermove", (e) => {
+          if (!dragging) return;
+          const r = stageRect();
+          // convert px delta to % of ELEMENT
+          const elementWpx = r.width  * (ELEMENT_W_PCT / 100);
+          const elementHpx = r.height * (ELEMENT_H_PCT / 100);
+          const dx = ((e.clientX - startX) / elementWpx) * 100;
+          const dy = ((e.clientY - startY) / elementHpx) * 100;
+          state[part].x = round(startState.x + dx, 0.5);
+          state[part].y = round(startState.y + dy, 0.5);
+          applyPart(part);
+        });
+
+        function end(e) {
+          if (!dragging) return;
+          dragging = false;
+          hb.classList.remove("is-dragging");
+          try { hb.releasePointerCapture(e.pointerId); } catch {}
+        }
+        hb.addEventListener("pointerup", end);
+        hb.addEventListener("pointercancel", end);
+
+        hb.addEventListener("focus", () => selectPart(part));
+        hb.addEventListener("click", () => selectPart(part));
+      }
+
+      function round(v, step) {
+        return Math.round(v / step) * step;
+      }
+
+      function initResize(part) {
+        for (const corner of Object.keys(handles[part])) {
+          const el = handles[part][corner];
+          let dragging = false;
+          let startDist = 0;
+          let startScale = 1;
+          let centerPx = { x: 0, y: 0 };
+
+          el.addEventListener("pointerdown", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            selectPart(part);
+            el.setPointerCapture(e.pointerId);
+            dragging = true;
+            // Piece center in stage pixels
+            const r = stageRect();
+            const box = computeBox(part);
+            centerPx = {
+              x: r.left + (box.cx / 100) * r.width,
+              y: r.top  + (box.cy / 100) * r.height,
+            };
+            startDist = Math.hypot(e.clientX - centerPx.x, e.clientY - centerPx.y);
+            startScale = state[part].scale;
+          });
+
+          el.addEventListener("pointermove", (e) => {
+            if (!dragging) return;
+            const dist = Math.hypot(e.clientX - centerPx.x, e.clientY - centerPx.y);
+            if (dist === 0 || startDist === 0) return;
+            const next = startScale * (dist / startDist);
+            state[part].scale = Math.max(0.1, Math.min(3, round(next, 0.01)));
+            applyPart(part);
+          });
+
+          const end = (e) => {
+            if (!dragging) return;
+            dragging = false;
+            try { el.releasePointerCapture(e.pointerId); } catch {}
+          };
+          el.addEventListener("pointerup", end);
+          el.addEventListener("pointercancel", end);
+        }
+      }
+
+      // === Keyboard nudge ===
+
+      window.addEventListener("keydown", (e) => {
+        if (
+          document.activeElement &&
+          (document.activeElement.tagName === "INPUT")
+        )
+          return;
+        const step = e.shiftKey ? 5 : 0.5;
+        let dx = 0, dy = 0;
+        if (e.key === "ArrowLeft")  dx = -step;
+        if (e.key === "ArrowRight") dx =  step;
+        if (e.key === "ArrowUp")    dy = -step;
+        if (e.key === "ArrowDown")  dy =  step;
+        if (!dx && !dy) return;
+        e.preventDefault();
+        state[selected].x = round(state[selected].x + dx, 0.5);
+        state[selected].y = round(state[selected].y + dy, 0.5);
+        applyPart(selected);
+      });
+
+      // === Sidebar controls ===
+
+      document.querySelectorAll("[data-slider]").forEach((el) => {
+        const [part, axis] = el.dataset.slider.split(".");
+        el.addEventListener("input", () => {
+          state[part][axis] = axis === "scale"
+            ? parseFloat(el.value)
+            : parseFloat(el.value);
+          applyPart(part);
+        });
+      });
+
+      document.querySelectorAll("[data-num]").forEach((el) => {
+        const [part, axis] = el.dataset.num.split(".");
+        el.addEventListener("input", () => {
+          const v = parseFloat(el.value);
+          if (Number.isFinite(v)) {
+            state[part][axis] = v;
+            applyPart(part);
+          }
+        });
+      });
+
+      document.querySelectorAll(".part").forEach((panel) => {
+        panel.addEventListener("click", (e) => {
+          if (e.target.matches("input")) return;
+          selectPart(panel.dataset.partPanel);
+        });
+      });
+
+      // === Buttons ===
+
+      document.getElementById("reset").addEventListener("click", () => {
+        Object.assign(state, structuredClone(DEFAULT_STATE));
+        applyAll();
+      });
+
+      document.getElementById("toggle-hotspots").addEventListener("click", () => {
+        document.body.classList.toggle("show-hotspots");
+      });
+
+      document.getElementById("export").addEventListener("click", async () => {
+        const text = output.textContent;
+        try {
+          await navigator.clipboard.writeText(text);
+          const btn = document.getElementById("export");
+          const old = btn.textContent;
+          btn.textContent = "Copied ✓";
+          setTimeout(() => (btn.textContent = old), 1500);
+        } catch {
+          // fall back: select the pre so user can Ctrl+C
+          const range = document.createRange();
+          range.selectNodeContents(output);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      });
+
+      function updateOutput() {
+        const out = {};
+        for (const part of Object.keys(state)) {
+          const box = computeBox(part);
+          out[part] = {
+            explodeX: +state[part].x.toFixed(1),
+            explodeY: +state[part].y.toFixed(1),
+            partScale: +state[part].scale.toFixed(2),
+            hotspot: {
+              top: +box.top.toFixed(1),
+              left: +box.left.toFixed(1),
+              width: +box.w.toFixed(1),
+              height: +box.h.toFixed(1),
+            },
+          };
+        }
+        output.textContent = JSON.stringify(out, null, 2);
+      }
+
+      // === Init ===
+      Object.keys(state).forEach(initDrag);
+      Object.keys(state).forEach(initResize);
+      applyAll();
+
+      // Reapply on resize so hitboxes and handles track the stage exactly.
+      window.addEventListener("resize", () => {
+        for (const part of Object.keys(state)) {
+          applyHitbox(part);
+          applyOverlay(part);
+          applyHandles(part);
+        }
+      });
+    </script>
+  </body>
+</html>
