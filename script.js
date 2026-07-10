@@ -479,19 +479,6 @@ updateFooterCover();
 window.addEventListener("scroll", updateFooterCover, { passive: true });
 window.addEventListener("resize", updateFooterCover);
 
-function updateProductStageMetrics() {
-  const stage = document.querySelector(".product-system__stage");
-
-  if (stage) {
-    stage.style.setProperty("--product-stage-h", `${stage.offsetHeight}px`);
-  }
-}
-
-updateProductStageMetrics();
-window.addEventListener("load", updateProductStageMetrics);
-window.addEventListener("resize", updateProductStageMetrics);
-document.fonts?.ready.then(updateProductStageMetrics);
-
 function updateOsRevealStack() {
   if (!osRevealStack) return;
 
