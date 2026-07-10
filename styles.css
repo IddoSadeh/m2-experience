@@ -3331,23 +3331,23 @@ img {
 }
 
 .product-cutout--interface {
-  --explode-x: -45%;
-  --explode-y: -44%;
-  --part-scale: 0.93;
+  --explode-x: -33%;
+  --explode-y: -27%;
+  --part-scale: 1.01;
   z-index: 3;
 }
 
 .product-cutout--engine {
-  --explode-x: -18%;
-  --explode-y: -25%;
-  --part-scale: 1.08;
+  --explode-x: -10.5%;
+  --explode-y: -18%;
+  --part-scale: 1.02;
   z-index: 2;
 }
 
 .product-cutout--outer {
-  --explode-x: 19%;
-  --explode-y: 0%;
-  --part-scale: 0.93;
+  --explode-x: 22%;
+  --explode-y: -0.5%;
+  --part-scale: 1.01;
   z-index: 1;
 }
 
@@ -3365,24 +3365,24 @@ img {
 }
 
 .product-hotspot--interface {
-  top: 6%;
-  left: 4%;
-  width: 12%;
-  height: 12%;
+  top: 21%;
+  left: 14%;
+  width: 18%;
+  height: 24%;
 }
 
 .product-hotspot--engine {
-  top: 20%;
-  left: 26%;
+  top: 27%;
+  left: 34%;
   width: 16%;
-  height: 16%;
+  height: 20%;
 }
 
 .product-hotspot--outer {
-  top: 13%;
-  left: 44%;
-  width: 47%;
-  height: 75%;
+  top: 9%;
+  left: 57%;
+  width: 38%;
+  height: 81%;
 }
 
 .sr-only {
@@ -3557,18 +3557,18 @@ img {
 }
 
 .part-card-wrap--interface {
-  top: 31.88%;
-  left: 5.81%;
+  top: 24.01%;
+  left: 11.17%;
 }
 
 .part-card-wrap--engine {
-  top: 8.05%;
-  left: 33.88%;
+  top: 0.19%;
+  left: 34.32%;
 }
 
 .part-card-wrap--outer {
-  top: 69.57%;
-  right: 5.81%;
+  top: 63.01%;
+  right: 7.59%;
 }
 
 .product-steps-frame {
