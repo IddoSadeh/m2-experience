@@ -3148,13 +3148,14 @@ img {
 
 .product-system {
   --product-pad: clamp(1.25rem, 3.25vw, 4rem);
+  --product-scene-gap: clamp(4rem, 7.06vw, 7.625rem);
   /* overflow: hidden would turn the section into the sticky containment box
      and break position: sticky for the intro and steps frame; clip crops
      without creating a scroll container. */
   overflow: clip;
   background: var(--black);
   color: var(--white);
-  padding: 0 var(--product-pad);
+  padding: 0 var(--product-pad) clamp(2rem, 3.74vw, 4rem);
 }
 
 .product-system--tuner {
@@ -3233,7 +3234,7 @@ img {
 
 .product-system__intro {
   display: grid;
-  gap: clamp(4rem, 7.06vw, 7.625rem);
+  gap: var(--product-scene-gap);
   align-content: center;
   max-width: 100rem;
   min-height: 100svh;
@@ -3432,7 +3433,7 @@ img {
   align-items: center;
   justify-content: center;
   gap: 1.75rem;
-  width: auto;
+  width: 21.25rem;
   min-width: 21.25rem;
   min-height: 8.8125rem;
   padding: 1.25rem;
@@ -3498,20 +3499,11 @@ img {
 }
 
 .part-card-wrap--interface .part-card__thumb {
-  transform: scale(3.95);
-}
-
-.part-card-wrap--interface .part-card {
-  min-width: 20.75rem;
-}
-
-.part-card-wrap--interface .part-card__text {
-  flex-basis: 12.35rem;
-  width: 12.35rem;
+  transform: scale(5.3);
 }
 
 .part-card-wrap--engine .part-card__thumb {
-  transform: scale(3.95);
+  transform: scale(5.9);
 }
 
 .part-card-wrap--outer .part-card__thumb {
@@ -3572,7 +3564,8 @@ img {
 }
 
 .product-steps-frame {
-  margin: 0 calc(-1 * var(--product-pad));
+  max-width: 100rem;
+  margin: var(--product-scene-gap) auto 0;
   background: var(--black);
   color: var(--white);
 }
@@ -3594,10 +3587,9 @@ img {
 .system-steps li {
   display: flex;
   flex-direction: column;
-  gap: clamp(4.5rem, 8vw, 8.75rem);
-  justify-content: flex-start;
-  min-height: 20rem;
-  padding: 1.25rem;
+  justify-content: space-between;
+  height: clamp(20rem, 22.08vw, 23.625rem);
+  padding: clamp(1.25rem, 1.4vw, 1.5rem);
   border-right: 1px dashed #838383;
 }
 
@@ -3612,8 +3604,8 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 0.98rem;
-  line-height: 1.52;
+  font-size: clamp(0.98rem, 1.05vw, 1.125rem);
+  line-height: 1.5556;
 }
 
 .system-steps__label {
@@ -5821,13 +5813,14 @@ img {
 
   .product-system {
     --product-pad: 1rem;
+    --product-scene-gap: 2rem;
   }
 
   .product-system__intro {
     position: relative;
     min-height: auto;
     padding: 3rem 0 1.5rem;
-    gap: 2rem;
+    gap: var(--product-scene-gap);
   }
 
   .product-system__title {
@@ -5952,6 +5945,7 @@ img {
   }
 
   .system-steps li {
+    height: auto;
     min-height: 0;
     gap: 5rem;
     padding: 1rem;
@@ -6348,10 +6342,11 @@ img {
 
   .product-system {
     --product-pad: 2rem;
+    --product-scene-gap: clamp(2.5rem, 4.5vw, 4rem);
   }
 
   .product-system__intro {
-    gap: clamp(2.5rem, 4.5vw, 4rem);
+    gap: var(--product-scene-gap);
   }
 
   .product-system__title {
