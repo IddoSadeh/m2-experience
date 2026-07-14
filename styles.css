@@ -2559,6 +2559,23 @@ img {
   background: #c5ffae;
 }
 
+.os-br-column.is-default > .os-br-cell--terminal,
+.os-br-column:hover > .os-br-cell--terminal,
+.os-br-column:focus-visible > .os-br-cell--terminal {
+  box-shadow:
+    0 0 0.35rem rgba(197, 255, 174, 0.85),
+    0 0 0.8rem rgba(197, 255, 174, 0.45);
+}
+
+.os-breath-chart__plot:has(.os-br-column:hover)
+  .os-br-column.is-default:not(:hover)
+  > .os-br-cell--terminal,
+.os-breath-chart__plot:has(.os-br-column:focus-visible)
+  .os-br-column.is-default:not(:focus-visible)
+  > .os-br-cell--terminal {
+  box-shadow: none;
+}
+
 .os-heart-chart__plot {
   position: relative;
   width: min(100%, 23.375rem);
@@ -2973,9 +2990,33 @@ img {
   margin-bottom: -0.7rem;
 }
 
-.os-weather-strip__sun--suncloud {
-  width: 2.35rem;
+.os-weather-strip__suncloud {
+  position: relative;
+  display: block;
+  align-self: end;
+  justify-self: end;
+  width: 2.348rem;
   height: 1.71rem;
+}
+
+.os-weather-strip__suncloud img {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
+.os-weather-strip__suncloud-sun {
+  top: -0.316rem;
+  left: -0.339rem;
+  width: 1.643rem;
+  height: 1.643rem;
+}
+
+.os-weather-strip__suncloud-cloud {
+  top: 0.339rem;
+  left: 0.155rem;
+  width: 2.193rem;
+  height: 1.372rem;
 }
 
 .os-sound-card {

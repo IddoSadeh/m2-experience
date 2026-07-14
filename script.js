@@ -1093,12 +1093,13 @@ for (const card of document.querySelectorAll("[data-breath-card]")) {
 
   for (const column of columns) {
     const btn = document.createElement("button");
+    const terminalY = Math.min(...column.cells.map(([y]) => y));
     btn.type = "button";
     btn.className = "os-br-column";
     btn.style.setProperty("--x", column.x + "%");
     btn.dataset.time = column.time;
     btn.dataset.value = column.value;
-    btn.dataset.top = column.cells[0][0];
+    btn.dataset.top = terminalY;
     btn.setAttribute(
       "aria-label",
       `${column.time}, ${column.value} breaths per minute`,
@@ -1110,6 +1111,7 @@ for (const card of document.querySelectorAll("[data-breath-card]")) {
     for (const [y, color] of column.cells) {
       const cell = document.createElement("span");
       cell.className = `os-br-cell os-br-cell--${color}`;
+      if (y === terminalY) cell.classList.add("os-br-cell--terminal");
       cell.style.setProperty("--cell-y", y + "%");
       btn.appendChild(cell);
     }
