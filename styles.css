@@ -2947,6 +2947,11 @@ img {
   height: 1.375rem;
 }
 
+.os-weather-strip strong .os-weather-strip__air-icon {
+  width: 1.125rem;
+  height: 0.9375rem;
+}
+
 .os-weather-strip__sun {
   display: block;
   align-self: end;
