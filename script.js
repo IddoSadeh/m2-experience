@@ -537,7 +537,7 @@ if (memoryTabs.length > 0 && memoryPanes.length > 0) {
 }
 
 for (const timeline of document.querySelectorAll("[data-timeline-points]")) {
-  const points = timeline.querySelectorAll(".os-timeline-point");
+  const points = [...timeline.querySelectorAll(".os-timeline-point")];
   const preview = timeline.querySelector("[data-timeline-preview]");
   const previewImage = preview?.querySelector("[data-timeline-preview-image]");
   const previewTime = preview?.querySelector("[data-timeline-preview-time]");
@@ -563,18 +563,69 @@ for (const timeline of document.querySelectorAll("[data-timeline-points]")) {
     preview.classList.add("is-visible");
   };
 
-  const hidePreview = (point) => {
-    if (activePoint !== point || document.activeElement === point) return;
-    point.classList.remove("is-active");
+  const hidePreview = () => {
+    const focusedPoint = points.find((point) => point === document.activeElement);
+    if (focusedPoint) {
+      showPreview(focusedPoint);
+      return;
+    }
+    activePoint?.classList.remove("is-active");
     preview.classList.remove("is-visible");
     activePoint = null;
   };
 
+  const findPointAt = (event) => {
+    const bounds = timeline.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return null;
+
+    const pointerX = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const pointerY = ((event.clientY - bounds.top) / bounds.height) * 100;
+    let nearestPoint = null;
+    let nearestDistance = Infinity;
+
+    for (const point of points) {
+      const pointX = Number.parseFloat(point.style.getPropertyValue("--point-x"));
+      const pointY = Number.parseFloat(point.style.getPropertyValue("--point-y"));
+      if (!Number.isFinite(pointX) || !Number.isFinite(pointY)) continue;
+
+      const hitX = Number.parseFloat(point.dataset.hitX) || 4.5;
+      const hitY = Number.parseFloat(point.dataset.hitY) || 7;
+      const zoneY = Number.parseFloat(point.dataset.zoneY) || pointY;
+      const xDistance = (pointerX - pointX) / hitX;
+      const yDistance = (pointerY - zoneY) / hitY;
+      const distance = xDistance * xDistance + yDistance * yDistance;
+
+      if (Math.abs(xDistance) <= 1 && Math.abs(yDistance) <= 1 && distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestPoint = point;
+      }
+    }
+
+    return nearestPoint;
+  };
+
+  timeline.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "touch") return;
+    const point = findPointAt(event);
+    timeline.classList.toggle("is-over-zone", Boolean(point));
+    if (point) showPreview(point);
+    else hidePreview();
+  });
+
+  timeline.addEventListener("pointerleave", () => {
+    timeline.classList.remove("is-over-zone");
+    hidePreview();
+  });
+
+  timeline.addEventListener("click", (event) => {
+    const point = findPointAt(event);
+    if (point) showPreview(point);
+    else hidePreview();
+  });
+
   for (const point of points) {
-    point.addEventListener("pointerenter", () => showPreview(point));
-    point.addEventListener("pointerleave", () => hidePreview(point));
     point.addEventListener("focus", () => showPreview(point));
-    point.addEventListener("blur", () => hidePreview(point));
+    point.addEventListener("blur", hidePreview);
   }
 }
 

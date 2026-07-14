@@ -4512,7 +4512,11 @@ img {
   position: absolute;
   inset: 0;
   z-index: 4;
-  pointer-events: none;
+  pointer-events: auto;
+}
+
+.os-timeline-points.is-over-zone {
+  cursor: pointer;
 }
 
 .os-timeline-point {
@@ -4525,8 +4529,7 @@ img {
   border: 0;
   border-radius: 50%;
   background: transparent;
-  cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
   transform: translate(-50%, -50%);
 }
 
