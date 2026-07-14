@@ -2682,7 +2682,7 @@ img {
 .os-bpm-point span {
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 0.05rem);
+  bottom: calc(100% + 0.375rem);
   color: rgba(255, 255, 255, 0.75);
   font-family:
     "Saans Mono",
