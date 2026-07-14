@@ -4279,6 +4279,7 @@ img {
 }
 
 .os-hero__intro {
+  --os-hero-meta-size: clamp(1rem, 1.39vw, 1.5rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
@@ -4287,7 +4288,7 @@ img {
 }
 
 .os-hero__title {
-  width: min(100%, 42.5625rem);
+  width: min(100%, clamp(31rem, 39.41vw, 42.5625rem));
   margin: 0;
   font-family:
     "F37 Moon",
@@ -4295,15 +4296,20 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: clamp(2.75rem, 3.15vw, 3.375rem);
+  font-size: clamp(2rem, 3.15vw, 3.375rem);
   font-weight: 900;
   line-height: 1.185185;
-  text-align: center;
+  text-align: left;
   text-transform: uppercase;
 }
 
 .os-hero__title > span {
   display: block;
+  white-space: nowrap;
+}
+
+.os-hero__title > span:first-child {
+  text-align: right;
 }
 
 .os-hero__round-colon {
@@ -4313,21 +4319,22 @@ img {
 }
 
 .os-hero__subhead {
-  margin: 0.875rem 0 0;
+  margin: clamp(0.625rem, 0.81vw, 0.875rem) 0 0;
   font-family:
     "F37 Moon",
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: clamp(1.125rem, 1.5vw, 1.5rem);
+  font-size: var(--os-hero-meta-size);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .os-hero__actions {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding-bottom: 0.4rem;
+  padding-bottom: 0;
   color: rgba(255, 255, 255, 0.62);
   font-family:
     "Saans Mono",
@@ -4335,8 +4342,8 @@ img {
     "SFMono-Regular",
     Consolas,
     monospace;
-  font-size: 1.125rem;
-  line-height: 1.3333;
+  font-size: var(--os-hero-meta-size);
+  line-height: 1;
   white-space: nowrap;
 }
 
@@ -6206,10 +6213,18 @@ img {
     line-height: 1.12;
   }
 
+  .os-hero__title > span {
+    white-space: normal;
+  }
+
   .os-hero__actions {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.8rem;
+    white-space: normal;
+  }
+
+  .os-hero__subhead {
     white-space: normal;
   }
 
