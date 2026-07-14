@@ -5341,6 +5341,15 @@ img {
   mix-blend-mode: screen;
 }
 
+.site-footer__product-frame img[data-footer-spin] {
+  top: 50%;
+  left: 50%;
+  width: 220%;
+  height: 75%;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+
 .site-footer__panel {
   position: relative;
   z-index: 2;

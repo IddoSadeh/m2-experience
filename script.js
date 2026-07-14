@@ -16,6 +16,7 @@ const textureCards = document.querySelectorAll(".texture-card");
 const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const siteFooter = document.querySelector(".site-footer");
+const footerSpinImages = [...document.querySelectorAll("[data-footer-spin]")];
 const osRevealStack = document.querySelector(".reveal--os");
 const osRevealInner = osRevealStack?.querySelector(".reveal__inner");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
@@ -475,7 +476,36 @@ function updateFooterCover() {
   siteFooter.classList.toggle("is-footer-cover-active", isActive);
 }
 
+function setupFooterSpin() {
+  if (!siteFooter || footerSpinImages.length === 0) return;
+
+  const frameCount = 90;
+  const frameDuration = 1000 / 15;
+  const frameUrls = Array.from(
+    { length: frameCount },
+    (_, index) =>
+      `assets/360/webp/footer-spin-${String(index + 1).padStart(3, "0")}.webp`,
+  );
+  let frameIndex = 0;
+
+  const renderFrame = () => {
+    const src = frameUrls[frameIndex];
+    for (const image of footerSpinImages) image.src = src;
+  };
+
+  for (const src of frameUrls.slice(1)) {
+    const image = new Image();
+    image.src = src;
+  }
+
+  setInterval(() => {
+    frameIndex = (frameIndex + 1) % frameCount;
+    renderFrame();
+  }, frameDuration);
+}
+
 updateFooterCover();
+setupFooterSpin();
 window.addEventListener("scroll", updateFooterCover, { passive: true });
 window.addEventListener("resize", updateFooterCover);
 
