@@ -17,7 +17,6 @@ const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const siteFooter = document.querySelector(".site-footer");
 const osRevealStack = document.querySelector(".reveal--os");
-const osReturnStack = document.querySelector(".os-return");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
 const memoryPanes = document.querySelectorAll("[data-memory-pane]");
 const modelPartConfigs = [
@@ -493,20 +492,6 @@ updateOsRevealStack();
 window.addEventListener("scroll", updateOsRevealStack, { passive: true });
 window.addEventListener("resize", updateOsRevealStack);
 
-function updateOsReturnStack() {
-  if (!osReturnStack) return;
-
-  const rect = osReturnStack.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const isActive = rect.top <= 0 && rect.bottom > viewportHeight * 0.05;
-
-  osReturnStack.classList.toggle("is-os-return-active", isActive);
-}
-
-updateOsReturnStack();
-window.addEventListener("scroll", updateOsReturnStack, { passive: true });
-window.addEventListener("resize", updateOsReturnStack);
-
 function updateHomeSystemIndexCover() {
   if (!homeSystemIndex) return;
 
@@ -548,6 +533,48 @@ if (memoryTabs.length > 0 && memoryPanes.length > 0) {
         }
       }
     });
+  }
+}
+
+for (const timeline of document.querySelectorAll("[data-timeline-points]")) {
+  const points = timeline.querySelectorAll(".os-timeline-point");
+  const preview = timeline.querySelector("[data-timeline-preview]");
+  const previewImage = preview?.querySelector("[data-timeline-preview-image]");
+  const previewTime = preview?.querySelector("[data-timeline-preview-time]");
+  let activePoint = null;
+
+  if (!preview || !previewImage || !previewTime) continue;
+
+  const showPreview = (point) => {
+    activePoint?.classList.remove("is-active");
+    activePoint = point;
+    point.classList.add("is-active");
+
+    const time = point.dataset.time || "";
+    const source = point.dataset.previewSrc;
+    if (source && previewImage.getAttribute("src") !== source) {
+      previewImage.src = source;
+    }
+    previewImage.alt = time ? `Memory preview at ${time}` : "Memory preview";
+    previewImage.style.objectPosition = point.dataset.previewPosition || "center";
+    previewTime.textContent = time;
+    preview.style.setProperty("--preview-x", point.style.getPropertyValue("--point-x"));
+    preview.style.setProperty("--preview-y", point.style.getPropertyValue("--point-y"));
+    preview.classList.add("is-visible");
+  };
+
+  const hidePreview = (point) => {
+    if (activePoint !== point || document.activeElement === point) return;
+    point.classList.remove("is-active");
+    preview.classList.remove("is-visible");
+    activePoint = null;
+  };
+
+  for (const point of points) {
+    point.addEventListener("pointerenter", () => showPreview(point));
+    point.addEventListener("pointerleave", () => hidePreview(point));
+    point.addEventListener("focus", () => showPreview(point));
+    point.addEventListener("blur", () => hidePreview(point));
   }
 }
 

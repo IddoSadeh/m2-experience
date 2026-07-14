@@ -49,7 +49,7 @@
         <div class="os-hero__intro">
           <div>
             <h1 id="os-title" class="os-hero__title">
-              <span>m.v_os: the system</span>
+              <span>m.v_os<span class="os-hero__round-colon">:</span> the system</span>
               <span>behind every experience</span>
             </h1>
             <p class="os-hero__subhead">
@@ -58,7 +58,7 @@
           </div>
 
           <div class="os-hero__actions">
-            <p><span aria-hidden="true">•</span> Signal becomes memory</p>
+            <p><span class="os-hero__signal-dot" aria-hidden="true"></span>Signal becomes memory</p>
             <a href="buy.html">Get access to m.2_os <span aria-hidden="true">›</span></a>
           </div>
         </div>
@@ -94,11 +94,24 @@
                     aria-hidden="true"
                   />
 
-                  <button class="os-memory-hotspot os-memory-hotspot--0130" type="button">
-                    <span class="os-memory-preview">
-                      <img src="assets/m2os-preview-0130.png" alt="Memory preview at 01:30" />
-                    </span>
-                  </button>
+                  <div class="os-timeline-points" data-timeline-points>
+                    <button class="os-timeline-point" type="button" style="--point-x: 24.45%; --point-y: 79.75%" data-time="01:30" data-preview-src="assets/m2os-timeline-0130.jpg" aria-label="Preview memory at 01:30"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 28.18%; --point-y: 71.55%" data-time="02:00" data-preview-src="assets/m2os-timeline-0200.jpg" aria-label="Preview memory at 02:00"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 28.81%; --point-y: 73.59%" data-time="02:05" data-preview-src="assets/m2os-timeline-0205.jpg" aria-label="Preview memory at 02:05"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 33.16%; --point-y: 64.73%" data-time="02:40" data-preview-src="assets/m2os-timeline-0240.jpg" aria-label="Preview memory at 02:40"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 35.77%; --point-y: 59.97%" data-time="03:01" data-preview-src="assets/m2os-timeline-0301.jpg" aria-label="Preview memory at 03:01"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 45.23%; --point-y: 64.92%" data-time="04:17" data-preview-src="assets/m2os-timeline-0417.jpg" aria-label="Preview memory at 04:17"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 50.96%; --point-y: 78.37%" data-time="05:03" data-preview-src="assets/m2os-timeline-0503.jpg" aria-label="Preview memory at 05:03"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 54.94%; --point-y: 69.49%" data-time="05:35" data-preview-src="assets/m2os-timeline-0535.jpg" aria-label="Preview memory at 05:35"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 65.52%; --point-y: 60.82%" data-time="07:00" data-preview-src="assets/m2os-timeline-0700.jpg" aria-label="Preview memory at 07:00"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 74.35%; --point-y: 56.82%" data-time="08:11" data-preview-src="assets/m2os-timeline-0811.jpg" aria-label="Preview memory at 08:11"></button>
+                    <button class="os-timeline-point" type="button" style="--point-x: 86.67%; --point-y: 55.86%" data-time="09:50" data-preview-src="assets/m2os-timeline-0950.jpg" aria-label="Preview memory at 09:50"></button>
+
+                    <div class="os-timeline-preview" data-timeline-preview aria-live="polite">
+                      <img data-timeline-preview-image src="assets/m2os-timeline-0130.jpg" alt="" />
+                      <span data-timeline-preview-time>01:30</span>
+                    </div>
+                  </div>
 
                   <div class="os-event os-event--one">
                     <img class="os-event__line" src="assets/m2os-vector-0.svg" alt="" aria-hidden="true" />
@@ -299,13 +312,13 @@
                   playsinline
                   muted
                   loop
-                  preload="metadata"
+                  preload="none"
                 ></video>
                 <audio
                   class="os-video-card__audio"
                   data-video-audio
                   src="assets/Underwater %E2%80%93 Sound.mp3"
-                  preload="metadata"
+                  preload="none"
                   loop
                 ></audio>
 
@@ -432,7 +445,7 @@
                     <audio
                       data-sound-audio
                       src="assets/Underwater %E2%80%93 Sound.mp3"
-                      preload="metadata"
+                  preload="none"
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
@@ -461,7 +474,7 @@
                     <audio
                       data-sound-audio
                       src="assets/Underwater %E2%80%93 Sound.mp3"
-                      preload="metadata"
+                  preload="none"
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
@@ -530,7 +543,7 @@
                   playsinline
                   muted
                   loop
-                  preload="metadata"
+                  preload="none"
                 ></video>
 
                 <div class="os-video-card__media">
@@ -656,7 +669,7 @@
                     <audio
                       data-sound-audio
                       src="assets/Protest (with Sound).mp4"
-                      preload="metadata"
+                  preload="none"
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
@@ -685,7 +698,7 @@
                     <audio
                       data-sound-audio
                       src="assets/Protest (with Sound).mp4"
-                      preload="metadata"
+                  preload="none"
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
@@ -755,13 +768,13 @@
                   playsinline
                   muted
                   loop
-                  preload="metadata"
+                  preload="none"
                 ></video>
                 <audio
                   class="os-video-card__audio"
                   data-video-audio
                   src="assets/Local Market- sound.mp3"
-                  preload="metadata"
+                  preload="none"
                   loop
                 ></audio>
 
@@ -889,7 +902,7 @@
                     <audio
                       data-sound-audio
                       src="assets/Local Market- sound.mp3"
-                      preload="metadata"
+                  preload="none"
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
@@ -918,7 +931,7 @@
                     <audio
                       data-sound-audio
                       src="assets/Local Market- sound.mp3"
-                      preload="metadata"
+                  preload="none"
                     ></audio>
                     <div><span>soundscape</span><img src="assets/m2os-sound-icon.svg" alt="" aria-hidden="true" /></div>
                     <div class="os-sound-card__wave">
