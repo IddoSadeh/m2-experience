@@ -17,6 +17,7 @@ const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const siteFooter = document.querySelector(".site-footer");
 const osRevealStack = document.querySelector(".reveal--os");
+const osRevealInner = osRevealStack?.querySelector(".reveal__inner");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
 const memoryPanes = document.querySelectorAll("[data-memory-pane]");
 const modelPartConfigs = [
@@ -488,9 +489,24 @@ function updateOsRevealStack() {
   osRevealStack.classList.toggle("is-os-reveal-active", isActive);
 }
 
+function syncOsRevealHeight() {
+  if (
+    !document.body.classList.contains("m2os-page") ||
+    !osRevealStack ||
+    !osRevealInner
+  ) {
+    return;
+  }
+  osRevealStack.style.setProperty("--os-reveal-height", `${osRevealInner.offsetHeight}px`);
+}
+
+syncOsRevealHeight();
 updateOsRevealStack();
 window.addEventListener("scroll", updateOsRevealStack, { passive: true });
-window.addEventListener("resize", updateOsRevealStack);
+window.addEventListener("resize", () => {
+  syncOsRevealHeight();
+  updateOsRevealStack();
+});
 
 function updateHomeSystemIndexCover() {
   if (!homeSystemIndex) return;

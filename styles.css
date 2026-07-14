@@ -1644,6 +1644,14 @@ img {
   min-height: 100svh;
 }
 
+.m2os-page .reveal--os {
+  min-height: var(--os-reveal-height, auto);
+}
+
+.m2os-page .reveal--os .reveal__inner {
+  min-height: auto;
+}
+
 .reveal--os.is-os-reveal-active .reveal__inner {
   position: fixed;
   top: 0;
