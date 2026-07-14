@@ -845,107 +845,30 @@ function formatVideoClock(seconds) {
   return `${hh}:${mm}:${ss}`;
 }
 
-const SVG_NS = "http://www.w3.org/2000/svg";
+function setupSignificanceCurve(card) {
+  const curve = card.querySelector(".os-significance__curve-svg");
+  const trace = card.querySelector("[data-significance-trace]");
+  if (!curve || !trace) return null;
 
-const significancePathPromises = new Map();
-function loadSignificancePath(src) {
-  if (!significancePathPromises.has(src)) {
-    significancePathPromises.set(
-      src,
-      fetch(src)
-        .then((r) => r.text())
-        .then((text) => {
-          const doc = new DOMParser().parseFromString(text, "image/svg+xml");
-          const path = doc.querySelector("path");
-          return path ? path.getAttribute("d") : null;
-        })
-        .catch(() => null),
-    );
+  const cardStyle = getComputedStyle(card);
+  const curveStart =
+    Number.parseFloat(cardStyle.getPropertyValue("--sig-left")) || 0;
+  const curveWidth =
+    (Number.parseFloat(cardStyle.getPropertyValue("--sig-w")) || 1) * 100;
+  let traceStart = curveStart;
+  let traceEnd = curveStart + curveWidth;
+  for (const segment of card.querySelectorAll(".os-significance__seg")) {
+    const segmentStart = Number.parseFloat(segment.style.left) || 0;
+    const segmentWidth = Number.parseFloat(segment.style.width) || 0;
+    traceStart = Math.min(traceStart, segmentStart);
+    traceEnd = Math.max(traceEnd, segmentStart + segmentWidth);
   }
-  return significancePathPromises.get(src);
-}
-
-async function setupSignificanceCurve(card, video) {
-  const svg = card.querySelector("[data-significance-svg]");
-  const marker = card.querySelector("[data-significance-marker]");
-  const reading = card.querySelector("[data-significance-reading]");
-  if (!svg || !svg.dataset.sigSrc) return null;
-
-  const d = await loadSignificancePath(svg.dataset.sigSrc);
-  if (!d) return null;
-
-  const vbX = svg.viewBox.baseVal.width || 1;
-  const vbY = svg.viewBox.baseVal.height || 1;
-  // Curves exported y-up are flipped via CSS scaleY(-1); an unflipped curve
-  // (data-sig-flip="false") is already top-down.
-  const flipped = svg.dataset.sigFlip !== "false";
-
-  const basePath = document.createElementNS(SVG_NS, "path");
-  basePath.setAttribute("d", d);
-  basePath.setAttribute("class", "os-significance__curve-base");
-  svg.appendChild(basePath);
-
-  const revealPath = document.createElementNS(SVG_NS, "path");
-  revealPath.setAttribute("d", d);
-  revealPath.setAttribute("class", "os-significance__curve-reveal");
-  svg.appendChild(revealPath);
-
-  // The base path is drawn with gaps (separate subpaths; the colored segment
-  // images fill them), so a dash-offset reveal would animate every subpath in
-  // parallel. Instead the reveal sweeps left to right along x — the time
-  // axis — via a clip rectangle, and the marker rides a pre-sampled x -> y
-  // lookup of the curve (interpolated across the gaps).
-  const totalLength = revealPath.getTotalLength();
-  const SAMPLE_COUNT = 400;
-  const samples = [];
-  for (let i = 0; i <= SAMPLE_COUNT; i++) {
-    const pt = revealPath.getPointAtLength((i / SAMPLE_COUNT) * totalLength);
-    samples.push({ x: pt.x, y: pt.y });
-  }
-  samples.sort((a, b) => a.x - b.x);
-
-  const yAtX = (x) => {
-    if (x <= samples[0].x) return samples[0].y;
-    let lo = 0;
-    let hi = samples.length - 1;
-    if (x >= samples[hi].x) return samples[hi].y;
-    while (hi - lo > 1) {
-      const mid = (lo + hi) >> 1;
-      if (samples[mid].x <= x) lo = mid;
-      else hi = mid;
-    }
-    const a = samples[lo];
-    const b = samples[hi];
-    const t = b.x === a.x ? 0 : (x - a.x) / (b.x - a.x);
-    return a.y + (b.y - a.y) * t;
-  };
-
-  const defaultReading = reading
-    ? reading.dataset.significanceDefault || reading.textContent
-    : null;
 
   const applyProgress = (progress) => {
     const pct = Math.min(Math.max(progress, 0), 1);
-    revealPath.style.clipPath = `inset(-10% ${(100 - pct * 100).toFixed(2)}% -10% -2%)`;
-
-    const y = yAtX(pct * vbX);
-    const heightFraction = flipped ? y / vbY : 1 - y / vbY;
-    if (marker) {
-      marker.style.setProperty("--marker-x", `${(pct * 100).toFixed(2)}%`);
-      // Marker is a plain DOM element (not inside the SVG) — its y offset runs
-      // top-down from the curve box top.
-      marker.style.setProperty("--marker-y", (1 - heightFraction).toFixed(4));
-    }
-    if (reading) {
-      if (pct <= 0) {
-        reading.textContent = defaultReading;
-      } else {
-        reading.textContent = (heightFraction * 100).toFixed(1);
-      }
-    }
-    // "0" exactly at rest so the CSS [data-video-progress="0"] marker-hiding
-    // selector matches.
-    card.setAttribute("data-video-progress", pct === 0 ? "0" : pct.toFixed(3));
+    const revealEdge = traceStart + pct * (traceEnd - traceStart);
+    trace.style.clipPath =
+      `inset(-20% ${(100 - revealEdge).toFixed(2)}% -20% -2%)`;
   };
 
   applyProgress(0);
@@ -1061,9 +984,29 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
 
   let muted = false;
   let applyProgress = () => {};
-  setupSignificanceCurve(card, video).then((fn) => {
-    if (fn) applyProgress = fn;
-  });
+  let progressFrame = null;
+  const syncVideoProgress = () => {
+    if (video.duration > 0) applyProgress(video.currentTime / video.duration);
+  };
+  const stopProgressLoop = () => {
+    if (progressFrame === null) return;
+    cancelAnimationFrame(progressFrame);
+    progressFrame = null;
+  };
+  const runProgressLoop = () => {
+    syncVideoProgress();
+    if (video.paused || video.ended) {
+      progressFrame = null;
+      return;
+    }
+    progressFrame = requestAnimationFrame(runProgressLoop);
+  };
+  const startProgressLoop = () => {
+    stopProgressLoop();
+    runProgressLoop();
+  };
+  applyProgress = setupSignificanceCurve(card) ?? applyProgress;
+  syncVideoProgress();
 
   const setPlayingState = (playing) => {
     if (playing) card.setAttribute("data-video-playing", "");
@@ -1088,12 +1031,20 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
 
   video.addEventListener("timeupdate", () => {
     if (timeEl) timeEl.textContent = formatVideoClock(video.currentTime);
-    if (video.duration > 0) applyProgress(video.currentTime / video.duration);
+    syncVideoProgress();
   });
 
-  video.addEventListener("play", () => setPlayingState(true));
-  video.addEventListener("pause", () => setPlayingState(false));
+  video.addEventListener("play", () => {
+    setPlayingState(true);
+    startProgressLoop();
+  });
+  video.addEventListener("pause", () => {
+    setPlayingState(false);
+    stopProgressLoop();
+    syncVideoProgress();
+  });
   video.addEventListener("ended", () => {
+    stopProgressLoop();
     if (audio) {
       audio.pause();
       audio.currentTime = 0;

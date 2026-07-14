@@ -2251,6 +2251,14 @@ img {
   overflow: visible;
 }
 
+.os-significance__trace {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  clip-path: inset(-20% 100% -20% -2%);
+  pointer-events: none;
+}
+
 .os-significance__line,
 .os-significance__bars {
   position: absolute;
@@ -2289,45 +2297,6 @@ img {
 
 .os-significance__curve-svg[data-sig-flip="false"] {
   transform: none;
-}
-
-.os-significance__curve-base {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.32);
-  stroke-linejoin: bevel;
-  vector-effect: non-scaling-stroke;
-}
-
-.os-significance__curve-reveal {
-  fill: none;
-  stroke: #c5ffae;
-  stroke-linejoin: bevel;
-  vector-effect: non-scaling-stroke;
-  clip-path: inset(-10% 100% -10% -2%);
-  transition: clip-path 80ms linear;
-}
-
-.os-significance__marker {
-  position: absolute;
-  left: calc(var(--sig-left) + var(--marker-x, 0%) * var(--sig-w));
-  top: calc(var(--sig-top) + var(--marker-y, 0.5) * var(--sig-h));
-  width: 0.5rem;
-  height: 0.5rem;
-  background: #c5ffae;
-  border-radius: 0.125rem;
-  box-shadow: 0 0 0.6rem rgba(197, 255, 174, 0.6);
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition:
-    left 80ms linear,
-    top 80ms linear,
-    opacity 200ms ease;
-  pointer-events: none;
-}
-
-.os-video-card[data-video-playing] .os-significance__marker,
-.os-video-card[data-video-progress]:not([data-video-progress="0"]) .os-significance__marker {
-  opacity: 1;
 }
 
 .os-significance__times,
