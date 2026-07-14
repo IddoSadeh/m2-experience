@@ -3031,6 +3031,10 @@ img {
   pointer-events: none;
 }
 
+.os-sound-card--street-primary .os-sound-card__wave-img {
+  transform: translateY(-5px);
+}
+
 /* Highlighted segment: translucent acid box with 3px edge bars, per Figma. */
 .os-sound-card__seg {
   position: absolute;
