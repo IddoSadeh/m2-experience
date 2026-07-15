@@ -122,6 +122,7 @@ img {
 }
 
 .site-menu__nav {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -164,27 +165,27 @@ img {
   white-space: nowrap;
 }
 
-.site-menu__nav a:first-child {
-  flex: 0 0 4.875rem;
-  order: 10;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.site-menu__label-full {
-  display: none;
-}
-
 .site-menu__label-preview {
-  display: inline;
-}
-
-.site-menu.is-menu-open .site-menu__label-full {
-  display: inline;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: none;
+  transition: opacity 120ms ease;
 }
 
 .site-menu.is-menu-open .site-menu__label-preview {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .site-menu.is-menu-open .site-menu__nav a {
@@ -5681,19 +5682,8 @@ body > main {
     text-align: center;
   }
 
-  .site-menu__nav a:not(:first-child) {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .site-menu__nav a:first-child {
-    flex: 0 0 3.375rem;
-    order: 0;
-  }
-
-  .site-menu.is-menu-open .site-menu__nav a:not(:first-child) {
-    opacity: 1;
-    pointer-events: auto;
+  .site-menu__label-preview {
+    font-size: 0.6875rem;
   }
 
   .home-sequence {
