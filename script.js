@@ -466,16 +466,6 @@ updateMaskRevealTitles();
 window.addEventListener("scroll", updateMaskRevealTitles, { passive: true });
 window.addEventListener("resize", updateMaskRevealTitles);
 
-function updateFooterCover() {
-  if (!siteFooter) return;
-
-  const rect = siteFooter.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const isActive = rect.top <= 0 && rect.bottom > viewportHeight * 0.08;
-
-  siteFooter.classList.toggle("is-footer-cover-active", isActive);
-}
-
 function setupFooterSpin() {
   if (!siteFooter || footerSpinImages.length === 0) return;
 
@@ -504,10 +494,7 @@ function setupFooterSpin() {
   }, frameDuration);
 }
 
-updateFooterCover();
 setupFooterSpin();
-window.addEventListener("scroll", updateFooterCover, { passive: true });
-window.addEventListener("resize", updateFooterCover);
 
 function updateOsRevealStack() {
   if (!osRevealStack) return;
