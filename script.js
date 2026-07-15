@@ -509,7 +509,9 @@ function updateWordRevealText() {
     const items = group.querySelectorAll("li");
     const rect = group.getBoundingClientRect();
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-    const rawProgress = (viewportHeight * 0.72 - rect.top) / (rect.height + viewportHeight * 0.08);
+    const rawProgress =
+      (viewportHeight * 0.72 - rect.top) /
+      (rect.height + viewportHeight * 0.6);
     const progress = Math.min(Math.max(rawProgress, 0), 1);
     const activeCount = Math.round(items.length * progress);
 
