@@ -4988,17 +4988,17 @@ img {
 .order-card {
   position: relative;
   z-index: 1;
-  width: min(100%, 24.375rem);
+  width: min(100%, clamp(20rem, 22.57vw, 24.375rem));
   overflow: hidden;
-  border-radius: 1.375rem;
+  border-radius: clamp(1rem, 1.27vw, 1.375rem);
   color: var(--white);
 }
 
 .order-card__top {
   display: grid;
-  gap: 1.375rem;
-  padding: 2rem 1.5rem;
-  border-radius: 1.375rem 1.375rem 0 0;
+  gap: clamp(1rem, 1.27vw, 1.375rem);
+  padding: clamp(1.5rem, 1.85vw, 2rem) clamp(1.125rem, 1.39vw, 1.5rem);
+  border-radius: clamp(1rem, 1.27vw, 1.375rem) clamp(1rem, 1.27vw, 1.375rem) 0 0;
   background: rgba(7, 7, 7, 0.5);
 }
 
@@ -5007,7 +5007,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2.75rem;
+  gap: clamp(1.25rem, 2.55vw, 2.75rem);
 }
 
 .order-card__summary h1,
@@ -5027,7 +5027,7 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 1.39vw, 1.5rem);
   font-weight: 900;
   line-height: 1.08;
   text-transform: uppercase;
@@ -5042,7 +5042,7 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 0.81vw, 0.875rem);
   line-height: 1.2;
   text-transform: capitalize;
 }
@@ -5050,13 +5050,13 @@ img {
 .order-card__quantity {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 0.69vw, 0.75rem);
   font-family:
     "F37 Moon",
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 1.125rem;
+  font-size: clamp(0.9375rem, 1.04vw, 1.125rem);
 }
 
 .order-card__quantity button,
@@ -5077,22 +5077,27 @@ img {
 }
 
 .order-card__config {
-  padding-top: 1.375rem;
+  padding-top: clamp(1rem, 1.27vw, 1.375rem);
   border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.order-card__config > div {
+  min-width: 0;
 }
 
 .order-card__config strong {
   display: block;
-  margin-top: 0.5rem;
+  margin-top: clamp(0.375rem, 0.46vw, 0.5rem);
   font-family:
     "F37 Moon",
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: 1.125rem;
+  font-size: clamp(0.875rem, 0.98vw, 1.0625rem);
   font-weight: 400;
   line-height: 1.25;
   text-transform: capitalize;
+  white-space: nowrap;
 }
 
 .order-card__config button {
@@ -5101,11 +5106,168 @@ img {
   height: 2.125rem;
 }
 
+.order-card__config-toggle {
+  position: relative;
+}
+
+.order-card__chevron {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-top: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+  transform: translateY(0.125rem) rotate(45deg);
+  transition: transform 220ms ease;
+}
+
+.order-card.is-config-open .order-card__chevron {
+  transform: translateY(-0.125rem) rotate(225deg);
+}
+
+.order-card__options {
+  display: grid;
+  gap: clamp(1rem, 1.27vw, 1.375rem);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    max-height 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 180ms ease,
+    visibility 0s linear 320ms;
+}
+
+.order-card.is-config-open .order-card__options {
+  max-height: 22rem;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.order-card__options fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.order-card__options legend {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(0.75rem, 0.81vw, 0.875rem);
+  text-transform: capitalize;
+}
+
+.order-card__plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.5rem, 0.69vw, 0.75rem);
+}
+
+.order-card__plan-grid button {
+  display: grid;
+  min-width: 0;
+  min-height: clamp(5.75rem, 6.5vw, 7rem);
+  padding: clamp(0.625rem, 0.69vw, 0.75rem);
+  border: 0.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: clamp(0.625rem, 0.69vw, 0.75rem);
+  background: rgba(7, 7, 7, 0.05);
+  color: var(--white);
+  cursor: pointer;
+  font-family: "F37 Moon", "Helvetica Neue", Arial, sans-serif;
+  text-align: left;
+}
+
+.order-card__plan-grid button[aria-pressed="true"] {
+  border-color: var(--acid);
+  background: rgba(197, 255, 174, 0.08);
+}
+
+.order-card__plan-grid span {
+  font-size: clamp(0.9375rem, 1.04vw, 1.125rem);
+}
+
+.order-card__plan-grid small {
+  margin-top: 0.25rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: clamp(0.6875rem, 0.81vw, 0.875rem);
+  line-height: 1.25;
+}
+
+.order-card__plan-grid b {
+  align-self: end;
+  justify-self: end;
+  margin-top: 0.5rem;
+  font-size: clamp(0.6875rem, 0.81vw, 0.875rem);
+  font-weight: 400;
+}
+
+.order-card__color-grid {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+}
+
+.order-card__color-grid button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--white);
+  cursor: pointer;
+  font-family: "F37 Moon", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(0.75rem, 1.04vw, 1.125rem);
+  white-space: nowrap;
+}
+
+.order-card__color-grid button[aria-pressed="true"] {
+  color: var(--acid);
+}
+
+.order-swatch {
+  flex: 0 0 auto;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+}
+
+.order-swatch--rose {
+  background: #ffe3fe;
+}
+
+.order-swatch--black {
+  background: #070707;
+}
+
+.order-swatch--clear {
+  background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.08));
+}
+
+.order-swatch--tort {
+  background: conic-gradient(from 30deg, #16110c, #9b6b2f, #20150d, #c59851, #16110c);
+}
+
+.order-swatch--dot {
+  background:
+    radial-gradient(circle, #070707 30%, transparent 34%) 0 0 / 4px 4px,
+    #d9ddde;
+}
+
 .order-card__bottom {
   display: grid;
   gap: 0.75rem;
   justify-items: center;
-  padding: 2rem 1.5rem;
+  padding: clamp(1.5rem, 1.85vw, 2rem) clamp(1.125rem, 1.39vw, 1.5rem);
   border-top: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 0 0 1.375rem 1.375rem;
   background: rgba(7, 7, 7, 0.6);

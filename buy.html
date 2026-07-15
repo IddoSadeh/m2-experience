@@ -53,18 +53,49 @@
                 <p>Sensing For Continuous Wear</p>
               </div>
               <div class="order-card__quantity" aria-label="Quantity">
-                <button type="button" aria-label="Decrease quantity">-</button>
-                <span>1</span>
-                <button type="button" aria-label="Increase quantity">+</button>
+                <button type="button" aria-label="Decrease quantity" data-quantity-action="decrease">-</button>
+                <span data-order-quantity>1</span>
+                <button type="button" aria-label="Increase quantity" data-quantity-action="increase">+</button>
               </div>
             </div>
 
             <div class="order-card__config">
               <div>
                 <p>Your Configuration</p>
-                <strong>m.2 Standard / Clear&nbsp; #D9DDDE</strong>
+                <strong><span data-selected-plan>m.2 Standard</span> / <span data-selected-color>Clear&nbsp; #FRC-01</span></strong>
               </div>
-              <button type="button" aria-label="Edit configuration">⌃</button>
+              <button class="order-card__config-toggle" type="button" aria-label="Edit configuration" aria-controls="order-config-options" aria-expanded="false">
+                <span class="order-card__chevron" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <div class="order-card__options" id="order-config-options" aria-hidden="true" inert>
+              <fieldset class="order-card__plans">
+                <legend>Choose Plan</legend>
+                <div class="order-card__plan-grid">
+                  <button type="button" data-order-plan="m.2 Standard" aria-pressed="true">
+                    <span>m.2 Standard</span>
+                    <small>15 Activation Credits<br />Per Mo.</small>
+                    <b>$19/Mo.</b>
+                  </button>
+                  <button type="button" data-order-plan="m.2 Extra" aria-pressed="false">
+                    <span>m.2 Extra</span>
+                    <small>30 Activation Credits<br />Per Mo.</small>
+                    <b>$39/Mo.</b>
+                  </button>
+                </div>
+              </fieldset>
+
+              <fieldset class="order-card__colors">
+                <legend>Pick Up A Color</legend>
+                <div class="order-card__color-grid">
+                  <button type="button" data-order-color="Rose #E2CBC4" aria-pressed="false"><i class="order-swatch order-swatch--rose" aria-hidden="true"></i>#E2CBC4</button>
+                  <button type="button" data-order-color="Black #070707" aria-pressed="false"><i class="order-swatch order-swatch--black" aria-hidden="true"></i>#070707</button>
+                  <button type="button" data-order-color="Clear #FRC-01" aria-pressed="true"><i class="order-swatch order-swatch--clear" aria-hidden="true"></i>#FRC-01</button>
+                  <button type="button" data-order-color="#PTRN-TORT" aria-pressed="false"><i class="order-swatch order-swatch--tort" aria-hidden="true"></i>#PTRN-TORT</button>
+                  <button type="button" data-order-color="#IPTRN-DOT" aria-pressed="false"><i class="order-swatch order-swatch--dot" aria-hidden="true"></i>#IPTRN-DOT</button>
+                </div>
+              </fieldset>
             </div>
           </div>
 

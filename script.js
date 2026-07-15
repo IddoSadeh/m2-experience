@@ -16,6 +16,7 @@ const textureCards = document.querySelectorAll(".texture-card");
 const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const productSpinImages = [...document.querySelectorAll("[data-product-spin]")];
+const orderCard = document.querySelector(".order-card");
 const osRevealStack = document.querySelector(".reveal--os");
 const osRevealInner = osRevealStack?.querySelector(".reveal__inner");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
@@ -494,6 +495,53 @@ function setupProductSpin() {
 }
 
 setupProductSpin();
+
+function setupOrderCard() {
+  if (!orderCard) return;
+
+  const toggle = orderCard.querySelector(".order-card__config-toggle");
+  const options = orderCard.querySelector(".order-card__options");
+  const quantity = orderCard.querySelector("[data-order-quantity]");
+  const selectedPlan = orderCard.querySelector("[data-selected-plan]");
+  const selectedColor = orderCard.querySelector("[data-selected-color]");
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = orderCard.classList.toggle("is-config-open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    options?.setAttribute("aria-hidden", String(!isOpen));
+    options?.toggleAttribute("inert", !isOpen);
+  });
+
+  for (const button of orderCard.querySelectorAll("[data-quantity-action]")) {
+    button.addEventListener("click", () => {
+      const current = Number(quantity?.textContent) || 1;
+      const next = button.dataset.quantityAction === "increase"
+        ? Math.min(current + 1, 9)
+        : Math.max(current - 1, 1);
+      if (quantity) quantity.textContent = String(next);
+    });
+  }
+
+  for (const button of orderCard.querySelectorAll("[data-order-plan]")) {
+    button.addEventListener("click", () => {
+      for (const option of orderCard.querySelectorAll("[data-order-plan]")) {
+        option.setAttribute("aria-pressed", String(option === button));
+      }
+      if (selectedPlan) selectedPlan.textContent = button.dataset.orderPlan;
+    });
+  }
+
+  for (const button of orderCard.querySelectorAll("[data-order-color]")) {
+    button.addEventListener("click", () => {
+      for (const option of orderCard.querySelectorAll("[data-order-color]")) {
+        option.setAttribute("aria-pressed", String(option === button));
+      }
+      if (selectedColor) selectedColor.textContent = button.dataset.orderColor;
+    });
+  }
+}
+
+setupOrderCard();
 
 function updateOsRevealStack() {
   if (!osRevealStack) return;
