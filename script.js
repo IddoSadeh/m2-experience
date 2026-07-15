@@ -22,6 +22,13 @@ const osRevealStack = document.querySelector(".reveal--os");
 const osRevealInner = osRevealStack?.querySelector(".reveal__inner");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
 const memoryPanes = document.querySelectorAll("[data-memory-pane]");
+const companyHero = document.querySelector(".company-hero");
+const companyVideoTrigger = document.querySelector(".company-hero__play");
+const companyVideoModal = document.querySelector("[data-company-video-modal]");
+const companyVideo = companyVideoModal?.querySelector("video");
+const companyVideoClose = companyVideoModal?.querySelector(
+  "[data-company-video-close]",
+);
 const modelPartConfigs = [
   {
     key: "interface",
@@ -570,6 +577,97 @@ if (siteMenu && siteMenuButton) {
       siteMenuButton.setAttribute("aria-expanded", "false");
       siteMenuButton.focus();
     }
+  });
+}
+
+if (companyHero && companyVideoTrigger && companyVideoModal && companyVideo) {
+  const canFollowPointer = window.matchMedia(
+    "(hover: hover) and (pointer: fine)",
+  );
+  let currentX = 0;
+  let currentY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let followFrame = 0;
+  let pointerIdleTimer = 0;
+
+  const updateTriggerPosition = () => {
+    currentX += (targetX - currentX) * 0.2;
+    currentY += (targetY - currentY) * 0.2;
+    companyVideoTrigger.style.left = `${currentX}px`;
+    companyVideoTrigger.style.top = `${currentY}px`;
+
+    if (
+      Math.abs(targetX - currentX) > 0.1 ||
+      Math.abs(targetY - currentY) > 0.1
+    ) {
+      followFrame = window.requestAnimationFrame(updateTriggerPosition);
+    } else {
+      followFrame = 0;
+    }
+  };
+
+  const moveTrigger = (event) => {
+    if (!canFollowPointer.matches) return;
+
+    companyVideoTrigger.classList.add("is-pointer-active");
+    window.clearTimeout(pointerIdleTimer);
+    pointerIdleTimer = window.setTimeout(() => {
+      companyVideoTrigger.classList.remove("is-pointer-active");
+    }, 800);
+
+    const heroRect = companyHero.getBoundingClientRect();
+    targetX = event.clientX - heroRect.left;
+    targetY = event.clientY - heroRect.top;
+
+    if (!companyVideoTrigger.classList.contains("is-following-pointer")) {
+      const triggerRect = companyVideoTrigger.getBoundingClientRect();
+      currentX = triggerRect.left - heroRect.left + triggerRect.width / 2;
+      currentY = triggerRect.top - heroRect.top + triggerRect.height / 2;
+      companyVideoTrigger.classList.add("is-following-pointer");
+    }
+
+    if (!followFrame) {
+      followFrame = window.requestAnimationFrame(updateTriggerPosition);
+    }
+  };
+
+  const resetTrigger = () => {
+    if (!canFollowPointer.matches) return;
+    if (followFrame) window.cancelAnimationFrame(followFrame);
+    window.clearTimeout(pointerIdleTimer);
+    followFrame = 0;
+    pointerIdleTimer = 0;
+    companyVideoTrigger.classList.remove(
+      "is-following-pointer",
+      "is-pointer-active",
+    );
+    companyVideoTrigger.style.removeProperty("left");
+    companyVideoTrigger.style.removeProperty("top");
+  };
+
+  const closeCompanyVideo = () => {
+    if (companyVideoModal.open) companyVideoModal.close();
+  };
+
+  companyHero.addEventListener("pointermove", moveTrigger);
+  companyHero.addEventListener("pointerleave", resetTrigger);
+
+  companyVideoTrigger.addEventListener("click", () => {
+    window.clearTimeout(pointerIdleTimer);
+    companyVideoTrigger.classList.remove("is-pointer-active");
+    companyVideoModal.showModal();
+    document.body.classList.add("is-company-video-open");
+    companyVideo.play().catch(() => {});
+  });
+
+  companyVideoClose?.addEventListener("click", closeCompanyVideo);
+  companyVideoModal.addEventListener("click", (event) => {
+    if (event.target === companyVideoModal) closeCompanyVideo();
+  });
+  companyVideoModal.addEventListener("close", () => {
+    companyVideo.pause();
+    document.body.classList.remove("is-company-video-open");
   });
 }
 
