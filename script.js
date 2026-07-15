@@ -480,7 +480,7 @@ function setupFooterSpin() {
   if (!siteFooter || footerSpinImages.length === 0) return;
 
   const frameCount = 90;
-  const frameDuration = 1000 / 15;
+  const frameDuration = 1000 / 12;
   const frameUrls = Array.from(
     { length: frameCount },
     (_, index) =>
