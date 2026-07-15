@@ -655,10 +655,10 @@ img {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: auto auto auto;
   column-gap: clamp(1.5rem, 3.7vw, 4rem);
-  row-gap: 2.5rem;
+  row-gap: clamp(2rem, 2.546vw, 2.75rem);
   min-height: 100svh;
-  padding: clamp(5rem, 6vw, 6.5rem) clamp(1.25rem, 3.7vw, 4rem) clamp(5rem, 5.9vw, 6.375rem);
-  background: #f4f4f4;
+  padding: clamp(5rem, 7.06vw, 7.625rem) clamp(1.25rem, 3.7vw, 4rem);
+  background: #f1f0ef;
   color: var(--black);
   font-family:
     "Saans Mono",
@@ -678,22 +678,20 @@ img {
 
 .home-process__item--detection {
   grid-column: 1 / 4;
-  grid-template-columns: minmax(18rem, 29.5rem) minmax(12rem, 20rem) minmax(14rem, 25rem);
-  column-gap: clamp(1.5rem, 3.7vw, 4rem);
+  grid-template-columns: 34.625% minmax(0, 1fr) clamp(17.25rem, 21%, 21.5rem);
+  column-gap: 1.5%;
 }
 
 .home-process__item--encoding {
   grid-column: 1 / 4;
-  grid-template-columns: minmax(18rem, 29.5rem) minmax(14rem, 20rem) minmax(18rem, 29.5rem);
-  column-gap: clamp(1.5rem, 3.7vw, 4rem);
-  margin-top: 0.5rem;
+  grid-template-columns: minmax(0, 1fr) 20.4622% 34.625%;
+  column-gap: 1.5%;
 }
 
 .home-process__item--capture {
   grid-column: 1 / 4;
-  grid-template-columns: minmax(18rem, 29.5rem) minmax(12rem, 20rem) minmax(14rem, 25rem);
-  column-gap: clamp(1.5rem, 3.7vw, 4rem);
-  margin-top: 0.5rem;
+  grid-template-columns: 34.625% minmax(0, 1fr) 20.1875%;
+  column-gap: 1.5%;
 }
 
 .home-process__visual {
@@ -702,7 +700,7 @@ img {
   margin: 0;
   overflow: hidden;
   border-radius: 0.5rem;
-  background: #f4f4f4;
+  background: #f1f0ef;
 }
 
 .home-process__item--encoding .home-process__visual {
@@ -734,8 +732,8 @@ img {
 .home-process__item h2,
 .home-process__item p {
   margin: 0;
-  font-size: clamp(0.875rem, 0.93vw, 1rem);
-  line-height: 1.25;
+  font-size: clamp(0.875rem, 1.0417vw, 1.125rem);
+  line-height: 1.2222;
 }
 
 .home-process__item h2 {
