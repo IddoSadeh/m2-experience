@@ -8,7 +8,9 @@ const revealTexts = document.querySelectorAll("[data-scroll-reveal]");
 const wordRevealGroups = document.querySelectorAll("[data-word-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
+const scrambleTypewriterTexts = document.querySelectorAll("[data-scramble-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
+const homeMaskRevealTitles = document.querySelectorAll("[data-home-mask-reveal]");
 const homeLetterTexts = document.querySelectorAll(".home-letters");
 const homeSymbolLayer = document.querySelector(".home-symbols");
 const homeProcessItems = document.querySelectorAll(".home-process__item");
@@ -209,6 +211,107 @@ function setupTypewriterText(element) {
   element.appendChild(fragment);
 }
 
+const scrambleStates = new WeakMap();
+const scrambleGlyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&?";
+
+function setupScrambleTypewriter(element) {
+  const text = element.textContent.trim();
+  const fragment = document.createDocumentFragment();
+  const characters = [];
+
+  element.setAttribute("aria-label", text);
+  element.textContent = "";
+
+  for (const character of text) {
+    const span = document.createElement("span");
+    span.setAttribute("aria-hidden", "true");
+
+    if (character === " ") {
+      span.className = "scramble-space";
+      span.textContent = "\u00a0";
+    } else {
+      span.className = "scramble-char";
+      span.textContent = character;
+      span.classList.add("is-visible");
+      characters.push({ span, character });
+    }
+
+    fragment.appendChild(span);
+  }
+
+  element.appendChild(fragment);
+  scrambleStates.set(element, { characters, frame: 0 });
+}
+
+function resetScrambleTypewriter(element) {
+  const state = scrambleStates.get(element);
+  if (!state) return;
+
+  cancelAnimationFrame(state.frame);
+  element.classList.remove("is-scrambling");
+
+  for (const item of state.characters) {
+    item.span.textContent = item.character;
+    item.span.classList.add("is-visible");
+    item.span.classList.remove("is-scrambling-char");
+  }
+}
+
+function playScrambleTypewriter(element) {
+  const state = scrambleStates.get(element);
+  if (!state) return;
+
+  resetScrambleTypewriter(element);
+
+  const start = performance.now();
+  const leadIn = 300;
+  const waveStagger = 58;
+  const scrambleHold = 650;
+  const glyphInterval = 55;
+  const waveDuration = Math.max(0, state.characters.length - 1) * waveStagger;
+  const resolveStart = leadIn + waveDuration + scrambleHold;
+  const animationEnd = resolveStart + waveDuration;
+
+  element.classList.add("is-scrambling");
+
+  const update = (now) => {
+    let isComplete = true;
+
+    state.characters.forEach((item, index) => {
+      const elapsed = now - start;
+      const scrambleStart = leadIn + (state.characters.length - index - 1) * waveStagger;
+      const resolveAt = resolveStart + index * waveStagger;
+
+      if (elapsed < scrambleStart) {
+        item.span.textContent = item.character;
+        item.span.classList.remove("is-scrambling-char");
+        isComplete = false;
+        return;
+      }
+
+      if (elapsed < resolveAt) {
+        const glyphIndex = Math.floor((elapsed - scrambleStart) / glyphInterval + index * 5) % scrambleGlyphs.length;
+        item.span.textContent = scrambleGlyphs[glyphIndex];
+        item.span.classList.add("is-scrambling-char");
+        isComplete = false;
+      } else {
+        item.span.textContent = item.character;
+        item.span.classList.remove("is-scrambling-char");
+      }
+    });
+
+    if (isComplete && now - start >= animationEnd) {
+      element.classList.remove("is-scrambling");
+      state.frame = 0;
+      return;
+    }
+
+    state.frame = requestAnimationFrame(update);
+  };
+
+  state.frame = requestAnimationFrame(update);
+}
+
 function setupHomeSymbols(layer) {
   const states = [];
 
@@ -382,6 +485,63 @@ function updateMaskRevealTitles() {
   }
 }
 
+function setupHomeMaskReveal(title) {
+  const lines = Array.from(title.children);
+  let letterIndex = 0;
+
+  title.setAttribute("aria-label", lines.map((line) => line.textContent.trim()).join(" "));
+
+  for (const line of lines) {
+    const text = line.textContent;
+    const fragment = document.createDocumentFragment();
+
+    line.textContent = "";
+
+    for (const character of text) {
+      const span = document.createElement("span");
+      span.setAttribute("aria-hidden", "true");
+
+      if (character === " ") {
+        span.className = "home-remember__space";
+        span.textContent = "\u00a0";
+      } else {
+        span.className = "home-remember__char";
+        span.dataset.homeMaskIndex = letterIndex;
+        span.textContent = character;
+        letterIndex += 1;
+      }
+
+      fragment.appendChild(span);
+    }
+
+    line.appendChild(fragment);
+  }
+}
+
+function updateHomeMaskRevealTitles() {
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  for (const title of homeMaskRevealTitles) {
+    const section = title.closest(".home-remember");
+    const rect = section.getBoundingClientRect();
+    const chars = title.querySelectorAll(".home-remember__char");
+    const totalChars = chars.length || 1;
+    const rawProgress = (viewportHeight * 0.68 - rect.top) / (viewportHeight * 0.46);
+    const progress = reduceMotion ? 1 : Math.min(Math.max(rawProgress, 0), 1);
+    const stagger = Math.min(0.045, 0.68 / totalChars);
+
+    chars.forEach((char) => {
+      const index = Number(char.dataset.homeMaskIndex) || 0;
+      const reverseIndex = totalChars - index - 1;
+      const local = Math.min(Math.max((progress - reverseIndex * stagger) / 0.24, 0), 1);
+      const y = (1 - easeOutCubic(local)) * 105;
+
+      char.style.transform = `translateY(${y}%)`;
+    });
+  }
+}
+
 for (const element of revealTexts) {
   setupRevealText(element);
 }
@@ -416,6 +576,18 @@ for (const element of letterDropTexts) {
 for (const element of typewriterTexts) {
   setupTypewriterText(element);
 }
+
+for (const element of scrambleTypewriterTexts) {
+  setupScrambleTypewriter(element);
+}
+
+for (const title of homeMaskRevealTitles) {
+  setupHomeMaskReveal(title);
+}
+
+updateHomeMaskRevealTitles();
+window.addEventListener("scroll", updateHomeMaskRevealTitles, { passive: true });
+window.addEventListener("resize", updateHomeMaskRevealTitles);
 
 let homeLetterOffset = 0;
 
@@ -1326,6 +1498,44 @@ if (typewriterTexts.length > 0) {
   for (const element of typewriterTexts) {
     typewriterObserver.observe(element);
   }
+}
+
+if (scrambleTypewriterTexts.length > 0) {
+  const scrambleSection = scrambleTypewriterTexts[0].closest(".home-remember");
+  let scrambleSequenceTimer = 0;
+
+  const stopScrambleSequence = () => {
+    window.clearTimeout(scrambleSequenceTimer);
+    scrambleSequenceTimer = 0;
+
+    for (const element of scrambleTypewriterTexts) {
+      resetScrambleTypewriter(element);
+    }
+  };
+
+  const runScrambleSequence = () => {
+    for (const element of scrambleTypewriterTexts) {
+      playScrambleTypewriter(element);
+    }
+
+    scrambleSequenceTimer = window.setTimeout(runScrambleSequence, 5200);
+  };
+
+  const scrambleObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          stopScrambleSequence();
+          scrambleSequenceTimer = window.setTimeout(runScrambleSequence, 600);
+        } else {
+          stopScrambleSequence();
+        }
+      }
+    },
+    { threshold: 0.45 },
+  );
+
+  if (scrambleSection) scrambleObserver.observe(scrambleSection);
 }
 
 if (homeProcessItems.length > 0) {

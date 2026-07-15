@@ -972,31 +972,45 @@ img {
   text-transform: uppercase;
 }
 
-.home-remember h2 span {
+.home-remember h2 > span {
   position: absolute;
   display: block;
+  overflow: hidden;
   white-space: nowrap;
 }
 
-.home-remember h2 span:nth-child(1) {
+.home-remember h2 > span:nth-child(1) {
   top: 0;
   left: 0;
 }
 
-.home-remember h2 span:nth-child(2) {
+.home-remember h2 > span:nth-child(2) {
   top: 31.5%;
   left: 52.7%;
 }
 
-.home-remember h2 span:nth-child(3) {
+.home-remember h2 > span:nth-child(3) {
   bottom: 0;
   left: 0;
+}
+
+.home-remember__char {
+  position: relative;
+  display: inline-block;
+  transform: translateY(105%);
+  will-change: transform;
+}
+
+.home-remember__space {
+  display: inline-block;
+  width: 0.28em;
 }
 
 .home-remember__label {
   position: absolute;
   z-index: 1;
   display: block;
+  overflow: hidden;
   padding-left: 1.125rem;
   margin: 0;
   color: #c5ffae;
@@ -1006,10 +1020,10 @@ img {
     "SFMono-Regular",
     Consolas,
     monospace;
-  font-size: clamp(1rem, 1.39vw, 1.5rem);
-  font-weight: 500;
+  font-size: clamp(0.875rem, 1.273vw, 1.375rem);
+  font-weight: 400;
   line-height: normal;
-  text-transform: capitalize;
+  text-transform: none;
   white-space: nowrap;
 }
 
@@ -1023,6 +1037,40 @@ img {
   border-radius: 50%;
   background: currentColor;
   transform: translateY(-50%);
+}
+
+.scramble-char,
+.scramble-space {
+  display: inline-block;
+}
+
+.scramble-char {
+  width: 0.6em;
+  opacity: 0;
+  text-align: center;
+}
+
+.scramble-char.is-visible {
+  opacity: 1;
+}
+
+.scramble-char.is-scrambling-char {
+  animation: scramble-slot 76ms steps(2, end) infinite;
+}
+
+.scramble-space {
+  width: 0.6em;
+}
+
+@keyframes scramble-slot {
+  0%,
+  100% {
+    transform: translateY(-0.1em);
+  }
+
+  50% {
+    transform: translateY(0.1em);
+  }
 }
 
 .home-remember__label--detection {
@@ -5913,7 +5961,7 @@ body > main {
     line-height: 1.16;
   }
 
-  .home-remember h2 span:nth-child(2) {
+  .home-remember h2 > span:nth-child(2) {
     top: 32%;
     right: 0;
     left: auto;
