@@ -1473,11 +1473,104 @@ if (scrambleTypewriterTexts.length > 0) {
   if (scrambleSection) scrambleObserver.observe(scrambleSection);
 }
 
+function setupHomeProcessCharacterReveal(item) {
+  const visual = item.querySelector(".home-process__visual");
+  const source = visual?.querySelector("img:first-child");
+  if (!visual || !source) return null;
+
+  const state = { characters: [], source, visual, started: false, ready: null };
+  visual.classList.add("has-character-reveal");
+
+  state.ready = fetch(source.src)
+    .then((response) => {
+      if (!response.ok) throw new Error("Could not load ASCII artwork");
+      return response.text();
+    })
+    .then((markup) => {
+      const documentNode = new DOMParser().parseFromString(markup, "image/svg+xml");
+      const svg = documentNode.documentElement;
+      if (svg.nodeName.toLowerCase() !== "svg") throw new Error("Invalid ASCII artwork");
+
+      svg.classList.add("home-process__character-reveal");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("width", "100%");
+      svg.setAttribute("height", "100%");
+      svg.setAttribute("preserveAspectRatio", "none");
+
+      state.characters = [...svg.querySelectorAll("path")];
+      for (const character of state.characters) character.style.opacity = "0";
+
+      visual.appendChild(document.importNode(svg, true));
+      state.characters = [...visual.querySelectorAll(".home-process__character-reveal path")];
+    })
+    .catch(() => {
+      visual.classList.remove("has-character-reveal");
+    });
+
+  return state;
+}
+
+async function playHomeProcessCharacterReveal(item, state) {
+  if (!state || state.started) return;
+  state.started = true;
+  await state.ready;
+
+  const characters = [...state.characters];
+  if (characters.length === 0) {
+    item.classList.add("is-process-active");
+    return;
+  }
+
+  for (let index = characters.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [characters[index], characters[swapIndex]] = [characters[swapIndex], characters[index]];
+  }
+
+  const duration = 1100;
+  const startedAt = performance.now();
+  let revealed = 0;
+
+  const draw = (now) => {
+    const target = Math.ceil(Math.min((now - startedAt) / duration, 1) * characters.length);
+
+    for (; revealed < target; revealed += 1) {
+      characters[revealed].style.opacity = "1";
+    }
+
+    if (revealed < characters.length) {
+      requestAnimationFrame(draw);
+    } else {
+      window.setTimeout(() => {
+        const photo = item.querySelector(".home-process__visual img + img");
+
+        if (photo) {
+          photo.style.opacity = "0";
+          void photo.offsetWidth;
+          photo.style.removeProperty("opacity");
+        }
+
+        requestAnimationFrame(() => item.classList.add("is-process-active"));
+      }, 250);
+    }
+  };
+
+  requestAnimationFrame(draw);
+}
+
 if (homeProcessItems.length > 0) {
+  const characterRevealStates = new WeakMap();
+
+  for (const item of homeProcessItems) {
+    characterRevealStates.set(item, setupHomeProcessCharacterReveal(item));
+  }
+
   const homeProcessObserver = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        entry.target.classList.toggle("is-process-active", entry.isIntersecting);
+        if (!entry.isIntersecting) continue;
+
+        playHomeProcessCharacterReveal(entry.target, characterRevealStates.get(entry.target));
+        homeProcessObserver.unobserve(entry.target);
       }
     },
     { rootMargin: "0px 0px -12% 0px", threshold: 0.42 },

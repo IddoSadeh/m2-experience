@@ -697,6 +697,7 @@ img {
 .home-process__visual {
   position: relative;
   width: 100%;
+  aspect-ratio: 1;
   margin: 0;
   overflow: hidden;
   border-radius: 0.5rem;
@@ -714,15 +715,31 @@ img {
 .home-process__visual img {
   display: block;
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .home-process__visual img + img {
   position: absolute;
   inset: 0;
+  z-index: 2;
   height: 100%;
   opacity: 0;
   object-fit: cover;
-  transition: opacity 2800ms ease;
+  transition: opacity 5000ms ease;
+}
+
+.home-process__visual.has-character-reveal > img:first-child {
+  visibility: hidden;
+}
+
+.home-process__character-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .home-process__item.is-process-active .home-process__visual img + img {
