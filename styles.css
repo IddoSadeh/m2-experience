@@ -1756,8 +1756,10 @@ img {
 }
 
 .os-foundations {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 3;
+  min-height: 100svh;
   padding: clamp(5rem, 7.06vw, 7.625rem) clamp(1.25rem, 3.7vw, 4rem);
   background: var(--black);
   color: var(--white);
@@ -1881,6 +1883,8 @@ img {
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem;
+  border-radius: 0;
+  background: transparent;
   text-transform: capitalize;
   cursor: pointer;
 }
@@ -6281,6 +6285,8 @@ img {
   }
 
   .os-foundations {
+    position: relative;
+    top: auto;
     padding: 5rem 1rem;
   }
 
