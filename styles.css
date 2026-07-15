@@ -3202,7 +3202,7 @@ img {
   overflow: clip;
   background: var(--black);
   color: var(--white);
-  padding: 0 var(--product-pad) clamp(2rem, 3.74vw, 4rem);
+  padding: 0 var(--product-pad) clamp(4rem, 7.06vw, 7.625rem);
 }
 
 .product-system--tuner {
