@@ -2584,19 +2584,9 @@ img {
   pointer-events: none;
   opacity: 0;
   white-space: nowrap;
-  transition:
-    left 120ms ease,
-    top 120ms ease,
-    opacity 120ms ease;
 }
 
-.os-breath-chart__plot:has(.os-br-column:hover) .os-breath-chart__tooltip,
-.os-breath-chart__plot:has(.os-br-column:focus-visible) .os-breath-chart__tooltip {
-  opacity: 1;
-}
-
-.os-breath-chart__plot.is-default-visible:not(:has(.os-br-column:hover)):not(:has(.os-br-column:focus-visible))
-  .os-breath-chart__tooltip {
+.os-breath-chart__plot.is-default-visible .os-breath-chart__tooltip {
   opacity: 1;
 }
 
@@ -2611,13 +2601,8 @@ img {
   border: 0;
   background: transparent;
   color: inherit;
-  cursor: pointer;
   transform: translateX(-50%);
-}
-
-.os-br-column:hover,
-.os-br-column:focus-visible {
-  outline: none;
+  pointer-events: none;
 }
 
 .os-br-cell {
@@ -2629,7 +2614,6 @@ img {
   border-radius: 1.32px;
   background: #66835a;
   transform: translateX(-50%);
-  transition: background 100ms ease;
 }
 
 .os-br-cell--g {
@@ -2644,26 +2628,10 @@ img {
   background: #c5ffae;
 }
 
-.os-br-column:hover > .os-br-cell,
-.os-br-column:focus-visible > .os-br-cell {
-  background: #c5ffae;
-}
-
-.os-br-column.is-default > .os-br-cell--terminal,
-.os-br-column:hover > .os-br-cell--terminal,
-.os-br-column:focus-visible > .os-br-cell--terminal {
+.os-br-column.is-default > .os-br-cell--terminal {
   box-shadow:
     0 0 0.35rem rgba(197, 255, 174, 0.85),
     0 0 0.8rem rgba(197, 255, 174, 0.45);
-}
-
-.os-breath-chart__plot:has(.os-br-column:hover)
-  .os-br-column.is-default:not(:hover)
-  > .os-br-cell--terminal,
-.os-breath-chart__plot:has(.os-br-column:focus-visible)
-  .os-br-column.is-default:not(:focus-visible)
-  > .os-br-cell--terminal {
-  box-shadow: none;
 }
 
 .os-heart-chart__plot {
@@ -2715,11 +2683,6 @@ img {
   border-left: 1px dashed rgba(255, 255, 255, 0.45);
   transform: translateX(-50%);
   pointer-events: none;
-  transition:
-    left 120ms ease,
-    top 120ms ease,
-    height 120ms ease,
-    opacity 120ms ease;
 }
 
 .os-heart-chart__times {
@@ -2751,8 +2714,8 @@ img {
   border: 0;
   background: transparent;
   color: inherit;
-  cursor: pointer;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .os-bpm-point::before {
@@ -2782,7 +2745,6 @@ img {
   content: "";
   opacity: 0;
   transform: translate(-50%, -50%);
-  transition: opacity 120ms ease;
   pointer-events: none;
 }
 
@@ -2801,34 +2763,11 @@ img {
   pointer-events: none;
   transform: translateX(-50%);
   white-space: nowrap;
-  transition: opacity 120ms ease;
 }
 
-.os-bpm-point:hover,
-.os-bpm-point:focus-visible {
-  outline: none;
-}
-
-.os-bpm-point:hover::after,
-.os-bpm-point:focus-visible::after,
-.os-bpm-point:hover span,
-.os-bpm-point:focus-visible span,
 .os-bpm-point.is-default::after,
 .os-bpm-point.is-default span {
   opacity: 1;
-}
-
-.os-heart-chart__plot:has(.os-bpm-point:hover)
-  .os-bpm-point.is-default:not(:hover)::after,
-.os-heart-chart__plot:has(.os-bpm-point:focus-visible)
-  .os-bpm-point.is-default:not(:focus-visible)::after,
-.os-heart-chart__plot:has(.os-bpm-point:hover)
-  .os-bpm-point.is-default:not(:hover)
-  span,
-.os-heart-chart__plot:has(.os-bpm-point:focus-visible)
-  .os-bpm-point.is-default:not(:focus-visible)
-  span {
-  opacity: 0;
 }
 
 .os-temp-chart__plot {
@@ -2906,8 +2845,8 @@ img {
   border: 0;
   background: transparent;
   color: inherit;
-  cursor: pointer;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .os-temp-point::before {
@@ -2920,7 +2859,6 @@ img {
   background: #6c8960;
   content: "";
   transform: translate(-50%, -50%);
-  transition: background-color 120ms ease;
 }
 
 .os-temp-point::after {
@@ -2938,7 +2876,6 @@ img {
   content: "";
   opacity: 0;
   transform: translate(-50%, -50%);
-  transition: opacity 120ms ease;
   pointer-events: none;
 }
 
@@ -2957,47 +2894,15 @@ img {
   pointer-events: none;
   transform: translateX(-50%);
   white-space: nowrap;
-  transition: opacity 120ms ease;
 }
 
-.os-temp-point:hover,
-.os-temp-point:focus-visible {
-  outline: none;
-}
-
-.os-temp-point:hover::before,
-.os-temp-point:focus-visible::before,
 .os-temp-point.is-default::before {
   background: #c5ffae;
 }
 
-.os-temp-point:hover::after,
-.os-temp-point:focus-visible::after,
-.os-temp-point:hover span,
-.os-temp-point:focus-visible span,
 .os-temp-point.is-default::after,
 .os-temp-point.is-default span {
   opacity: 1;
-}
-
-.os-temp-chart__plot:has(.os-temp-point:hover)
-  .os-temp-point.is-default:not(:hover)::before,
-.os-temp-chart__plot:has(.os-temp-point:focus-visible)
-  .os-temp-point.is-default:not(:focus-visible)::before {
-  background: #6c8960;
-}
-
-.os-temp-chart__plot:has(.os-temp-point:hover)
-  .os-temp-point.is-default:not(:hover)::after,
-.os-temp-chart__plot:has(.os-temp-point:focus-visible)
-  .os-temp-point.is-default:not(:focus-visible)::after,
-.os-temp-chart__plot:has(.os-temp-point:hover)
-  .os-temp-point.is-default:not(:hover)
-  span,
-.os-temp-chart__plot:has(.os-temp-point:focus-visible)
-  .os-temp-point.is-default:not(:focus-visible)
-  span {
-  opacity: 0;
 }
 
 .os-weather-strip {

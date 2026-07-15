@@ -867,28 +867,6 @@ if (memoryDateToggle && memoryDateMenu) {
   });
 }
 
-for (const card of document.querySelectorAll("[data-temp-card]")) {
-  const reading = card.querySelector("[data-temp-reading]");
-  const points = card.querySelectorAll(".os-temp-point");
-  if (!reading || points.length === 0) continue;
-
-  const defaultValue = reading.dataset.tempDefault ?? reading.textContent;
-
-  const show = (value) => {
-    reading.textContent = value;
-  };
-
-  for (const point of points) {
-    const value = point.dataset.value;
-    if (!value) continue;
-
-    point.addEventListener("mouseenter", () => show(value));
-    point.addEventListener("focus", () => show(value));
-    point.addEventListener("mouseleave", () => show(defaultValue));
-    point.addEventListener("blur", () => show(defaultValue));
-  }
-}
-
 // Breathing charts extracted from Figma: per memory, columns at exact x
 // positions with cells at exact y offsets (percent of the 7.5rem plot).
 // Colors: g grey #777777, m mid green #66835A, a acid #C5FFAE.
@@ -1316,37 +1294,29 @@ for (const card of document.querySelectorAll("[data-breath-card]")) {
   const columns = breathCharts[memory];
   const plot = card.querySelector(".os-breath-chart__plot");
   const tooltip = card.querySelector(".os-breath-chart__tooltip");
-  const reading = card.querySelector("[data-breath-reading]");
-  if (!columns || !plot || !reading) continue;
+  if (!columns || !plot) continue;
 
-  const defaultValue = reading.dataset.breathDefault ?? reading.textContent;
   let defaultColumn = null;
 
   for (const column of columns) {
-    const btn = document.createElement("button");
+    const columnElement = document.createElement("span");
     const terminalY = Math.min(...column.cells.map(([y]) => y));
-    btn.type = "button";
-    btn.className = "os-br-column";
-    btn.style.setProperty("--x", column.x + "%");
-    btn.dataset.time = column.time;
-    btn.dataset.value = column.value;
-    btn.dataset.top = terminalY;
-    btn.setAttribute(
-      "aria-label",
-      `${column.time}, ${column.value} breaths per minute`,
-    );
+    columnElement.className = "os-br-column";
+    columnElement.style.setProperty("--x", column.x + "%");
+    columnElement.dataset.time = column.time;
+    columnElement.dataset.top = terminalY;
     if (column.isDefault) {
-      btn.classList.add("is-default");
-      defaultColumn = btn;
+      columnElement.classList.add("is-default");
+      defaultColumn = columnElement;
     }
     for (const [y, color] of column.cells) {
       const cell = document.createElement("span");
       cell.className = `os-br-cell os-br-cell--${color}`;
       if (y === terminalY) cell.classList.add("os-br-cell--terminal");
       cell.style.setProperty("--cell-y", y + "%");
-      btn.appendChild(cell);
+      columnElement.appendChild(cell);
     }
-    plot.appendChild(btn);
+    plot.appendChild(columnElement);
   }
 
   const showColumn = (col) => {
@@ -1359,58 +1329,26 @@ for (const card of document.querySelectorAll("[data-breath-card]")) {
     showColumn(defaultColumn);
     plot.classList.add("is-default-visible");
   }
-
-  for (const col of plot.querySelectorAll(".os-br-column")) {
-    const enter = () => {
-      showColumn(col);
-      reading.textContent = col.dataset.value;
-    };
-    const leave = () => {
-      reading.textContent = defaultValue;
-      if (defaultColumn) showColumn(defaultColumn);
-    };
-
-    col.addEventListener("mouseenter", enter);
-    col.addEventListener("focus", enter);
-    col.addEventListener("mouseleave", leave);
-    col.addEventListener("blur", leave);
-  }
 }
 
 for (const card of document.querySelectorAll("[data-bpm-card]")) {
-  const reading = card.querySelector("[data-bpm-reading]");
   const plot = card.querySelector(".os-heart-chart__plot");
-  const points = card.querySelectorAll(".os-bpm-point");
-  if (!reading || !plot || points.length === 0) continue;
-
-  const defaultValue = reading.dataset.bpmDefault ?? reading.textContent;
   const defaultPoint = card.querySelector(".os-bpm-point.is-default");
+  if (!plot || !defaultPoint) continue;
 
-  const showPoint = (point) => {
-    plot.style.setProperty("--active-x", point.style.getPropertyValue("--x"));
-    plot.style.setProperty("--active-y", point.style.getPropertyValue("--y"));
-  };
+  plot.style.setProperty(
+    "--active-x",
+    defaultPoint.style.getPropertyValue("--x"),
+  );
+  plot.style.setProperty(
+    "--active-y",
+    defaultPoint.style.getPropertyValue("--y"),
+  );
+}
 
-  if (defaultPoint) showPoint(defaultPoint);
-
-  for (const point of points) {
-    const value = point.dataset.value;
-    if (!value) continue;
-
-    const enter = () => {
-      showPoint(point);
-      reading.textContent = value;
-    };
-    const leave = () => {
-      reading.textContent = defaultValue;
-      if (defaultPoint) showPoint(defaultPoint);
-    };
-
-    point.addEventListener("mouseenter", enter);
-    point.addEventListener("focus", enter);
-    point.addEventListener("mouseleave", leave);
-    point.addEventListener("blur", leave);
-  }
+for (const point of document.querySelectorAll(".os-bpm-point, .os-temp-point")) {
+  point.tabIndex = -1;
+  point.setAttribute("aria-hidden", "true");
 }
 
 if (letterDropTexts.length > 0) {
