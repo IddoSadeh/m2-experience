@@ -472,8 +472,8 @@ img {
 
 .home-system__readout {
   display: grid;
-  grid-template-columns: 0.98fr 1.08fr 0.95fr 0.9fr;
-  gap: clamp(1.25rem, 3.35vw, 3.625rem);
+  grid-template-columns: 20.875% 23.5% 18.1875% 17.4375%;
+  column-gap: 6.6667%;
   width: 100%;
   max-width: 100rem;
   margin: 0 auto 4rem;
@@ -490,14 +490,6 @@ img {
 }
 
 .home-system__readout div {
-  text-align: center;
-}
-
-.home-system__readout div:first-child {
-  text-align: left;
-}
-
-.home-system__readout div:last-child {
   text-align: right;
 }
 
@@ -5724,12 +5716,6 @@ body > main {
     grid-template-columns: 1fr;
     gap: 1.1rem;
     margin-bottom: 4rem;
-  }
-
-  .home-system__readout div,
-  .home-system__readout div:first-child,
-  .home-system__readout div:last-child {
-    text-align: left;
   }
 
   .home-system__footer {
