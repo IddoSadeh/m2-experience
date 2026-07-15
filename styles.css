@@ -1645,11 +1645,11 @@ img {
 }
 
 .m2os-page .reveal--os {
-  min-height: var(--os-reveal-height, auto);
+  min-height: 100svh;
 }
 
 .m2os-page .reveal--os .reveal__inner {
-  min-height: auto;
+  min-height: 100svh;
 }
 
 .reveal--os.is-os-reveal-active .reveal__inner {
@@ -1765,7 +1765,8 @@ img {
 
 .os-foundations__inner {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 27.8125% 25.3125% 25.3125%;
+  justify-content: space-between;
   width: min(100%, 100rem);
   min-height: clamp(22rem, 25.52vw, 27.5625rem);
   margin: 0 auto;
@@ -1777,18 +1778,13 @@ img {
   flex-direction: column;
   justify-content: space-between;
   min-height: clamp(22rem, 25.52vw, 27.5625rem);
-  padding-right: clamp(1.25rem, 2.5vw, 3rem);
-}
-
-.os-foundation-card + .os-foundation-card {
-  padding-left: clamp(1.5rem, 2.45vw, 2.625rem);
 }
 
 .os-foundation-card + .os-foundation-card::before {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
+  left: -21.2963%;
   width: 1px;
   background: rgba(255, 255, 255, 0.2);
   content: "";
@@ -1815,7 +1811,7 @@ img {
 }
 
 .os-foundation-card p {
-  width: min(100%, clamp(22rem, 25.75vw, 27.8125rem));
+  width: 100%;
   margin: 0;
   font-family:
     "F37 Moon",
@@ -1825,10 +1821,6 @@ img {
   font-size: clamp(0.9375rem, 1.04vw, 1.125rem);
   font-weight: 400;
   line-height: 1.555556;
-}
-
-.os-foundation-card:nth-child(n + 2) p {
-  width: min(100%, clamp(20rem, 23.44vw, 25.3125rem));
 }
 
 .os-memory-lab {
@@ -6311,6 +6303,7 @@ img {
     top: 0;
     right: 0;
     bottom: auto;
+    left: 0;
     width: 100%;
     height: 1px;
   }
