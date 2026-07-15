@@ -1916,7 +1916,10 @@ img {
 }
 
 .os-memory-date__menu button {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
   width: 100%;
   padding: 0.625rem 0.875rem;
   border: 0;
@@ -1934,6 +1937,23 @@ img {
   cursor: pointer;
 }
 
+.os-memory-date__menu button:disabled {
+  color: rgba(255, 255, 255, 0.38);
+  cursor: default;
+}
+
+.os-memory-date__status {
+  color: rgba(255, 255, 255, 0.28);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
+
 .os-memory-date__menu button:hover,
 .os-memory-date__menu button:focus-visible {
   outline: none;
@@ -1943,6 +1963,11 @@ img {
 
 .os-memory-date__menu button[aria-selected="true"] {
   color: #c5ffae;
+}
+
+.os-memory-date__menu button:disabled:hover {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.38);
 }
 
 .os-memory-date img:first-child {

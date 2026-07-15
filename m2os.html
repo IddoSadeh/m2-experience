@@ -289,8 +289,16 @@
               </button>
               <ul class="os-memory-date__menu" role="listbox" aria-label="Memory date" data-memory-date-menu hidden>
                 <li><button type="button" role="option" aria-selected="true">21 Jan 2027</button></li>
-                <li><button type="button" role="option" aria-selected="false">20 Jan 2027</button></li>
-                <li><button type="button" role="option" aria-selected="false">19 Jan 2027</button></li>
+                <li>
+                  <button type="button" role="option" aria-selected="false" disabled>
+                    <span>20 Jan 2027</span><span class="os-memory-date__status">No data</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" role="option" aria-selected="false" disabled>
+                    <span>19 Jan 2027</span><span class="os-memory-date__status">No data</span>
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
