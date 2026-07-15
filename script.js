@@ -569,15 +569,21 @@ if (memoryTabs.length > 0 && memoryPanes.length > 0) {
         item.setAttribute("aria-selected", String(isActive));
       }
 
+      let activePane = null;
       for (const pane of memoryPanes) {
         const isActive = pane.dataset.memoryPane === target;
         pane.classList.toggle("is-active", isActive);
+        if (isActive) activePane = pane;
         if (!isActive) {
           for (const media of pane.querySelectorAll("video, audio")) {
             media.pause();
           }
         }
       }
+
+      activePane
+        ?.querySelector("[data-video-card]")
+        ?.dispatchEvent(new Event("memory-preview:activate"));
     });
   }
 }
@@ -1012,7 +1018,13 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
 
   if (!video) continue;
 
-  let muted = false;
+  const soundTarget = audio ?? video;
+  let muted = true;
+  soundTarget.muted = true;
+  if (muteBtn) {
+    muteBtn.style.opacity = "0.4";
+    muteBtn.setAttribute("aria-label", "Unmute memory preview");
+  }
   let applyProgress = () => {};
   let progressFrame = null;
   const syncVideoProgress = () => {
@@ -1083,6 +1095,22 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
     applyProgress(0);
   });
 
+  card.addEventListener("memory-preview:activate", () => {
+    pauseOtherMemoryMedia([video]);
+    video.pause();
+    video.currentTime = 0;
+    video.muted = true;
+    muted = true;
+    soundTarget.muted = true;
+    if (audio) audio.currentTime = 0;
+    if (muteBtn) {
+      muteBtn.style.opacity = "0.4";
+      muteBtn.setAttribute("aria-label", "Unmute memory preview");
+    }
+    applyProgress(0);
+    video.play().catch(() => {});
+  });
+
   if (playBtn) {
     playBtn.addEventListener("click", () => {
       if (video.paused) {
@@ -1101,13 +1129,37 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
   }
 
   if (muteBtn) {
-    const soundTarget = audio ?? video;
     muteBtn.addEventListener("click", () => {
       muted = !muted;
       soundTarget.muted = muted;
+      if (audio && !muted && !video.paused) {
+        audio.currentTime = video.currentTime;
+        audio.play().catch(() => {});
+      }
       muteBtn.style.opacity = muted ? "0.4" : "1";
+      muteBtn.setAttribute(
+        "aria-label",
+        muted ? "Unmute memory preview" : "Mute memory preview",
+      );
     });
   }
+}
+
+const memoryLabContent = document.querySelector(".os-memory-lab__inner");
+if (memoryLabContent) {
+  let wasVisible = false;
+  const memoryLabObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting && !wasVisible) {
+        document
+          .querySelector(".os-memory-pane.is-active [data-video-card]")
+          ?.dispatchEvent(new Event("memory-preview:activate"));
+      }
+      wasVisible = entry.isIntersecting;
+    },
+    { threshold: 0.01 },
+  );
+  memoryLabObserver.observe(memoryLabContent);
 }
 
 for (const card of document.querySelectorAll("[data-breath-card]")) {
