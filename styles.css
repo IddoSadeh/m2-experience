@@ -4369,7 +4369,7 @@ img {
     "SFMono-Regular",
     Consolas,
     monospace;
-  font-size: var(--os-hero-meta-size);
+  font-size: clamp(0.875rem, 1.04vw, 1.125rem);
   line-height: 1;
   white-space: nowrap;
 }
@@ -4385,6 +4385,7 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
+  font-size: clamp(0.8125rem, 0.93vw, 1rem);
 }
 
 .os-hero__signal-dot {
