@@ -1154,14 +1154,13 @@ img {
 
 .company-hero__marker {
   position: absolute;
-  top: calc(35.75% - 0.45rem);
-  left: calc(81.48% - 0.45rem);
+  top: 35.75%;
+  left: 81.48%;
   z-index: 2;
-  width: 0;
-  height: 0;
-  border-right: 0.45rem solid transparent;
-  border-bottom: 0.78rem solid #c5ffae;
-  border-left: 0.45rem solid transparent;
+  width: 1.125rem;
+  height: 1.0625rem;
+  max-width: none;
+  transform: translate(-50%, -50%);
 }
 
 .company-hero__coords {
@@ -5946,8 +5945,8 @@ body > main {
   }
 
   .company-hero__marker {
-    top: calc(39% - 0.45rem);
-    left: calc(78% - 0.45rem);
+    top: 39%;
+    left: 78%;
   }
 
   .company-hero__coords {
