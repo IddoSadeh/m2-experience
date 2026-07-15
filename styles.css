@@ -592,6 +592,7 @@ img {
   width: 100%;
   height: auto;
   border-radius: 0.5rem;
+  mix-blend-mode: screen;
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
   animation: home-product-spin 14s linear infinite;
