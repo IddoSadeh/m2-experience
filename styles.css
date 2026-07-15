@@ -1185,12 +1185,14 @@ img {
 .company-hero__copy {
   position: absolute;
   bottom: 7.4%;
-  left: 5.3%;
+  left: 3.53%;
   z-index: 2;
   color: var(--white);
+  text-align: left;
 }
 
-.company-hero__copy p {
+.company-hero__eyebrow {
+  display: block;
   margin: 0 0 1.15rem;
   font-family:
     "Saans Mono",
@@ -1201,9 +1203,15 @@ img {
   font-size: clamp(0.875rem, 1.04vw, 1.125rem);
   font-weight: 500;
   line-height: 1.2;
+  text-transform: none;
 }
 
 .company-hero__copy h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: max-content;
+  max-width: 100%;
   margin: 0;
   font-family:
     "F37 Moon",
@@ -1213,7 +1221,14 @@ img {
   font-size: clamp(2.75rem, 3.7vw, 4rem);
   font-weight: 700;
   line-height: 1.156;
+  text-align: right;
   text-transform: uppercase;
+}
+
+.company-hero__first-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .company-hero__play {
