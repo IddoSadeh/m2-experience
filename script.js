@@ -10,7 +10,6 @@ const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const scrambleTypewriterTexts = document.querySelectorAll("[data-scramble-typewriter]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
-const homeMaskRevealTitles = document.querySelectorAll("[data-home-mask-reveal]");
 const homeLetterTexts = document.querySelectorAll(".home-letters");
 const homeSymbolLayer = document.querySelector(".home-symbols");
 const homeProcessItems = document.querySelectorAll(".home-process__item");
@@ -466,73 +465,17 @@ function updateMaskRevealTitles() {
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
 
   for (const title of maskRevealTitles) {
-    const section = title.closest(".product-system");
+    const section = title.closest(".product-system, .home-remember");
     const rect = section.getBoundingClientRect();
     const chars = title.querySelectorAll(".product-system__title-char");
     const totalChars = chars.length || 1;
-    const raw = (viewportHeight * 0.68 - rect.top) / (viewportHeight * 0.46);
+    const revealDistance = section.classList.contains("home-remember") ? 0.7 : 0.46;
+    const raw = (viewportHeight * 0.68 - rect.top) / (viewportHeight * revealDistance);
     const progress = Math.min(Math.max(raw, 0), 1);
     const stagger = Math.min(0.045, 0.68 / totalChars);
 
     chars.forEach((char) => {
       const index = Number(char.dataset.maskIndex) || 0;
-      const reverseIndex = totalChars - index - 1;
-      const local = Math.min(Math.max((progress - reverseIndex * stagger) / 0.24, 0), 1);
-      const y = (1 - easeOutCubic(local)) * 105;
-
-      char.style.transform = `translateY(${y}%)`;
-    });
-  }
-}
-
-function setupHomeMaskReveal(title) {
-  const lines = Array.from(title.children);
-  let letterIndex = 0;
-
-  title.setAttribute("aria-label", lines.map((line) => line.textContent.trim()).join(" "));
-
-  for (const line of lines) {
-    const text = line.textContent;
-    const fragment = document.createDocumentFragment();
-
-    line.textContent = "";
-
-    for (const character of text) {
-      const span = document.createElement("span");
-      span.setAttribute("aria-hidden", "true");
-
-      if (character === " ") {
-        span.className = "home-remember__space";
-        span.textContent = "\u00a0";
-      } else {
-        span.className = "home-remember__char";
-        span.dataset.homeMaskIndex = letterIndex;
-        span.textContent = character;
-        letterIndex += 1;
-      }
-
-      fragment.appendChild(span);
-    }
-
-    line.appendChild(fragment);
-  }
-}
-
-function updateHomeMaskRevealTitles() {
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  for (const title of homeMaskRevealTitles) {
-    const section = title.closest(".home-remember");
-    const rect = section.getBoundingClientRect();
-    const chars = title.querySelectorAll(".home-remember__char");
-    const totalChars = chars.length || 1;
-    const rawProgress = (viewportHeight * 0.68 - rect.top) / (viewportHeight * 0.46);
-    const progress = reduceMotion ? 1 : Math.min(Math.max(rawProgress, 0), 1);
-    const stagger = Math.min(0.045, 0.68 / totalChars);
-
-    chars.forEach((char) => {
-      const index = Number(char.dataset.homeMaskIndex) || 0;
       const reverseIndex = totalChars - index - 1;
       const local = Math.min(Math.max((progress - reverseIndex * stagger) / 0.24, 0), 1);
       const y = (1 - easeOutCubic(local)) * 105;
@@ -580,14 +523,6 @@ for (const element of typewriterTexts) {
 for (const element of scrambleTypewriterTexts) {
   setupScrambleTypewriter(element);
 }
-
-for (const title of homeMaskRevealTitles) {
-  setupHomeMaskReveal(title);
-}
-
-updateHomeMaskRevealTitles();
-window.addEventListener("scroll", updateHomeMaskRevealTitles, { passive: true });
-window.addEventListener("resize", updateHomeMaskRevealTitles);
 
 let homeLetterOffset = 0;
 
