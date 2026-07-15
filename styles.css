@@ -502,14 +502,14 @@ img {
 }
 
 .home-reacts {
-  min-height: 100svh;
+  min-height: auto;
   background: var(--black);
 }
 
-.home-reacts__inner {
+.reveal__inner.home-reacts__inner {
   align-items: flex-start;
   justify-content: flex-start;
-  padding: clamp(7rem, 10vw, 8.5rem) clamp(1.25rem, 3.7vw, 4rem) 0;
+  padding: 6.5rem clamp(1.25rem, 3.7vw, 4rem) 9.75rem;
 }
 
 .home-reacts__text {
@@ -519,14 +519,15 @@ img {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-size: clamp(2.25rem, 3.75vw, 4rem);
+  font-size: clamp(2.25rem, 3.125vw, 3.375rem);
   font-weight: 700;
-  line-height: 1.24;
+  line-height: 1.185185;
   text-align: left;
 }
 
 .home-reacts__text .reveal__indent {
-  display: none;
+  display: inline-block;
+  width: min(8.51vw, 9.1875rem);
 }
 
 .home-product {
@@ -535,8 +536,8 @@ img {
   grid-template-rows: auto 1fr;
   align-items: start;
   column-gap: clamp(2rem, 4.7vw, 5.25rem);
-  min-height: 100svh;
-  padding: clamp(4rem, 7.45vw, 8.125rem) clamp(1.25rem, 3.7vw, 4rem) clamp(5rem, 7.7vw, 7.625rem);
+  min-height: auto;
+  padding: 0 clamp(1.25rem, 3.7vw, 4rem) 7.625rem;
   background: var(--black);
   color: var(--white);
 }
@@ -5728,13 +5729,22 @@ body > main {
     text-align: right;
   }
 
-  .home-reacts__inner {
+  .reveal__inner.home-reacts__inner {
     padding: 7rem 1rem 0;
+  }
+
+  .home-reacts,
+  .home-product {
+    min-height: 100svh;
   }
 
   .home-reacts__text {
     font-size: clamp(2rem, 10vw, 3.2rem);
     line-height: 1.18;
+  }
+
+  .home-reacts__text .reveal__indent {
+    display: none;
   }
 
   .home-product {
