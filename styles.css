@@ -348,7 +348,7 @@ img {
   right: clamp(1.25rem, 1.16vw, 1.25rem);
   left: clamp(1.25rem, 1.16vw, 1.25rem);
   margin: 0;
-  font-size: clamp(0.75rem, 0.93vw, 1rem);
+  font-size: clamp(0.875rem, 1.0417vw, 1.125rem);
   line-height: 1.25;
   text-transform: none;
 }
@@ -356,6 +356,7 @@ img {
 .home-intro__edge {
   display: flex;
   justify-content: space-between;
+  font-size: clamp(0.75rem, 0.81vw, 0.875rem);
   opacity: 0;
   animation: home-edge-in 700ms ease forwards;
   animation-delay: 200ms;
@@ -365,6 +366,7 @@ img {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+  font-size: clamp(0.875rem, 1.0417vw, 1.125rem);
 }
 
 .home-letters {
@@ -381,8 +383,15 @@ img {
 .home-letter {
   display: inline-block;
   opacity: 0;
-  animation: home-letter-in 1ms linear forwards;
-  animation-delay: calc(280ms + var(--home-letter-index) * 70ms);
+  transform-origin: 50% 70%;
+}
+
+.home-letter.is-home-letter-visible {
+  opacity: 1;
+}
+
+.home-letter.is-home-letter-glitching {
+  animation: home-letter-glitch 110ms steps(2, end) infinite;
 }
 
 .home-letter-space {
@@ -406,7 +415,7 @@ img {
     monospace;
   font-size: clamp(0.5rem, 0.694vw, 0.75rem);
   font-weight: 400;
-  line-height: normal;
+  line-height: 1;
   pointer-events: none;
 }
 
@@ -416,26 +425,31 @@ img {
   left: var(--x);
   width: min-content;
   white-space: pre;
+  transform: scaleX(0.74);
+  transform-origin: top left;
 }
 
 .home-symbols i {
   display: inline-block;
   font-style: normal;
   opacity: 0;
-  text-shadow: 0 0 0.35rem rgba(197, 255, 174, 0.45);
   transform: translate3d(
     calc(var(--symbol-tx, 0) + var(--symbol-enter-x, 0)),
     calc(var(--symbol-ty, 0) + var(--symbol-enter-y, 0.65rem)),
     0
   );
   transition:
-    opacity 180ms linear,
-    transform 520ms steps(2, end);
+    opacity 80ms linear,
+    transform 140ms steps(2, end);
 }
 
 .home-symbols i.is-symbol-active {
   opacity: 1;
   transform: translate3d(var(--symbol-tx, 0), var(--symbol-ty, 0), 0);
+}
+
+.home-symbols i.is-symbol-glitching {
+  animation: home-letter-glitch 110ms steps(2, end) infinite;
 }
 
 .home-system {
@@ -457,8 +471,8 @@ img {
   font-weight: 500;
   line-height: 1.25;
   transform: translateY(100%);
-  animation: home-system-in 1.15s cubic-bezier(0.62, 0.05, 0, 1) forwards;
-  animation-delay: 2.75s;
+  animation: home-system-in 1.6s cubic-bezier(0.62, 0.05, 0, 1) forwards;
+  animation-delay: 5.8s;
 }
 
 .home-system__mark {
@@ -1477,9 +1491,14 @@ img {
   }
 }
 
-@keyframes home-letter-in {
-  to {
-    opacity: 1;
+@keyframes home-letter-glitch {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateY(-0.08em) scaleY(1.28);
   }
 }
 
