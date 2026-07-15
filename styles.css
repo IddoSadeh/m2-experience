@@ -4976,6 +4976,15 @@ img {
   mix-blend-mode: screen;
 }
 
+.buy-section__product img[data-product-spin] {
+  top: 50%;
+  left: 50%;
+  width: 220%;
+  height: 80%;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+
 .order-card {
   position: relative;
   z-index: 1;
@@ -5361,7 +5370,7 @@ body > main {
   mix-blend-mode: screen;
 }
 
-.site-footer__product-frame img[data-footer-spin] {
+.site-footer__product-frame img[data-product-spin] {
   top: 50%;
   left: 50%;
   width: 220%;

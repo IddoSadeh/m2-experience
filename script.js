@@ -15,8 +15,7 @@ const homeProcessItems = document.querySelectorAll(".home-process__item");
 const textureCards = document.querySelectorAll(".texture-card");
 const homeMemory = document.querySelector(".home-memory");
 const homeSystemIndex = document.querySelector(".home-system-index");
-const siteFooter = document.querySelector(".site-footer");
-const footerSpinImages = [...document.querySelectorAll("[data-footer-spin]")];
+const productSpinImages = [...document.querySelectorAll("[data-product-spin]")];
 const osRevealStack = document.querySelector(".reveal--os");
 const osRevealInner = osRevealStack?.querySelector(".reveal__inner");
 const memoryTabs = document.querySelectorAll("[data-memory-tab]");
@@ -466,8 +465,8 @@ updateMaskRevealTitles();
 window.addEventListener("scroll", updateMaskRevealTitles, { passive: true });
 window.addEventListener("resize", updateMaskRevealTitles);
 
-function setupFooterSpin() {
-  if (!siteFooter || footerSpinImages.length === 0) return;
+function setupProductSpin() {
+  if (productSpinImages.length === 0) return;
 
   const frameCount = 90;
   const frameDuration = 1000 / 12;
@@ -480,7 +479,7 @@ function setupFooterSpin() {
 
   const renderFrame = () => {
     const src = frameUrls[frameIndex];
-    for (const image of footerSpinImages) image.src = src;
+    for (const image of productSpinImages) image.src = src;
   };
 
   for (const src of frameUrls.slice(1)) {
@@ -494,7 +493,7 @@ function setupFooterSpin() {
   }, frameDuration);
 }
 
-setupFooterSpin();
+setupProductSpin();
 
 function updateOsRevealStack() {
   if (!osRevealStack) return;
