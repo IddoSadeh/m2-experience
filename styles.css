@@ -704,7 +704,7 @@ img {
 
 .home-process__item--encoding {
   grid-column: 1 / 4;
-  grid-template-columns: minmax(0, 1fr) 20.4622% 34.625%;
+  grid-template-columns: minmax(0, 1fr) 22.25% 34.625%;
   column-gap: 1.5%;
 }
 
@@ -746,7 +746,7 @@ img {
   height: 100%;
   opacity: 0;
   object-fit: cover;
-  transition: opacity 5000ms ease;
+  transition: opacity 2200ms ease-in-out;
 }
 
 .home-process__visual.has-character-reveal > img:first-child {
