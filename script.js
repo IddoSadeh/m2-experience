@@ -265,7 +265,7 @@ function resetScrambleTypewriter(element) {
 
 function playScrambleTypewriter(element) {
   const state = scrambleStates.get(element);
-  if (!state) return;
+  if (!state) return 0;
 
   resetScrambleTypewriter(element);
 
@@ -316,6 +316,7 @@ function playScrambleTypewriter(element) {
   };
 
   state.frame = requestAnimationFrame(update);
+  return animationEnd;
 }
 
 function setupHomeSymbols(layer) {
@@ -484,6 +485,16 @@ function updateMaskRevealTitles() {
     const raw = (viewportHeight * 0.68 - rect.top) / (viewportHeight * revealDistance);
     const progress = Math.min(Math.max(raw, 0), 1);
     const stagger = Math.min(0.045, 0.68 / totalChars);
+
+    if (section.classList.contains("home-remember")) {
+      const wasRevealed = section.classList.contains("is-title-revealed");
+      const isRevealed = progress >= 0.9;
+
+      if (wasRevealed !== isRevealed) {
+        section.classList.toggle("is-title-revealed", isRevealed);
+        section.dispatchEvent(new Event("home-remember:title-state"));
+      }
+    }
 
     chars.forEach((char) => {
       const index = Number(char.dataset.maskIndex) || 0;
@@ -1493,10 +1504,49 @@ if (typewriterTexts.length > 0) {
 if (scrambleTypewriterTexts.length > 0) {
   const scrambleSection = scrambleTypewriterTexts[0].closest(".home-remember");
   let scrambleSequenceTimer = 0;
+  let scrollUnlockTimer = 0;
+  let scrambleSectionVisible = false;
+  let hasLockedCurrentReveal = false;
+
+  const blockedScrollKeys = new Set([
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowUp",
+    "End",
+    "Home",
+    "PageDown",
+    "PageUp",
+    " ",
+  ]);
+  const preventScroll = (event) => event.preventDefault();
+  const preventScrollKey = (event) => {
+    if (!blockedScrollKeys.has(event.key)) return;
+    if (event.target instanceof Element && event.target.closest("input, textarea, select, button")) return;
+    event.preventDefault();
+  };
+
+  const unlockScroll = () => {
+    window.clearTimeout(scrollUnlockTimer);
+    scrollUnlockTimer = 0;
+    window.removeEventListener("wheel", preventScroll);
+    window.removeEventListener("touchmove", preventScroll);
+    window.removeEventListener("keydown", preventScrollKey);
+  };
+
+  const lockScrollUntil = (duration) => {
+    unlockScroll();
+    window.addEventListener("wheel", preventScroll, { passive: false });
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+    window.addEventListener("keydown", preventScrollKey);
+    scrollUnlockTimer = window.setTimeout(unlockScroll, duration + 80);
+  };
 
   const stopScrambleSequence = () => {
     window.clearTimeout(scrambleSequenceTimer);
     scrambleSequenceTimer = 0;
+    unlockScroll();
+    scrambleSection?.classList.remove("is-green-active");
 
     for (const element of scrambleTypewriterTexts) {
       resetScrambleTypewriter(element);
@@ -1504,28 +1554,45 @@ if (scrambleTypewriterTexts.length > 0) {
   };
 
   const runScrambleSequence = () => {
+    scrambleSection?.classList.add("is-green-active");
+    let longestAnimation = 0;
+
     for (const element of scrambleTypewriterTexts) {
-      playScrambleTypewriter(element);
+      longestAnimation = Math.max(longestAnimation, playScrambleTypewriter(element));
+    }
+
+    if (!hasLockedCurrentReveal) {
+      hasLockedCurrentReveal = true;
+      lockScrollUntil(longestAnimation);
     }
 
     scrambleSequenceTimer = window.setTimeout(runScrambleSequence, 5200);
   };
 
+  const syncScrambleSequence = () => {
+    stopScrambleSequence();
+
+    if (scrambleSectionVisible && scrambleSection?.classList.contains("is-title-revealed")) {
+      scrambleSequenceTimer = window.setTimeout(runScrambleSequence, 0);
+    } else {
+      hasLockedCurrentReveal = false;
+    }
+  };
+
   const scrambleObserver = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (entry.isIntersecting) {
-          stopScrambleSequence();
-          scrambleSequenceTimer = window.setTimeout(runScrambleSequence, 600);
-        } else {
-          stopScrambleSequence();
-        }
+        scrambleSectionVisible = entry.isIntersecting;
+        syncScrambleSequence();
       }
     },
     { threshold: 0.45 },
   );
 
-  if (scrambleSection) scrambleObserver.observe(scrambleSection);
+  if (scrambleSection) {
+    scrambleSection.addEventListener("home-remember:title-state", syncScrambleSequence);
+    scrambleObserver.observe(scrambleSection);
+  }
 }
 
 function setupHomeProcessCharacterReveal(item) {

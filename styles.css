@@ -1110,6 +1110,13 @@ img {
   line-height: normal;
   text-transform: none;
   white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.home-remember.is-green-active .home-remember__label {
+  opacity: 1;
+  visibility: visible;
 }
 
 .home-remember__label::before {
