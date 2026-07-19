@@ -866,6 +866,7 @@ img {
 }
 
 .home-system-index__inner {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -882,9 +883,66 @@ img {
   will-change: transform;
 }
 
-.home-system-index__inner:hover {
+.home-system-index__inner:hover,
+.home-system-index__inner:focus-within {
   background: #070707;
   color: #f1f0ef;
+}
+
+.home-system-index__top,
+.home-system-index__list,
+.home-system-index__copy {
+  transition: opacity 220ms ease;
+}
+
+.home-system-index__inner:hover .home-system-index__top,
+.home-system-index__inner:hover .home-system-index__list,
+.home-system-index__inner:hover .home-system-index__copy,
+.home-system-index__inner:focus-within .home-system-index__top,
+.home-system-index__inner:focus-within .home-system-index__list,
+.home-system-index__inner:focus-within .home-system-index__copy {
+  opacity: 0;
+}
+
+.home-system-index__discover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--white);
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(1.125rem, 1.273vw, 1.375rem);
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.home-system-index__discover img {
+  width: 0.78rem;
+  height: 0.78rem;
+  transform: rotate(135.05deg);
+}
+
+.home-system-index__inner:hover .home-system-index__discover,
+.home-system-index__inner:focus-within .home-system-index__discover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.home-system-index__discover:focus-visible {
+  outline: 1px solid var(--white);
+  outline-offset: -0.75rem;
 }
 
 .home-system-index__top {
@@ -915,7 +973,8 @@ img {
   transition: color 220ms ease;
 }
 
-.home-system-index__inner:hover .home-system-index__top p:last-child {
+.home-system-index__inner:hover .home-system-index__top p:last-child,
+.home-system-index__inner:focus-within .home-system-index__top p:last-child {
   color: rgba(241, 240, 239, 0.58);
 }
 
@@ -954,7 +1013,8 @@ img {
   transition: color 220ms ease;
 }
 
-.home-system-index__inner:hover .home-system-index__copy {
+.home-system-index__inner:hover .home-system-index__copy,
+.home-system-index__inner:focus-within .home-system-index__copy {
   color: rgba(241, 240, 239, 0.58);
 }
 
