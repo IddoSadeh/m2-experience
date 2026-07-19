@@ -323,7 +323,7 @@ function playScrambleTypewriter(element) {
   return animationEnd;
 }
 
-function setupHomeSymbols(layer) {
+function setupHomeSymbols(layer, revealStart) {
   const states = [];
   const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*-_+=;:<>,./{}\\";
 
@@ -358,8 +358,7 @@ function setupHomeSymbols(layer) {
   }
 
   const shuffled = [...states].sort(() => Math.random() - 0.5);
-  const revealStart = 360;
-  const revealStep = 10;
+  const revealStep = 32;
 
   shuffled.forEach(({ cell, finalCharacter }, index) => {
     window.setTimeout(() => {
@@ -377,7 +376,7 @@ function setupHomeSymbols(layer) {
         cell.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
         frame += 1;
       }, 55);
-    }, revealStart + index * revealStep + Math.random() * 180);
+    }, revealStart + index * revealStep + Math.random() * 140);
   });
 }
 
@@ -441,6 +440,11 @@ function playHomeLetterGlitch() {
       }, frameDuration);
     }, initialDelay + index * stagger);
   });
+
+  const finalLetterStart = initialDelay + Math.max(letters.length - 1, 0) * stagger;
+  const fullRevealDuration = finalLetterStart + frameDuration * (randomFrames + 1);
+
+  return Math.max(initialDelay, fullRevealDuration - 220);
 }
 
 function setupMaskRevealTitle(element) {
@@ -565,12 +569,11 @@ for (const element of homeLetterTexts) {
   homeLetterOffset += setupHomeLetters(element, homeLetterOffset);
 }
 
-if (homeLetterTexts.length > 0) {
-  playHomeLetterGlitch();
-}
+const homeSymbolRevealStart =
+  homeLetterTexts.length > 0 ? playHomeLetterGlitch() : 900;
 
 if (homeSymbolLayer) {
-  setupHomeSymbols(homeSymbolLayer);
+  setupHomeSymbols(homeSymbolLayer, homeSymbolRevealStart);
 }
 
 for (const card of textureCards) {

@@ -472,7 +472,7 @@ img {
   line-height: 1.25;
   transform: translateY(100%);
   animation: home-system-in 1.6s cubic-bezier(0.62, 0.05, 0, 1) forwards;
-  animation-delay: 5.8s;
+  animation-delay: 7.2s;
 }
 
 .home-system__mark {
