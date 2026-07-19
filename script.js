@@ -26,6 +26,9 @@ const companyHero = document.querySelector(".company-hero");
 const companyVideoTrigger = document.querySelector(".company-hero__play");
 const companyVideoModal = document.querySelector("[data-company-video-modal]");
 const companyVideo = companyVideoModal?.querySelector("video");
+const companyVideoTime = companyVideoModal?.querySelector(
+  "[data-company-video-time]",
+);
 const companyVideoClose = companyVideoModal?.querySelector(
   "[data-company-video-close]",
 );
@@ -663,6 +666,19 @@ if (companyHero && companyVideoTrigger && companyVideoModal && companyVideo) {
     if (companyVideoModal.open) companyVideoModal.close();
   };
 
+  const updateCompanyVideoTime = () => {
+    const elapsed = Math.max(0, Math.floor(companyVideo.currentTime || 0));
+    const hours = String(Math.floor(elapsed / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((elapsed % 3600) / 60)).padStart(2, "0");
+    const seconds = String(elapsed % 60).padStart(2, "0");
+    const clock = `${hours}:${minutes}:${seconds}`;
+
+    if (companyVideoTime) {
+      companyVideoTime.textContent = clock;
+      companyVideoTime.dateTime = `PT${elapsed}S`;
+    }
+  };
+
   companyHero.addEventListener("pointermove", moveTrigger);
   companyHero.addEventListener("pointerleave", resetTrigger);
 
@@ -675,6 +691,8 @@ if (companyHero && companyVideoTrigger && companyVideoModal && companyVideo) {
   });
 
   companyVideoClose?.addEventListener("click", closeCompanyVideo);
+  companyVideo.addEventListener("timeupdate", updateCompanyVideoTime);
+  companyVideo.addEventListener("loadedmetadata", updateCompanyVideoTime);
   companyVideoModal.addEventListener("click", (event) => {
     if (event.target === companyVideoModal) closeCompanyVideo();
   });

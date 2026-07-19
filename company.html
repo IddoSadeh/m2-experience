@@ -158,9 +158,10 @@
     </footer>
 
     <dialog class="company-video-modal" data-company-video-modal aria-label="About m.2 video">
-      <button class="company-video-modal__close" type="button" data-company-video-close aria-label="Close video">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <div class="company-video-modal__header">
+        <time class="company-video-modal__time" data-company-video-time datetime="PT0S">00:00:00</time>
+        <button class="company-video-modal__close" type="button" data-company-video-close>[CLOSE]</button>
+      </div>
       <video class="company-video-modal__video" controls playsinline preload="metadata">
         <source src="assets/company-about.mp4" type="video/mp4" />
       </video>

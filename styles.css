@@ -1354,6 +1354,8 @@ body.is-company-video-open {
 }
 
 .company-video-modal {
+  display: none;
+  position: relative;
   width: 100vw;
   max-width: none;
   height: 100dvh;
@@ -1366,8 +1368,39 @@ body.is-company-video-open {
   overflow: hidden;
 }
 
+.company-video-modal[open] {
+  display: block;
+}
+
 .company-video-modal::backdrop {
   background: #070707;
+}
+
+.company-video-modal__header {
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 0 4rem;
+  font-family:
+    "Saans Mono",
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+  font-size: clamp(1rem, 1.39vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.1667;
+  letter-spacing: 0.03125rem;
+}
+
+.company-video-modal__time {
+  font: inherit;
 }
 
 .company-video-modal__video {
@@ -1379,26 +1412,17 @@ body.is-company-video-open {
 }
 
 .company-video-modal__close {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 50%;
-  background: rgba(7, 7, 7, 0.5);
+  border: 0;
+  background: transparent;
   color: var(--white);
-  font: 300 1.75rem/1 Arial, sans-serif;
-  backdrop-filter: blur(10px);
+  font: inherit;
   cursor: pointer;
 }
 
-.company-video-modal__close span {
-  transform: translateY(-0.05em);
+.company-video-modal__close:hover,
+.company-video-modal__close:focus-visible {
+  color: var(--acid);
 }
 
 .company-principles {
@@ -6136,6 +6160,12 @@ body > main {
     left: auto;
     height: 2.75rem;
     font-size: 0.625rem;
+  }
+
+  .company-video-modal__header {
+    top: 2rem;
+    padding: 0 1rem;
+    font-size: 0.875rem;
   }
 
   .company-principles {
