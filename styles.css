@@ -507,6 +507,12 @@ img {
   text-align: right;
 }
 
+.home-system__readout div:first-child {
+  justify-self: start;
+  width: max-content;
+  max-width: 100%;
+}
+
 .home-system__footer {
   display: flex;
   justify-content: space-between;
