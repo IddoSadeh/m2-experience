@@ -1425,15 +1425,21 @@ body.is-company-video-open {
   color: var(--acid);
 }
 
+.company-principles-track {
+  position: relative;
+  z-index: 1;
+  height: 200svh;
+  background: #070707;
+}
+
 .company-principles {
   position: sticky;
   top: 0;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100svh;
-  padding: clamp(3.5rem, 3.7vw, 4rem);
+  padding: 0 clamp(3.5rem, 3.7vw, 4rem) clamp(3.5rem, 3.7vw, 4rem);
   background: #070707;
   color: var(--white);
 }
@@ -1488,6 +1494,8 @@ body.is-company-video-open {
 }
 
 .company-principles__copy {
+  flex: 0 1 33.2rem;
+  min-width: 0;
   width: min(100%, 33.2rem);
   margin: 0;
   padding-top: 0.3rem;
@@ -1501,7 +1509,7 @@ body.is-company-video-open {
   font-weight: 500;
   line-height: 1.17;
   letter-spacing: 0.021em;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .company-vision {

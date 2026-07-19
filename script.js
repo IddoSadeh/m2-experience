@@ -9,6 +9,7 @@ const wordRevealGroups = document.querySelectorAll("[data-word-reveal]");
 const letterDropTexts = document.querySelectorAll("[data-letter-drop]");
 const typewriterTexts = document.querySelectorAll("[data-typewriter]");
 const scrambleTypewriterTexts = document.querySelectorAll("[data-scramble-typewriter]");
+const standaloneScrambleTexts = document.querySelectorAll("[data-standalone-scramble]");
 const maskRevealTitles = document.querySelectorAll("[data-mask-reveal]");
 const homeLetterTexts = document.querySelectorAll(".home-letters");
 const homeSymbolLayer = document.querySelector(".home-symbols");
@@ -521,13 +522,16 @@ window.addEventListener("resize", updateRevealText);
 function updateWordRevealText() {
   for (const group of wordRevealGroups) {
     const items = group.querySelectorAll("li");
-    const rect = group.getBoundingClientRect();
+    const track = group.closest(".company-principles-track") ?? group;
+    const rect = track.getBoundingClientRect();
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-    const rawProgress =
-      (viewportHeight * 0.72 - rect.top) /
-      (rect.height + viewportHeight * 0.6);
+    const scrollDistance = Math.max(rect.height - viewportHeight, 1);
+    const rawProgress = -rect.top / scrollDistance;
     const progress = Math.min(Math.max(rawProgress, 0), 1);
-    const activeCount = Math.round(items.length * progress);
+    const activeCount = Math.min(
+      items.length,
+      Math.floor(progress * (items.length + 1)),
+    );
 
     items.forEach((item, index) => {
       item.classList.toggle("is-active", index < activeCount);
@@ -548,6 +552,10 @@ for (const element of typewriterTexts) {
 }
 
 for (const element of scrambleTypewriterTexts) {
+  setupScrambleTypewriter(element);
+}
+
+for (const element of standaloneScrambleTexts) {
   setupScrambleTypewriter(element);
 }
 
@@ -1610,6 +1618,24 @@ if (scrambleTypewriterTexts.length > 0) {
   if (scrambleSection) {
     scrambleSection.addEventListener("home-remember:title-state", syncScrambleSequence);
     scrambleObserver.observe(scrambleSection);
+  }
+}
+
+if (standaloneScrambleTexts.length > 0) {
+  const standaloneScrambleObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+
+        playScrambleTypewriter(entry.target);
+        standaloneScrambleObserver.unobserve(entry.target);
+      }
+    },
+    { threshold: 0.65 },
+  );
+
+  for (const element of standaloneScrambleTexts) {
+    standaloneScrambleObserver.observe(element);
   }
 }
 
