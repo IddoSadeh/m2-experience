@@ -611,8 +611,7 @@ img {
 .home-product__figure img {
   width: 100%;
   height: auto;
-  border-radius: 0.5rem;
-  mix-blend-mode: screen;
+  clip-path: inset(3% 6.4% 3% 5% round 0.5rem);
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
   animation: home-product-spin 14s linear infinite;
