@@ -1254,8 +1254,15 @@ for (const card of document.querySelectorAll("[data-video-card]")) {
   }
   let applyProgress = () => {};
   let progressFrame = null;
+  const significanceDuration =
+    Number.parseFloat(card.dataset.significanceDuration) || 0;
+  const significanceLead =
+    Number.parseFloat(card.dataset.significanceLead) || 0;
   const syncVideoProgress = () => {
-    if (video.duration > 0) applyProgress(video.currentTime / video.duration);
+    const duration = significanceDuration || video.duration;
+    if (duration > 0) {
+      applyProgress((video.currentTime + significanceLead) / duration);
+    }
   };
   const stopProgressLoop = () => {
     if (progressFrame === null) return;
@@ -1381,6 +1388,8 @@ if (memoryLabContent) {
         document
           .querySelector(".os-memory-pane.is-active [data-video-card]")
           ?.dispatchEvent(new Event("memory-preview:activate"));
+      } else if (!entry.isIntersecting && wasVisible) {
+        pauseOtherMemoryMedia();
       }
       wasVisible = entry.isIntersecting;
     },

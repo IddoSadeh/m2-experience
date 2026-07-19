@@ -1992,6 +1992,7 @@ body.is-company-video-open {
   z-index: 4;
   min-height: 100svh;
   padding: clamp(4rem, 5.9vw, 7.625rem) clamp(1.25rem, 3.7vw, 4rem);
+  padding-top: clamp(3rem, 3.7vw, 4rem);
   background: var(--black);
   color: var(--white);
 }
