@@ -1641,7 +1641,7 @@ async function playHomeProcessCharacterReveal(item, state) {
     [characters[index], characters[swapIndex]] = [characters[swapIndex], characters[index]];
   }
 
-  const duration = 500;
+  const duration = 200;
   const startedAt = performance.now();
   let revealed = 0;
 

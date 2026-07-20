@@ -746,7 +746,7 @@ img {
   height: 100%;
   opacity: 0;
   object-fit: cover;
-  transition: opacity 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 1200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .home-process__visual.has-character-reveal > img:first-child {

@@ -17,9 +17,9 @@ const scenes = {
 };
 
 const defaults = {
-  write: 500,
+  write: 200,
   pause: 120,
-  fade: 1400,
+  fade: 1200,
 };
 
 const stage = document.querySelector("#animation-stage");
