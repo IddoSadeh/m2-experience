@@ -15,7 +15,10 @@ const homeLetterTexts = document.querySelectorAll(".home-letters");
 const homeSymbolLayer = document.querySelector(".home-symbols");
 const homeProcessItems = document.querySelectorAll(".home-process__item");
 const textureCards = document.querySelectorAll(".texture-card");
-const homeMemory = document.querySelector(".home-memory");
+const homeMemoryTransition = document.querySelector(".home-memory-transition");
+const homeMemoryStage = homeMemoryTransition?.querySelector(".home-memory-transition__stage");
+const homeMemoryInner = homeMemoryTransition?.querySelector(".home-memory__inner");
+const homeMemoryText = homeMemoryTransition?.querySelector(".home-memory__text");
 const homeSystemIndex = document.querySelector(".home-system-index");
 const productSpinImages = [...document.querySelectorAll("[data-product-spin]")];
 const orderCard = document.querySelector(".order-card");
@@ -797,19 +800,33 @@ function setupOrderCard() {
 setupOrderCard();
 
 function updateHomeSystemIndexCover() {
-  if (!homeSystemIndex) return;
+  if (
+    !homeMemoryTransition ||
+    !homeMemoryStage ||
+    !homeMemoryInner ||
+    !homeMemoryText ||
+    !homeSystemIndex
+  ) {
+    return;
+  }
 
-  const rect = homeSystemIndex.getBoundingClientRect();
+  const rect = homeMemoryTransition.getBoundingClientRect();
+  const stageRect = homeMemoryStage.getBoundingClientRect();
+  const textRect = homeMemoryText.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const coverProgress = Math.min(Math.max((viewportHeight - rect.top) / viewportHeight, 0), 1);
+  const scrollDistance = Math.max(rect.height - viewportHeight, 1);
+  const coverProgress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
   const imageProgress = Math.min(Math.max(coverProgress / 0.5, 0), 1);
   const textProgress = Math.min(Math.max((coverProgress - 0.5) / 0.5, 0), 1);
-  const isCovering = rect.top <= viewportHeight && rect.top > 0;
+  const textGap = Number.parseFloat(getComputedStyle(homeMemoryInner).paddingTop) || 0;
+  const imageStart = Math.max(
+    viewportHeight * 0.5,
+    textRect.bottom - stageRect.top + textGap,
+  );
+  const imageOffset = imageStart * (1 - imageProgress);
 
-  homeSystemIndex.style.setProperty("--home-system-image-cover", imageProgress.toFixed(4));
+  homeSystemIndex.style.setProperty("--home-system-image-offset", `${imageOffset.toFixed(2)}px`);
   homeSystemIndex.style.setProperty("--home-system-text-cover", textProgress.toFixed(4));
-  homeSystemIndex.classList.toggle("is-home-system-covering", isCovering);
-  homeMemory?.classList.toggle("is-home-memory-underlay", isCovering);
 }
 
 updateHomeSystemIndexCover();
