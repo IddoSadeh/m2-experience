@@ -1883,7 +1883,7 @@ body.is-company-video-open {
 
 .reveal--os .reveal__inner {
   justify-content: flex-start;
-  padding: clamp(3.5rem, 4.65vw, 5rem) clamp(1.25rem, 3.7vw, 4rem)
+  padding: clamp(5rem, 7.06vw, 7.625rem) clamp(1.25rem, 3.7vw, 4rem)
     clamp(7rem, 10.76vw, 11.625rem);
 }
 
@@ -1899,30 +1899,11 @@ body.is-company-video-open {
 .reveal--os {
   position: relative;
   z-index: 1;
-  min-height: 100svh;
 }
 
 .reveal--os .reveal__inner {
   position: relative;
   z-index: 1;
-  min-height: 100svh;
-}
-
-.m2os-page .reveal--os {
-  min-height: 100svh;
-}
-
-.m2os-page .reveal--os .reveal__inner {
-  min-height: 100svh;
-}
-
-.reveal--os.is-os-reveal-active .reveal__inner {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 1;
-  background: var(--black);
 }
 
 .os-return {
