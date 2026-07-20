@@ -1519,67 +1519,29 @@ if (typewriterTexts.length > 0) {
 if (scrambleTypewriterTexts.length > 0) {
   const scrambleSection = scrambleTypewriterTexts[0].closest(".home-remember");
   let scrambleSequenceTimer = 0;
-  let scrollUnlockTimer = 0;
+  let scrambleLabelTimers = [];
   let scrambleSectionVisible = false;
-  let hasLockedCurrentReveal = false;
-
-  const blockedScrollKeys = new Set([
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowUp",
-    "End",
-    "Home",
-    "PageDown",
-    "PageUp",
-    " ",
-  ]);
-  const preventScroll = (event) => event.preventDefault();
-  const preventScrollKey = (event) => {
-    if (!blockedScrollKeys.has(event.key)) return;
-    if (event.target instanceof Element && event.target.closest("input, textarea, select, button")) return;
-    event.preventDefault();
-  };
-
-  const unlockScroll = () => {
-    window.clearTimeout(scrollUnlockTimer);
-    scrollUnlockTimer = 0;
-    window.removeEventListener("wheel", preventScroll);
-    window.removeEventListener("touchmove", preventScroll);
-    window.removeEventListener("keydown", preventScrollKey);
-  };
-
-  const lockScrollUntil = (duration) => {
-    unlockScroll();
-    window.addEventListener("wheel", preventScroll, { passive: false });
-    window.addEventListener("touchmove", preventScroll, { passive: false });
-    window.addEventListener("keydown", preventScrollKey);
-    scrollUnlockTimer = window.setTimeout(unlockScroll, duration + 80);
-  };
 
   const stopScrambleSequence = () => {
     window.clearTimeout(scrambleSequenceTimer);
     scrambleSequenceTimer = 0;
-    unlockScroll();
-    scrambleSection?.classList.remove("is-green-active");
+    for (const timer of scrambleLabelTimers) window.clearTimeout(timer);
+    scrambleLabelTimers = [];
 
     for (const element of scrambleTypewriterTexts) {
+      element.classList.remove("is-green-active");
       resetScrambleTypewriter(element);
     }
   };
 
   const runScrambleSequence = () => {
-    scrambleSection?.classList.add("is-green-active");
-    let longestAnimation = 0;
-
-    for (const element of scrambleTypewriterTexts) {
-      longestAnimation = Math.max(longestAnimation, playScrambleTypewriter(element));
-    }
-
-    if (!hasLockedCurrentReveal) {
-      hasLockedCurrentReveal = true;
-      lockScrollUntil(longestAnimation);
-    }
+    for (const timer of scrambleLabelTimers) window.clearTimeout(timer);
+    scrambleLabelTimers = [...scrambleTypewriterTexts].map((element, index) =>
+      window.setTimeout(() => {
+        element.classList.add("is-green-active");
+        playScrambleTypewriter(element);
+      }, index * 350),
+    );
 
     scrambleSequenceTimer = window.setTimeout(runScrambleSequence, 5200);
   };
@@ -1589,8 +1551,6 @@ if (scrambleTypewriterTexts.length > 0) {
 
     if (scrambleSectionVisible && scrambleSection?.classList.contains("is-title-revealed")) {
       scrambleSequenceTimer = window.setTimeout(runScrambleSequence, 0);
-    } else {
-      hasLockedCurrentReveal = false;
     }
   };
 
