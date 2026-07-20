@@ -1664,7 +1664,7 @@ async function playHomeProcessCharacterReveal(item, state) {
     [characters[index], characters[swapIndex]] = [characters[swapIndex], characters[index]];
   }
 
-  const duration = 1100;
+  const duration = 500;
   const startedAt = performance.now();
   let revealed = 0;
 
@@ -1688,7 +1688,7 @@ async function playHomeProcessCharacterReveal(item, state) {
         }
 
         requestAnimationFrame(() => item.classList.add("is-process-active"));
-      }, 250);
+      }, 120);
     }
   };
 
