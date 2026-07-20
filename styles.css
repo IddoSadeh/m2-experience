@@ -370,14 +370,14 @@ img {
 }
 
 .home-letters {
-  margin-left: 19.65%;
+  margin-left: 40.17%;
   white-space: nowrap;
 }
 
 .home-letters:last-child {
-  justify-self: end;
-  margin-right: 19.78%;
-  margin-left: 0;
+  justify-self: start;
+  margin-right: 0;
+  margin-left: 36.73%;
 }
 
 .home-letter {
@@ -472,7 +472,7 @@ img {
   line-height: 1.25;
   transform: translateY(100%);
   animation: home-system-in 1.6s cubic-bezier(0.62, 0.05, 0, 1) forwards;
-  animation-delay: 7.2s;
+  animation-delay: 2.2s;
 }
 
 .home-system__mark {
