@@ -55,6 +55,12 @@ html {
   overflow-x: clip;
 }
 
+@media (min-width: 2000px) and (min-height: 1200px) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
 body {
   margin: 0;
   overflow-x: clip;
@@ -5811,6 +5817,46 @@ body > main {
   display: grid;
   gap: 0.2rem;
   white-space: nowrap;
+}
+
+@media (min-width: 2000px) and (min-height: 1200px) {
+  .home-system__readout {
+    display: flex;
+    justify-content: space-between;
+    max-width: none;
+  }
+
+  .home-system__readout div {
+    flex: 0 0 auto;
+  }
+
+  .home-system__footer,
+  .company-principles__inner,
+  .company-contact__inner,
+  .product-system__intro,
+  .product-steps-frame,
+  .choice-section__inner,
+  .home-remember__stage {
+    max-width: none;
+  }
+
+  .home-product {
+    grid-template-columns: 28.25% 35.38% 26.05%;
+    column-gap: 5.16%;
+  }
+
+  .home-product__tags,
+  .home-product__copy p {
+    max-width: none;
+  }
+
+  .home-product__figure {
+    width: 100%;
+  }
+
+  .product-system__figure {
+    width: 81%;
+  }
 }
 
 @media (max-width: 760px) {
