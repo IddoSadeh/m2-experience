@@ -569,14 +569,14 @@ img {
 }
 
 .home-product__tags {
-  display: grid;
+  display: flex;
   grid-column: 1;
   grid-row: 1;
-  grid-template-columns: repeat(2, max-content);
   align-self: start;
-  justify-items: start;
+  flex-wrap: wrap;
   gap: 0.75rem;
-  max-width: none;
+  width: 24.75rem;
+  max-width: 100%;
 }
 
 .home-product__tags span {
@@ -5852,6 +5852,10 @@ body > main {
     width: 100%;
   }
 
+  .product-system__title > span:nth-child(2) {
+    align-self: flex-end;
+    padding-left: 0;
+  }
 }
 
 @media (max-width: 760px) {
