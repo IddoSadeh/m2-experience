@@ -3973,8 +3973,7 @@ body.is-company-video-open {
 .choice-section__inner {
   display: grid;
   gap: clamp(6rem, 9.5vw, 10.25rem);
-  max-width: 92.625rem;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .choice-section__prompt {
@@ -5833,8 +5832,7 @@ body > main {
   .company-principles__inner,
   .company-contact__inner,
   .product-system__intro,
-  .product-steps-frame,
-  .choice-section__inner {
+  .product-steps-frame {
     max-width: none;
   }
 
