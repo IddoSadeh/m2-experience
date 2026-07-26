@@ -55,7 +55,7 @@ html {
   overflow-x: clip;
 }
 
-@media (min-width: 2000px) and (min-height: 1200px) {
+@media (min-width: 2000px) {
   html {
     font-size: 112.5%;
   }
@@ -5815,7 +5815,7 @@ body > main {
   white-space: nowrap;
 }
 
-@media (min-width: 2000px) and (min-height: 1200px) {
+@media (min-width: 2000px) {
   .home-system__readout {
     display: flex;
     justify-content: space-between;
