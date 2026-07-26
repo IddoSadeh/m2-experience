@@ -792,6 +792,8 @@ img {
   width: 100%;
   max-width: 20.1875rem;
   align-self: start;
+  justify-self: end;
+  white-space: nowrap;
 }
 
 .home-process__item--encoding h2 {
@@ -6028,6 +6030,12 @@ body > main {
   .home-process__item--capture p {
     grid-column: auto;
     grid-row: auto;
+  }
+
+  .home-process__item p {
+    max-width: 100%;
+    justify-self: start;
+    white-space: normal;
   }
 
   .home-process__item--encoding .home-process__visual {
